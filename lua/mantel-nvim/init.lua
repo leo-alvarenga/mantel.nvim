@@ -17,6 +17,8 @@ end
 --- @param opts mantel-nvim.Opts
 function M.setup(opts)
 	config.set_opts(opts)
+	highlights.setup_autocmd()
+
 	highlights.setup()
 
 	vim.o.showtabline = 2

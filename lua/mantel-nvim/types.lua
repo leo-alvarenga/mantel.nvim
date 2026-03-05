@@ -19,6 +19,9 @@
 --- @field modified mantel-nvim.PositionableDecorator?
 --- @field duplicate mantel-nvim.PositionableDecorator?
 
+--- @class mantel-nvim.HlEntry
+--- @field hl vim.api.keyset.highlight|fun(): vim.api.keyset.highlight
+
 --- @class mantel-nvim.BufContentOverwrites
 --- @field ambiguos string|fun(buf: vim.fn.getbufinfo.ret.item): string
 --- @field name string|fun(buf: vim.fn.getbufinfo.ret.item): string

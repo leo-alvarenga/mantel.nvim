@@ -17,7 +17,13 @@ function M.blend(fg, bg, alpha)
 	return vim.api.nvim_get_color_by_name(string.format("#%06x", math.floor((1 - alpha) * fg + alpha * bg)))
 end
 
--- Setup --------------------------------------------------------
+function M.setup_autocmd()
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		callback = function()
+			require("mantel-nvim.highlights").setup()
+		end,
+	})
+end
 
 function M.setup()
 	local normal = get_hl("Normal")
@@ -96,12 +102,6 @@ function M.setup()
 		fg = comment.fg,
 		bg = fill.bg or tabline.bg,
 		italic = true,
-	})
-
-	vim.api.nvim_create_autocmd("ColorScheme", {
-		callback = function()
-			require("mantel-nvim.highlights").setup()
-		end,
 	})
 end
 
