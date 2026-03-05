@@ -1,4 +1,5 @@
-local hl = require("mantel-nvim.utils").hl
+local utils = require("mantel-nvim.utils")
+local hl = utils.hl
 
 local M = {}
 
@@ -14,12 +15,10 @@ end
 --- @param is_ambiguos boolean
 --- @return string res, integer len
 function M._private.render_buf(opts, buf, is_current, is_ambiguos)
-	local part = ""
-
 	local name = buf.name
 
 	if name == "" then
-		name = "[No Name]"
+		name = utils.evaluate_option(opts.bufs.no_name_overwrite)
 	end
 
 	if is_ambiguos then
@@ -28,7 +27,7 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 		name = vim.fn.fnamemodify(name, ":t")
 	end
 
-	part = part .. " " .. name .. " "
+	local part = utils.center_text(" " .. name .. " ", opts.bufs.min_width)
 	local len = #part
 
 	if is_current then

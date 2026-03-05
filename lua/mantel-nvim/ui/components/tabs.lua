@@ -1,8 +1,19 @@
-local hl = require("mantel-nvim.utils").hl
+local utils = require("mantel-nvim.utils")
+local hl = utils.hl
 
 local M = {}
 
 M._private = {}
+
+--- @param opts mantel-nvim.Opts
+--- @param tab_count integer
+function M._private.is_enabled(opts, tab_count)
+	if opts.tabs.enabled == "auto" then
+		return tab_count > 1
+	end
+
+	return opts.tabs.enabled ~= false and opts.tabs.enabled ~= "never"
+end
 
 function M._private.get_tabs()
 	return vim.fn.gettabinfo()
@@ -13,11 +24,7 @@ end
 --- @param is_current boolean
 --- @return string res, integer len
 function M._private.render_tab(opts, tab, is_current)
-	local label = tostring(tab.tabnr or "?")
-
-	local width = 5
-	local padding = math.max(0, math.floor((width - #label) / 2))
-	label = string.rep(" ", padding) .. label .. string.rep(" ", width - padding - #label)
+	local label = utils.center_text(tostring(tab.tabnr or "?"), opts.tabs.min_width)
 
 	if is_current then
 		return hl(opts.hl.tabline_sel) .. label .. hl(opts.hl.tabfill), #label
@@ -33,7 +40,7 @@ function M.get(opts)
 	local total_len = 0
 	local tabs = M._private.get_tabs()
 
-	if #tabs <= 1 then
+	if not M._private.is_enabled(opts, #tabs) then
 		return part, total_len
 	end
 

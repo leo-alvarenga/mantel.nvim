@@ -1,5 +1,14 @@
 --- @type mantel-nvim.Opts
+---
 local default_config = {
+	bufs = {
+		min_width = 10,
+		no_name_overwrite = "[No name]",
+	},
+	tabs = {
+		enabled = "auto",
+		min_width = 5,
+	},
 	hl = {
 		tabline_sel = "TabLineSel",
 		tabfill = "TabFill",
