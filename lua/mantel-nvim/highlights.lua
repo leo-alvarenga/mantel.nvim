@@ -51,7 +51,9 @@ function M.setup()
 	})
 
 	vim.api.nvim_set_hl(0, "MantelActive", {
-		link = "TabLineSel",
+		fg = tabsel.fg,
+		bg = tabsel.bg,
+		bold = true,
 	})
 
 	vim.api.nvim_set_hl(0, "MantelModified", {

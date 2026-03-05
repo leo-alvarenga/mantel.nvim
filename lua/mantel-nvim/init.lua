@@ -6,7 +6,7 @@ local ui = require("mantel-nvim.ui")
 local M = {}
 
 M.patch = "0"
-M.minor = "2"
+M.minor = "3"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch

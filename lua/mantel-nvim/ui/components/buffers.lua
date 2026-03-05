@@ -17,6 +17,12 @@ end
 --- @return string res, integer len
 function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
 	local name = buf.name
+	local prefix = utils.evaluate_option(opts.bufs.decorators.prefix)
+	local suffix = utils.evaluate_option(opts.bufs.decorators.suffix)
+
+	if buf.changed == 1 then
+		prefix = prefix .. " ●"
+	end
 
 	if name == "" then
 		name = utils.evaluate_option(opts.bufs.no_name_overwrite)
@@ -29,7 +35,9 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
 	end
 
 	local part = utils.center_text(" " .. name .. " ", opts.bufs.min_width)
-	local len = #part
+	part = prefix .. part .. suffix
+
+	local len = #part + #prefix + #suffix
 
 	if is_current then
 		part = hl(opts.bufs.hl.active) .. part .. hl(opts.bufs.hl.inactive)
@@ -39,6 +47,11 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
 
 	if is_last then
 		part = part .. hl(opts.bufs.hl.fill)
+	else
+		local sep = utils.evaluate_option(opts.bufs.decorators.sep)
+
+		part = part .. hl(opts.bufs.hl.separator) .. sep
+		len = len + #sep
 	end
 
 	return part, len

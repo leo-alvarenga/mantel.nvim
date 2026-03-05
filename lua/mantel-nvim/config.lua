@@ -1,3 +1,10 @@
+--- @type mantel-nvim.Decorators
+local default_decorators = {
+	sep = "|",
+	prefix = "",
+	suffix = "",
+}
+
 --- @type mantel-nvim.HL
 local default_hl = {
 	fill = "MantelFill",
@@ -18,11 +25,13 @@ local default_hl = {
 --- @type mantel-nvim.Opts
 local default_config = {
 	bufs = {
+		decorators = default_decorators,
 		min_width = 10,
 		no_name_overwrite = "[No name]",
 		hl = default_hl,
 	},
 	tabs = {
+		decorators = default_decorators,
 		enabled = "auto",
 		min_width = 5,
 		hl = default_hl,
