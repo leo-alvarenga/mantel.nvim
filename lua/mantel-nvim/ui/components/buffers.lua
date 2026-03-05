@@ -13,8 +13,9 @@ end
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @param is_current boolean
 --- @param is_ambiguos boolean
+--- @param is_last boolean
 --- @return string res, integer len
-function M._private.render_buf(opts, buf, is_current, is_ambiguos)
+function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
 	local name = buf.name
 
 	if name == "" then
@@ -31,9 +32,13 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 	local len = #part
 
 	if is_current then
-		part = hl(opts.hl.tabline_sel) .. part .. hl(opts.hl.tabfill)
+		part = hl(opts.bufs.hl.active) .. part .. hl(opts.bufs.hl.inactive)
 	else
-		part = hl(opts.hl.tabfill) .. part
+		part = hl(opts.bufs.hl.inactive) .. part
+	end
+
+	if is_last then
+		part = part .. hl(opts.bufs.hl.fill)
 	end
 
 	return part, len
@@ -48,10 +53,10 @@ function M.get(opts)
 	local bufs = M._private.get_bufs()
 	local current_buf = vim.api.nvim_get_current_buf()
 
-	for _, buf in ipairs(bufs) do
+	for i, buf in ipairs(bufs) do
 		local buf_text, len = M._private.render_buf(opts, buf, buf.bufnr == current_buf, #vim.tbl_filter(function(b)
 			return vim.fn.fnamemodify(b.name, ":t") == vim.fn.fnamemodify(buf.name, ":t")
-		end, bufs) > 1)
+		end, bufs) > 1, i == #bufs)
 
 		part = part .. buf_text
 		total_len = total_len + len
