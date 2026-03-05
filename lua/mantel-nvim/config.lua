@@ -1,8 +1,14 @@
 --- @type mantel-nvim.Decorators
 local default_decorators = {
-	sep = "|",
+	sep = "",
 	prefix = "",
 	suffix = "",
+	modified = {
+		enabled = true,
+		order = 1,
+		text = " ●",
+		position = "suffix",
+	},
 }
 
 --- @type mantel-nvim.HL
@@ -27,8 +33,17 @@ local default_config = {
 	bufs = {
 		decorators = default_decorators,
 		min_width = 10,
-		no_name_overwrite = "[No name]",
 		hl = default_hl,
+
+		overwrites = {
+			ambiguos = function(buf)
+				return vim.fn.fnamemodify(buf.name, ":.")
+			end,
+			name = function(buf)
+				return vim.fn.fnamemodify(buf.name, ":t")
+			end,
+			no_name = "[No name]",
+		},
 	},
 	tabs = {
 		decorators = default_decorators,

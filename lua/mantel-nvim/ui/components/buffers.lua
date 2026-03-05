@@ -10,34 +10,65 @@ function M._private.get_bufs()
 end
 
 --- @param opts mantel-nvim.Opts
+--- @param part string
+--- @param duplicate boolean
+--- @param modified boolean
+--- @return string part, integer len
+function M._private.add_prefix(opts, part, duplicate, modified)
+	local decorators = utils.add_decorators(opts, "prefix", duplicate, modified)
+	local prefix = decorators .. utils.evaluate_option(opts.bufs.decorators.prefix)
+
+	local len = #prefix
+
+	if len <= 0 then
+		return part, 0
+	end
+
+	return prefix .. part, len
+end
+
+--- @param opts mantel-nvim.Opts
+--- @param part string
+--- @param duplicate boolean
+--- @param modified boolean
+--- @return string part, integer len
+function M._private.add_suffix(opts, part, duplicate, modified)
+	local decorators = utils.add_decorators(opts, "suffix", duplicate, modified)
+	local suffix = utils.evaluate_option(opts.bufs.decorators.suffix) .. decorators
+
+	local len = #suffix
+
+	if len <= 0 then
+		return part, 0
+	end
+
+	return part .. suffix, len
+end
+
+--- @param opts mantel-nvim.Opts
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @param is_current boolean
 --- @param is_ambiguos boolean
 --- @param is_last boolean
 --- @return string res, integer len
 function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
-	local name = buf.name
-	local prefix = utils.evaluate_option(opts.bufs.decorators.prefix)
-	local suffix = utils.evaluate_option(opts.bufs.decorators.suffix)
+	local modified = buf.changed == 1
 
-	if buf.changed == 1 then
-		prefix = prefix .. " ●"
-	end
+	local name = buf.name
 
 	if name == "" then
-		name = utils.evaluate_option(opts.bufs.no_name_overwrite)
+		name = utils.evaluate_buf_overwrite(opts.bufs.overwrites.no_name, buf)
+	elseif is_ambiguos then
+		name = utils.evaluate_buf_overwrite(opts.bufs.overwrites.ambiguos, buf)
+	else
+		name = utils.evaluate_buf_overwrite(opts.bufs.overwrites.name, buf)
 	end
 
-	if is_ambiguos then
-		name = vim.fn.fnamemodify(name, ":.")
-	else
-		name = vim.fn.fnamemodify(name, ":t")
-	end
+	name = M._private.add_prefix(opts, name, is_ambiguos, modified)
+	name = M._private.add_suffix(opts, name, is_ambiguos, modified)
 
 	local part = utils.center_text(" " .. name .. " ", opts.bufs.min_width)
-	part = prefix .. part .. suffix
-
-	local len = #part + #prefix + #suffix
+	local len = #part
 
 	if is_current then
 		part = hl(opts.bufs.hl.active) .. part .. hl(opts.bufs.hl.inactive)
@@ -47,7 +78,7 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
 
 	if is_last then
 		part = part .. hl(opts.bufs.hl.fill)
-	else
+	elseif opts.bufs.decorators.sep then
 		local sep = utils.evaluate_option(opts.bufs.decorators.sep)
 
 		part = part .. hl(opts.bufs.hl.separator) .. sep

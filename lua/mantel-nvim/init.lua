@@ -1,5 +1,4 @@
 local config = require("mantel-nvim.config")
-local consts = require("mantel-nvim.constants")
 local highlights = require("mantel-nvim.highlights")
 local ui = require("mantel-nvim.ui")
 

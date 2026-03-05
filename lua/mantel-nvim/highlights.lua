@@ -88,7 +88,7 @@ function M.setup()
 	})
 
 	vim.api.nvim_set_hl(0, "MantelSeparator", {
-		fg = fill.bg,
+		fg = diag_info.fg,
 		bg = tabline.bg,
 	})
 
