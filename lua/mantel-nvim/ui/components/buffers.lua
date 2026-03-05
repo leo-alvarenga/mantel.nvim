@@ -99,7 +99,8 @@ function M.get(opts)
 
 	for i, buf in ipairs(bufs) do
 		local buf_text, len = M._private.render_buf(opts, buf, buf.bufnr == current_buf, #vim.tbl_filter(function(b)
-			return vim.fn.fnamemodify(b.name, ":t") == vim.fn.fnamemodify(buf.name, ":t")
+			return utils.evaluate_buf_overwrite(opts.bufs.overwrites.no_name, b)
+				== utils.evaluate_buf_overwrite(opts.bufs.overwrites.no_name, buf)
 		end, bufs) > 1, i == #bufs)
 
 		part = part .. buf_text
