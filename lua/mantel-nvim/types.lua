@@ -6,10 +6,14 @@
 --- | 'prefix'
 --- | 'suffix'
 
+--- @alias mantel-nvim.BufAwareText
+--- | string
+--- | fun(buf: vim.fn.getbufinfo.ret.item): string
+
 --- @class mantel-nvim.PositionableDecorator
 --- @field enabled nil|boolean|fun(): boolean?
 --- @field order integer Order in which the decorator should be applied; Lower numbers are applied first
---- @field text string|fun(): string
+--- @field text mantel-nvim.BufAwareText
 --- @field position mantel-nvim.Positionable
 
 --- @class mantel-nvim.Decorators
@@ -25,38 +29,24 @@
 
 --- @class mantel-nvim.HighlightOverwrites
 --- @field fill mantel-nvim.HlEntry
---- @field background mantel-nvim.HlEntry
 --- @field inactive mantel-nvim.HlEntry
---- @field visible mantel-nvim.HlEntry
 --- @field active mantel-nvim.HlEntry
 --- @field modified mantel-nvim.HlEntry
 --- @field duplicate mantel-nvim.HlEntry
---- @field error mantel-nvim.HlEntry
---- @field warn mantel-nvim.HlEntry
---- @field info mantel-nvim.HlEntry
---- @field hint mantel-nvim.HlEntry
 --- @field separator mantel-nvim.HlEntry
---- @field breadcrumb mantel-nvim.HlEntry
 
 --- @class mantel-nvim.BufContentOverwrites
---- @field ambiguos string|fun(buf: vim.fn.getbufinfo.ret.item): string
---- @field name string|fun(buf: vim.fn.getbufinfo.ret.item): string
---- @field no_name string|fun(buf: vim.fn.getbufinfo.ret.item): string
+--- @field ambiguos mantel-nvim.BufAwareText
+--- @field name mantel-nvim.BufAwareText
+--- @field no_name mantel-nvim.BufAwareText
 
 --- @class mantel-nvim.HighlightGroups represents the highlight groups used by a component/section of mantel-nvim. These groups should be defined in the user's colorscheme or by mantel-nvim's setup function (default values).
 --- @field fill string
---- @field background string
 --- @field inactive string
---- @field visible string
 --- @field active string
 --- @field modified string
 --- @field duplicate string
---- @field error string
---- @field warn string
---- @field info string
---- @field hint string
 --- @field separator string
---- @field breadcrumb string
 
 --- @class mantel-nvim.Bufs
 --- @field decorators mantel-nvim.Decorators

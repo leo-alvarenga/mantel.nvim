@@ -57,14 +57,14 @@ function M.evaluate_table_option(option)
 	return {}
 end
 
---- @param option string|fun(buf: vim.fn.getbufinfo.ret.item): string
+--- @param option mantel-nvim.BufAwareText
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @return string val
-function M.evaluate_buf_overwrite(option, buf)
+function M.evaluate_buf_aware_option(option, buf)
 	if type(option) == "string" then
 		return option
 	elseif type(option) == "function" then
-		return M.evaluate_buf_overwrite(option(buf), buf)
+		return M.evaluate_buf_aware_option(option(buf), buf)
 	end
 
 	return ""

@@ -21,32 +21,19 @@ local function get_default_highlights()
 	local tabline = utils.get_hl("TabLine")
 	local comment = utils.get_hl("Comment")
 
-	local diag_error = utils.get_hl("DiagnosticError")
-	local diag_warn = utils.get_hl("DiagnosticWarn")
-	local diag_info = utils.get_hl("DiagnosticInfo")
-	local diag_hint = utils.get_hl("DiagnosticHint")
-
 	return {
 		fill = {
-			fg = normal.fg,
-			bg = normal.bg,
-		},
-		background = {
 			fg = tabline.fg,
-			bg = tabline.bg,
+			bg = tabsel.fg,
 		},
 		inactive = {
 			fg = tabsel.bg,
-			bg = normal.bg,
+			bg = tabsel.fg,
 		},
 		active = {
-			fg = normal.bg,
+			fg = tabsel.fg,
 			bg = tabsel.bg,
 			bold = true,
-		},
-		visible = {
-			fg = normal.fg,
-			bg = tabline.bg,
 		},
 		modified = {
 			fg = comment.fg,
@@ -57,38 +44,9 @@ local function get_default_highlights()
 			fg = comment.fg,
 			bg = tabline.bg,
 		},
-		error = {
-			fg = diag_error.fg,
-			bg = tabline.bg,
-		},
-		warn = {
-			fg = diag_warn.fg,
-			bg = tabline.bg,
-		},
-		info = {
-			fg = diag_info.fg,
-			bg = tabline.bg,
-		},
-		hint = {
-			fg = diag_hint.fg,
-			bg = tabline.bg,
-		},
 		separator = {
-			fg = diag_info.fg,
-			bg = tabline.bg,
-		},
-		prefix = {
-			fg = diag_info.fg,
-			bg = tabline.bg,
-		},
-		suffix = {
-			fg = diag_info.fg,
-			bg = tabline.bg,
-		},
-		breadcrumb = {
 			fg = comment.fg,
 			bg = normal.bg,
-			italic = true,
 		},
 	}
 end
@@ -96,18 +54,11 @@ end
 --- @type mantel-nvim.HighlightGroups
 local default_hl = {
 	fill = "MantelFill",
-	background = "MantelBackground",
 	inactive = "MantelInactive",
-	visible = "MantelVisible",
 	active = "MantelActive",
 	modified = "MantelModified",
 	duplicate = "MantelDuplicate",
-	error = "MantelError",
-	warn = "MantelWarn",
-	info = "MantelInfo",
-	hint = "MantelHint",
 	separator = "MantelSeparator",
-	breadcrumb = "MantelBreadcrumb",
 }
 
 --- @type mantel-nvim.Opts

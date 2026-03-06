@@ -33,6 +33,8 @@ function M.setup(opts)
 			vim.api.nvim_set_hl(0, hl_group, value)
 		end
 	end
+
+	M.setup_autocmd(opts)
 end
 
 return M

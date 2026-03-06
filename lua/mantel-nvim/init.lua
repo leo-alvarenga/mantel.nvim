@@ -21,7 +21,6 @@ function M.setup(opts)
 
 	config.set_opts(opts)
 
-	highlights.setup_autocmd(config.opts)
 	highlights.setup(config.opts)
 
 	vim.o.showtabline = 2
