@@ -1,12 +1,24 @@
+--- @type mantel-nvim.Decorators
+local default_decorators = {
+	sep = "",
+	prefix = " ",
+	suffix = " ",
+	modified = {
+		enabled = true,
+		order = 1,
+		text = " ●",
+		position = "suffix",
+	},
+}
+
 --- @return mantel-nvim.HighlightOverwrites
 local function get_default_highlights()
 	local lazy = require("mantel-nvim.lazy")
 	local utils = lazy.require("mantel-nvim.utils")
 
 	local normal = utils.get_hl("Normal")
-	local tabline = utils.get_hl("TabLine")
 	local tabsel = utils.get_hl("TabLineSel")
-	local fill = utils.get_hl("TabLineFill")
+	local tabline = utils.get_hl("TabLine")
 	local comment = utils.get_hl("Comment")
 
 	local diag_error = utils.get_hl("DiagnosticError")
@@ -16,24 +28,25 @@ local function get_default_highlights()
 
 	return {
 		fill = {
-			bg = fill.bg or tabline.bg,
+			fg = normal.fg,
+			bg = normal.bg,
 		},
 		background = {
 			fg = tabline.fg,
 			bg = tabline.bg,
 		},
 		inactive = {
-			fg = tabline.fg,
-			bg = tabline.bg,
+			fg = tabsel.bg,
+			bg = normal.bg,
+		},
+		active = {
+			fg = normal.bg,
+			bg = tabsel.bg,
+			bold = true,
 		},
 		visible = {
 			fg = normal.fg,
 			bg = tabline.bg,
-		},
-		active = {
-			fg = tabsel.fg,
-			bg = tabsel.bg,
-			bold = true,
 		},
 		modified = {
 			fg = comment.fg,
@@ -64,42 +77,21 @@ local function get_default_highlights()
 			fg = diag_info.fg,
 			bg = tabline.bg,
 		},
+		prefix = {
+			fg = diag_info.fg,
+			bg = tabline.bg,
+		},
+		suffix = {
+			fg = diag_info.fg,
+			bg = tabline.bg,
+		},
 		breadcrumb = {
 			fg = comment.fg,
-			bg = fill.bg or tabline.bg,
+			bg = normal.bg,
 			italic = true,
 		},
 	}
 end
-
-local default_highlights = {
-	MantelFill = { bg = "#000000" },
-	MantelBackground = { fg = "#ffffff", bg = "#000000" },
-	MantelInactive = { fg = "#cccccc", bg = "#222222" },
-	MantelVisible = { fg = "#ffffff", bg = "#222222" },
-	MantelActive = { fg = "#ffffff", bg = "#222222", bold = true },
-	MantelModified = { fg = "#ff8800", bg = "#222222", italic = true },
-	MantelDuplicate = { fg = "#888888", bg = "#222222" },
-	MantelError = { fg = "#ff0000", bg = "#222222" },
-	MantelWarn = { fg = "#ffaa00", bg = "#222222" },
-	MantelInfo = { fg = "#00aaff", bg = "#222222" },
-	MantelHint = { fg = "#00ff88", bg = "#222222" },
-	MantelSeparator = { fg = "#888888", bg = "#222222" },
-	MantelBreadcrumb = { fg = "#888888", bg = "#000000", italic = true },
-}
-
---- @type mantel-nvim.Decorators
-local default_decorators = {
-	sep = "",
-	prefix = "",
-	suffix = "",
-	modified = {
-		enabled = true,
-		order = 1,
-		text = " ●",
-		position = "suffix",
-	},
-}
 
 --- @type mantel-nvim.HighlightGroups
 local default_hl = {
