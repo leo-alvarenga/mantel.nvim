@@ -17,9 +17,9 @@
 --- @field position mantel-nvim.Positionable
 
 --- @class mantel-nvim.Decorators
---- @field sep string|fun(): string?
---- @field prefix string|fun(): string?
---- @field suffix string|fun(): string?
+--- @field sep mantel-nvim.BufAwareText?
+--- @field prefix mantel-nvim.BufAwareText?
+--- @field suffix mantel-nvim.BufAwareText?
 --- @field modified mantel-nvim.PositionableDecorator?
 --- @field duplicate mantel-nvim.PositionableDecorator?
 ---

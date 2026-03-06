@@ -24,7 +24,7 @@ local function get_default_highlights()
 	return {
 		fill = {
 			fg = tabline.fg,
-			bg = tabsel.fg,
+			bg = normal.bg,
 		},
 		inactive = {
 			fg = tabsel.bg,
@@ -46,7 +46,7 @@ local function get_default_highlights()
 		},
 		separator = {
 			fg = comment.fg,
-			bg = normal.bg,
+			bg = tabsel.fg,
 		},
 	}
 end

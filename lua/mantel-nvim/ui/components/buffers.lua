@@ -49,9 +49,8 @@ end
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @param is_current boolean
 --- @param is_ambiguos boolean
---- @param is_last boolean
 --- @return string res, integer len
-function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
+function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 	local modified = buf.changed == 1
 
 	local name = buf.name
@@ -76,15 +75,6 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos, is_last)
 		part = hl(opts.bufs.hl.inactive) .. part
 	end
 
-	if is_last then
-		part = part .. hl(opts.bufs.hl.fill)
-	elseif opts.bufs.decorators.sep then
-		local sep = utils.evaluate_buf_aware_option(opts.bufs.decorators.sep, buf)
-
-		part = part .. hl(opts.bufs.hl.separator) .. sep
-		len = len + #sep
-	end
-
 	return part, len
 end
 
@@ -101,10 +91,19 @@ function M.get(opts)
 			M._private.render_buf(opts, buf, buf.bufnr == vim.api.nvim_get_current_buf(), #vim.tbl_filter(function(b)
 				return utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, b)
 					== utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, buf)
-			end, bufs) > 1, i == #bufs)
+			end, bufs) > 1)
 
 		part = part .. buf_text
 		total_len = total_len + len
+
+		if i == #bufs then
+			part = part .. hl(opts.bufs.hl.fill)
+		elseif opts.bufs.decorators.sep then
+			local sep = utils.evaluate_buf_aware_option(opts.bufs.decorators.sep, buf)
+
+			part = part .. hl(opts.bufs.hl.separator) .. sep
+			total_len = total_len + #sep
+		end
 	end
 
 	return part, total_len
