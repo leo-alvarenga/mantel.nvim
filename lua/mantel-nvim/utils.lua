@@ -2,6 +2,19 @@ local M = {}
 
 M.fmt = string.format
 
+--- Wrapper around `nvim_get_hl` that returns an empty table if the highlight group doesn't exist
+--- @param name string
+--- @return table
+function M.get_hl(name)
+	local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+
+	if not ok then
+		return {}
+	end
+
+	return hl
+end
+
 --- @param option string|fun(): string
 --- @return string|nil val
 function M.evaluate_option_explicit(option)
@@ -30,6 +43,18 @@ function M.evaluate_toggle(option)
 	end
 
 	return false
+end
+
+--- @param option table|fun(): table
+--- @return table val
+function M.evaluate_table_option(option)
+	if type(option) == "table" then
+		return option
+	elseif type(option) == "function" then
+		return M.evaluate_table_option(option())
+	end
+
+	return {}
 end
 
 --- @param option string|fun(buf: vim.fn.getbufinfo.ret.item): string

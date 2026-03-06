@@ -1,11 +1,12 @@
+local lazy = require("mantel-nvim.lazy")
 local config = require("mantel-nvim.config")
-local highlights = require("mantel-nvim.highlights")
-local ui = require("mantel-nvim.ui")
+
+local ui = lazy.require("mantel-nvim.ui")
 
 local M = {}
 
 M.patch = "0"
-M.minor = "4"
+M.minor = "5"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch
@@ -16,13 +17,19 @@ end
 
 --- @param opts mantel-nvim.Opts
 function M.setup(opts)
-	config.set_opts(opts)
-	highlights.setup_autocmd()
+	local highlights = require("mantel-nvim.highlights")
 
-	highlights.setup()
+	config.set_opts(opts)
+
+	highlights.setup_autocmd(config.opts)
+	highlights.setup(config.opts)
 
 	vim.o.showtabline = 2
 	vim.o.tabline = "%!v:lua.require'mantel-nvim'.render()"
 end
+
+M.helpers = {
+	lazy = lazy,
+}
 
 return M

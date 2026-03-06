@@ -1,4 +1,6 @@
-local utils = require("mantel-nvim.utils")
+local lazy = require("mantel-nvim.lazy")
+
+local utils = lazy.require("mantel-nvim.utils")
 local hl = utils.hl
 
 local M = {}
