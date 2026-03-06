@@ -8,22 +8,29 @@ end
 function M.setup_autocmd(opts)
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		callback = function()
-			require("mantel-nvim.highlights").setup(opts)
+			M.reload_colors(opts)
 		end,
 	})
 end
 
+function M.setup_cmd(opts)
+	local const = require("mantel-nvim.constants")
+
+	vim.api.nvim_create_user_command(const.prefix .. "ReloadColors", function()
+		M.reload_colors(opts)
+	end, {})
+end
+
 --- @param opts mantel-nvim.Opts
-function M.setup(opts)
-	local lazy = require("mantel-nvim.lazy")
-	local const = lazy.require("mantel-nvim.constants")
-	local utils = lazy.require("mantel-nvim.utils")
+function M.reload_colors(opts)
+	local const = require("mantel-nvim.constants")
+	local utils = require("mantel-nvim.utils")
 
 	if not opts or not opts.highlight_overwrites then
 		return
 	end
 
-	for key, hl in pairs(opts.highlight_overwrites) do
+	for key, hl in pairs(utils.evaluate_table_option(opts.highlight_overwrites)) do
 		local value = utils.evaluate_table_option(hl)
 
 		--- @type string|nil

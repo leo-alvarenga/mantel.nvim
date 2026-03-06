@@ -68,6 +68,6 @@
 --- @class mantel-nvim.Opts
 --- @field bufs mantel-nvim.Bufs
 --- @field tabs mantel-nvim.Tabs
---- @field highlight_overwrites mantel-nvim.HighlightOverwrites
+--- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites
 
 return {}

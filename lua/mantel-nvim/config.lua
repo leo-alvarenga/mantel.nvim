@@ -1,7 +1,7 @@
 --- @type mantel-nvim.Decorators
 local default_decorators = {
 	sep = "",
-	prefix = " ",
+	prefix = "| ",
 	suffix = " ",
 	modified = {
 		enabled = true,
@@ -13,26 +13,28 @@ local default_decorators = {
 
 --- @return mantel-nvim.HighlightOverwrites
 local function get_default_highlights()
-	local lazy = require("mantel-nvim.lazy")
-	local utils = lazy.require("mantel-nvim.utils")
+	local utils = require("mantel-nvim.utils")
 
 	local normal = utils.get_hl("Normal")
+	local statusline = utils.get_hl("StatusLine")
 	local tabsel = utils.get_hl("TabLineSel")
 	local tabline = utils.get_hl("TabLine")
+
 	local comment = utils.get_hl("Comment")
+	local diag_info = utils.get_hl("DiagnosticInfo")
 
 	return {
 		fill = {
 			fg = tabline.fg,
-			bg = normal.bg,
+			bg = statusline.bg or tabsel.fg,
 		},
 		inactive = {
 			fg = tabsel.bg,
-			bg = tabsel.fg,
+			bg = statusline.bg or tabsel.fg,
 		},
 		active = {
-			fg = tabsel.fg,
-			bg = tabsel.bg,
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
 			bold = true,
 		},
 		modified = {
@@ -85,7 +87,7 @@ local default_config = {
 		hl = default_hl,
 	},
 
-	highlight_overwrites = get_default_highlights(),
+	highlight_overwrites = get_default_highlights,
 }
 
 local M = {}

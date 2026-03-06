@@ -15,6 +15,19 @@ function M.get_hl(name)
 	return hl
 end
 
+--- Gets just the bg color from a highlight group
+--- @param name string
+--- @return string? hex color string (e.g. "#rrggbb") or nil
+function M.bg(name)
+	local hl = M.get_hl(name)
+	return hl.bg and string.format("#%06x", hl.bg) or nil
+end
+
+--- Gets the background color for the current buffer
+function M.get_buf_bg()
+	return M.bg("Normal") or M.bg("NormalNC") or M.bg("NormalFloat") or M.bg("StatusLine")
+end
+
 --- @param option string|fun(): string
 --- @return string|nil val
 function M.evaluate_option_explicit(option)

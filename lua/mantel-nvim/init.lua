@@ -1,6 +1,7 @@
 local lazy = require("mantel-nvim.lazy")
 local config = require("mantel-nvim.config")
 
+local highlights = require("mantel-nvim.highlights")
 local ui = lazy.require("mantel-nvim.ui")
 
 local M = {}
@@ -17,11 +18,11 @@ end
 
 --- @param opts mantel-nvim.Opts
 function M.setup(opts)
-	local highlights = require("mantel-nvim.highlights")
-
 	config.set_opts(opts)
 
-	highlights.setup(config.opts)
+	highlights.setup_cmd(config.opts)
+	highlights.setup_autocmd(config.opts)
+	highlights.reload_colors(config.opts)
 
 	vim.o.showtabline = 2
 	vim.o.tabline = "%!v:lua.require'mantel-nvim'.render()"
