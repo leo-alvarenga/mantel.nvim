@@ -32,6 +32,12 @@ Custom configuration example:
 - Simple, predictable configuration
 - Minimal runtime overhead
 
+## Next on the roadmap
+
+- [ ] Decorator improvements (more options, more built-in decorators)
+- [ ] Diagnostic indicators
+- [ ] LSP status indicators
+
 # Installation
 
 ## Using vim-plug
