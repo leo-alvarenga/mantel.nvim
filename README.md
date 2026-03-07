@@ -1,4 +1,4 @@
-# mantel.nvimre
+# mantel.nvim
 
 A dead-simple, lightweight, customizable and _cozy_ tabline/bufferline for Neovim
 
