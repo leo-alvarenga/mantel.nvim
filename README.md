@@ -1,4 +1,4 @@
-# mantel.nvim
+# mantel.nvimre
 
 A dead-simple, lightweight, customizable and _cozy_ tabline/bufferline for Neovim
 
@@ -12,8 +12,6 @@ The idea is simple: give users a **clean way to render buffer and tab indicators
 
 If you want to know _why_, when there are already so many bufferline plugins, check out the [Comparison](#comparison) section at the end of this README.
 
----
-
 ## Preview
 
 Default configuration:
@@ -24,8 +22,6 @@ Custom configuration example:
 
 ![Custom preview](./docs/custom.png)
 
----
-
 # Features
 
 - **No dependencies**
@@ -35,8 +31,6 @@ Custom configuration example:
 - Colorscheme-friendly defaults
 - Simple, predictable configuration
 - Minimal runtime overhead
-
----
 
 # Installation
 
@@ -55,8 +49,6 @@ Plug 'leo-alvarenga/mantel.nvim'
 }
 ```
 
----
-
 # Usage
 
 Setup is straightforward:
@@ -66,8 +58,6 @@ require("mantel-nvim").setup({})
 ```
 
 No configuration is required.
-
----
 
 # Concepts
 
@@ -84,15 +74,11 @@ Each buffer entry supports:
 - highlight groups
 - minimum width
 
----
-
 ## Tabs
 
 Tabs represent Neovim tabpages.
 
 They can be enabled or disabled independently from buffers.
-
----
 
 # Commands
 
@@ -110,8 +96,6 @@ Example mapping:
 vim.keymap.set("n", "<leader>bh", "<cmd>MantelMoveBufLeft<CR>")
 ```
 
----
-
 ### `:MantelMoveBufRight`
 
 Moves the current buffer **one position to the right** in the tabline.
@@ -123,8 +107,6 @@ Example mapping:
 ```lua
 vim.keymap.set("n", "<leader>bl", "<cmd>MantelMoveBufRight<CR>")
 ```
-
----
 
 ### `:MantelReloadColors`
 
@@ -141,8 +123,6 @@ Example:
 ```vim
 :MantelReloadColors
 ```
-
----
 
 # Default configuration
 
@@ -223,8 +203,6 @@ require("mantel-nvim").setup({
 })
 ```
 
----
-
 # Customization Examples
 
 ## Change buffer prefix
@@ -238,12 +216,6 @@ require("mantel-nvim").setup({
   },
 })
 ```
-
-Result example:
-
-[TODO: add image]: #
-
----
 
 ## Disable modified indicator
 
@@ -259,8 +231,6 @@ require("mantel-nvim").setup({
 })
 ```
 
----
-
 ## Always show tabs
 
 ```lua
@@ -270,8 +240,6 @@ require("mantel-nvim").setup({
   },
 })
 ```
-
----
 
 ## Custom separator
 
@@ -289,8 +257,6 @@ require("mantel-nvim").setup({
 
 ![Default preview](./docs/default.png)
 
----
-
 ## Custom buffer name
 
 ```lua
@@ -305,8 +271,6 @@ require("mantel-nvim").setup({
   },
 })
 ```
-
----
 
 ## Custom highlight groups
 
@@ -336,7 +300,6 @@ require("mantel-nvim").setup({
 })
 
 
----
 
 # Options Reference
 
@@ -347,7 +310,6 @@ require("mantel-nvim").setup({
 | `tabs`                 | `mantel-nvim.Tabs`                            | Tab configuration                    | see below                |
 | `highlight_overwrites` | `mantel-nvim.HighlightOverwrites \| function` | Highlight definitions used by Mantel | derived from colorscheme |
 
----
 
 ## Buffer Options
 
@@ -362,7 +324,6 @@ require("mantel-nvim").setup({
 | `min_width`                    | `integer`  | `10`          |
 | `overwrites.no_name`           | `string`   | `"[No name]"` |
 
----
 
 ## Tab Options
 
@@ -371,7 +332,6 @@ require("mantel-nvim").setup({
 | `enabled`   | `"auto" \| "always" \| "never"` | `"auto"` |
 | `min_width` | `integer`                       | `5`      |
 
----
 
 # Types
 
@@ -388,8 +348,6 @@ require("mantel-nvim.types")
 --- @field tabs mantel-nvim.Tabs
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites
 ```
-
----
 
 # Comparison
 
