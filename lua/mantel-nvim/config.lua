@@ -1,3 +1,5 @@
+local M = {}
+
 --- @type mantel-nvim.Decorators
 local default_decorators = {
 	sep = "",
@@ -12,7 +14,7 @@ local default_decorators = {
 }
 
 --- @return mantel-nvim.HighlightOverwrites
-local function get_default_highlights()
+function M.get_default_highlights()
 	local utils = require("mantel-nvim.utils")
 
 	local normal = utils.get_hl("Normal")
@@ -89,10 +91,8 @@ local default_config = {
 		hl = default_hl,
 	},
 
-	highlight_overwrites = get_default_highlights,
+	highlight_overwrites = M.get_default_highlights,
 }
-
-local M = {}
 
 --- @type mantel-nvim.Opts
 M.opts = default_config

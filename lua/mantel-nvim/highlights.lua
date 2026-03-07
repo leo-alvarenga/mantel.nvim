@@ -23,6 +23,7 @@ end
 
 --- @param opts mantel-nvim.Opts
 function M.reload_colors(opts)
+	local config = require("mantel-nvim.config")
 	local const = require("mantel-nvim.constants")
 	local utils = require("mantel-nvim.utils")
 
@@ -30,7 +31,14 @@ function M.reload_colors(opts)
 		return
 	end
 
-	for key, hl in pairs(utils.evaluate_table_option(opts.highlight_overwrites)) do
+	local hl_overwrites = vim.tbl_deep_extend(
+		"force",
+		{},
+		config.get_default_highlights(),
+		utils.evaluate_table_option(opts.highlight_overwrites)
+	)
+
+	for key, hl in pairs(hl_overwrites) do
 		local value = utils.evaluate_table_option(hl)
 
 		--- @type string|nil
