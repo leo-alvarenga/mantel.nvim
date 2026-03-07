@@ -1,5 +1,8 @@
 local lazy = require("mantel-nvim.lazy")
+
 local utils = lazy.require("mantel-nvim.utils")
+local buffers = lazy.require("mantel-nvim.ui.components.buffers")
+local tabs = lazy.require("mantel-nvim.ui.components.tabs")
 
 local M = {}
 
@@ -22,9 +25,6 @@ end
 
 --- @param opts mantel-nvim.Opts
 function M.render(opts)
-	local buffers = lazy.require("mantel-nvim.ui.components.buffers")
-	local tabs = lazy.require("mantel-nvim.ui.components.tabs")
-
 	local line = ""
 	local len = 0
 

@@ -8,7 +8,8 @@ local M = {}
 M._private = {}
 
 function M._private.get_bufs()
-	return vim.fn.getbufinfo({ buflisted = 1 })
+	local state = require("mantel-nvim.state")
+	return state.get_bufs()
 end
 
 --- @param opts mantel-nvim.Opts

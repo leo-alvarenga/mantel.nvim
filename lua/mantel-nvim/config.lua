@@ -65,6 +65,8 @@ local default_hl = {
 
 --- @type mantel-nvim.Opts
 local default_config = {
+	mode = "classic",
+
 	bufs = {
 		decorators = default_decorators,
 		min_width = 10,
