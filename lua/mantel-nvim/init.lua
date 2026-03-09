@@ -7,8 +7,8 @@ local tabline = lazy.require("mantel-nvim.ui.tabline")
 
 local M = {}
 
-M.patch = "1"
-M.minor = "8"
+M.patch = "0"
+M.minor = "9"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch

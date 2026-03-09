@@ -97,49 +97,45 @@ end
 --- @param text string The text to center
 --- @param width integer The total width of the field
 --- @param filler_char string? The character to use for filling the space (default: " ")
+--- @return string centered_text, integer padding
 function M.center_text(text, width, filler_char)
 	local text_len = #text
 	filler_char = filler_char or " "
 
 	if text_len >= width then
-		return text
+		return text, 0
 	end
 
 	local padding = math.max(0, math.floor((width - #text) / 2))
 	local left_padding = string.rep(filler_char, padding)
-	local right_padding = string.rep(filler_char, width - text_len - padding)
+	local right_padding = string.rep(filler_char, math.max(0, width - text_len - padding))
 
-	return left_padding .. text .. right_padding
+	return left_padding .. text .. right_padding, padding
 end
 
 --- @param opts mantel-nvim.Opts
+--- @param buf vim.fn.getbufinfo.ret.item
 --- @param position mantel-nvim.Positionable
 --- @param duplicate boolean
 --- @param modified boolean
 --- @return string part, integer len
-function M.add_decorators(opts, position, duplicate, modified)
+function M.add_decorators(opts, buf, position, duplicate, modified)
 	local part = ""
 
 	--- @type mantel-nvim.PositionableDecorator[]
 	local decorators = {}
 	local len = 0
 
-	if
-		duplicate
-		and opts.bufs.decorators.duplicate
-		and M.evaluate_toggle(opts.bufs.decorators.duplicate.enabled)
-		and opts.bufs.decorators.duplicate.position == position
-	then
+	if duplicate and opts.bufs.decorators.duplicate and opts.bufs.decorators.duplicate.position == position then
 		table.insert(decorators, opts.bufs.decorators.duplicate)
 	end
 
-	if
-		modified
-		and opts.bufs.decorators.modified
-		and M.evaluate_toggle(opts.bufs.decorators.modified.enabled)
-		and opts.bufs.decorators.modified.position == position
-	then
+	if modified and opts.bufs.decorators.modified and opts.bufs.decorators.modified.position == position then
 		table.insert(decorators, opts.bufs.decorators.modified)
+	end
+
+	if opts.bufs.decorators.diagnostics and opts.bufs.decorators.diagnostics.position == position then
+		table.insert(decorators, opts.bufs.decorators.diagnostics)
 	end
 
 	table.sort(decorators, function(a, b)
@@ -147,10 +143,12 @@ function M.add_decorators(opts, position, duplicate, modified)
 	end)
 
 	for _, decorator in ipairs(decorators) do
-		local text = M.evaluate_option(decorator.text)
+		local text = M.evaluate_buf_aware_option(decorator.text, buf)
 
-		part = part .. text
-		len = len + #text
+		if #text > 0 then
+			part = part .. text
+			len = len + #text
+		end
 	end
 
 	return part, len

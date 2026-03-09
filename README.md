@@ -34,9 +34,10 @@ Custom configuration example:
 
 ## Next on the roadmap
 
-- [ ] Decorator improvements (more options, more built-in decorators)
-- [ ] Diagnostic indicators
+- [x] Diagnostic indicators
+- [ ] Git indicators
 - [ ] LSP status indicators
+- [ ] Decorator custom HL improvements
 
 # Installation
 
@@ -145,7 +146,6 @@ require("mantel-nvim").setup({
       suffix = " ",
 
       modified = {
-        enabled = true,
         order = 1,
         text = " ●",
         position = "suffix",
@@ -183,7 +183,6 @@ require("mantel-nvim").setup({
       suffix = " ",
 
       modified = {
-        enabled = true,
         order = 1,
         text = " ●",
         position = "suffix",
@@ -230,7 +229,7 @@ require("mantel-nvim").setup({
   bufs = {
     decorators = {
       modified = {
-        enabled = false,
+        text = ""
       },
     },
   },
@@ -324,7 +323,6 @@ require("mantel-nvim").setup({
 | `decorators.sep`               | `string`   | `""`          |
 | `decorators.prefix`            | `string`   | `""`          |
 | `decorators.suffix`            | `string`   | `" "`         |
-| `decorators.modified.enabled`  | `boolean`  | `true`        |
 | `decorators.modified.text`     | `string`   | `" ●"`        |
 | `decorators.modified.position` | `"suffix"` | `"suffix"`    |
 | `min_width`                    | `integer`  | `10`          |

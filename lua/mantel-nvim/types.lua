@@ -31,6 +31,10 @@
 ---  Buffers
 ------------------------------------------
 
+--- @alias mantel-nvim.BufAwareNumber
+--- | number
+--- | fun(buf: vim.fn.getbufinfo.ret.item): number
+
 --- @alias mantel-nvim.BufAwareText
 --- | string
 --- | fun(buf: vim.fn.getbufinfo.ret.item): string
@@ -42,8 +46,7 @@
 --- | 'suffix'
 
 --- @class mantel-nvim.PositionableDecorator
---- @field enabled nil|boolean|fun(): boolean?
---- @field order integer Order in which the decorator should be applied; Lower numbers are applied first
+--- @field order mantel-nvim.BufAwareNumber Order in which the decorator should be applied; Lower numbers are applied first
 --- @field text mantel-nvim.BufAwareText
 --- @field position mantel-nvim.Positionable
 
@@ -51,6 +54,8 @@
 --- @field sep mantel-nvim.BufAwareText?
 --- @field prefix mantel-nvim.BufAwareText?
 --- @field suffix mantel-nvim.BufAwareText?
+--- @field git mantel-nvim.PositionableDecorator?
+--- @field diagnostics mantel-nvim.PositionableDecorator?
 --- @field modified mantel-nvim.PositionableDecorator?
 --- @field duplicate mantel-nvim.PositionableDecorator?
 
@@ -75,7 +80,6 @@
 --- | "never"
 
 --- @class mantel-nvim.Tabs
---- @field decorators mantel-nvim.Decorators
 --- @field hl mantel-nvim.HighlightGroups
 --- @field enabled boolean|mantel-nvim.TabBehavior "auto" to enable only when more than 1 tab is open (default); 'true' 'always' to always enable; 'false' or 'never' to disable
 --- @field min_width integer Minimum width for each tab in the tabline

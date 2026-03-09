@@ -1,5 +1,4 @@
-local lazy = require("mantel-nvim.lazy")
-local utils = lazy.require("mantel-nvim.utils")
+local utils = require("mantel-nvim.utils")
 
 local hl = utils.hl
 
@@ -13,11 +12,12 @@ function M._private.get_bufs()
 end
 
 --- @param opts mantel-nvim.Opts
+--- @param buf vim.fn.getbufinfo.ret.item
 --- @param duplicate boolean
 --- @param modified boolean
 --- @return string part, integer len
-function M._private.add_prefix(opts, buf, duplicate, modified)
-	local decorators, decorators_len = utils.add_decorators(opts, "prefix", duplicate, modified)
+function M._private.get_prefix(opts, buf, duplicate, modified)
+	local decorators, decorators_len = utils.add_decorators(opts, buf, "prefix", duplicate, modified)
 	local prefix = utils.evaluate_buf_aware_option(opts.bufs.decorators.prefix, buf)
 
 	local len = #prefix + decorators_len
@@ -30,11 +30,12 @@ function M._private.add_prefix(opts, buf, duplicate, modified)
 end
 
 --- @param opts mantel-nvim.Opts
+--- @param buf vim.fn.getbufinfo.ret.item
 --- @param duplicate boolean
 --- @param modified boolean
 --- @return string part, integer len
-function M._private.add_suffix(opts, buf, duplicate, modified)
-	local decorators, decorators_len = utils.add_decorators(opts, "suffix", duplicate, modified)
+function M._private.get_suffix(opts, buf, duplicate, modified)
+	local decorators, decorators_len = utils.add_decorators(opts, buf, "suffix", duplicate, modified)
 	local suffix = utils.evaluate_buf_aware_option(opts.bufs.decorators.suffix, buf)
 
 	local len = #suffix + decorators_len
@@ -44,6 +45,18 @@ function M._private.add_suffix(opts, buf, duplicate, modified)
 	end
 
 	return decorators .. suffix, len
+end
+
+--- @param opts mantel-nvim.Opts
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @param modified boolean
+--- @param is_ambiguos boolean
+--- @return string before, string after, integer before_len, integer after_len
+function M._private.get_name_decorators(opts, buf, modified, is_ambiguos)
+	local name_before, name_before_len = utils.add_decorators(opts, buf, "name_before", is_ambiguos, modified)
+	local name_after, name_after_len = utils.add_decorators(opts, buf, "name_after", is_ambiguos, modified)
+
+	return name_before, name_after, name_after_len, name_before_len
 end
 
 --- @param opts mantel-nvim.Opts
@@ -64,9 +77,11 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 		name = utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, buf)
 	end
 
-	local prefix, prefix_len = M._private.add_prefix(opts, buf, is_ambiguos, modified)
-	local suffix, suffix_len = M._private.add_suffix(opts, buf, is_ambiguos, modified)
+	local name_before, name_after = M._private.get_name_decorators(opts, buf, modified, is_ambiguos)
+	local prefix, prefix_len = M._private.get_prefix(opts, buf, is_ambiguos, modified)
+	local suffix, suffix_len = M._private.get_suffix(opts, buf, is_ambiguos, modified)
 
+	name = name_before .. name .. name_after
 	local part = prefix .. utils.center_text(name, opts.bufs.min_width - prefix_len - suffix_len) .. suffix
 	local len = #part
 
