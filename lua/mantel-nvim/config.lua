@@ -28,11 +28,11 @@ function M.get_default_highlights()
 	return {
 		fill = {
 			fg = tabline.fg,
-			bg = statusline.bg or tabsel.fg,
+			bg = statusline.bg,
 		},
 		inactive = {
 			fg = tabsel.bg,
-			bg = statusline.bg or tabsel.fg,
+			bg = statusline.bg,
 		},
 		active = {
 			fg = diag_info.fg or statusline.fg,
