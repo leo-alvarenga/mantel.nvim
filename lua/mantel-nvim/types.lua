@@ -58,6 +58,7 @@
 --- @field diagnostics mantel-nvim.PositionableDecorator?
 --- @field modified mantel-nvim.PositionableDecorator?
 --- @field duplicate mantel-nvim.PositionableDecorator?
+--- @field extras mantel-nvim.PositionableDecorator[]?
 
 --- @class mantel-nvim.BufContentOverwrites
 --- @field ambiguos mantel-nvim.BufAwareText

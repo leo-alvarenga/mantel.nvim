@@ -35,9 +35,9 @@ Custom configuration example:
 ## Next on the roadmap
 
 - [x] Diagnostic indicators
+- [ ] Decorator custom HL improvements <- Current
 - [ ] Git indicators
 - [ ] LSP status indicators
-- [ ] Decorator custom HL improvements
 
 # Installation
 

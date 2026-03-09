@@ -126,6 +126,10 @@ function M.add_decorators(opts, buf, position, duplicate, modified)
 	local decorators = {}
 	local len = 0
 
+	----------------------------------------------------------
+	--- Native decorators
+	----------------------------------------------------------
+
 	if duplicate and opts.bufs.decorators.duplicate and opts.bufs.decorators.duplicate.position == position then
 		table.insert(decorators, opts.bufs.decorators.duplicate)
 	end
@@ -137,6 +141,20 @@ function M.add_decorators(opts, buf, position, duplicate, modified)
 	if opts.bufs.decorators.diagnostics and opts.bufs.decorators.diagnostics.position == position then
 		table.insert(decorators, opts.bufs.decorators.diagnostics)
 	end
+
+	----------------------------------------------------------
+	--- Extra decorators
+	----------------------------------------------------------
+
+	if opts.bufs.decorators.extras and #opts.bufs.decorators.extras > 0 then
+		for _, extra in ipairs(opts.bufs.decorators.extras) do
+			if extra.position == position then
+				table.insert(decorators, extra)
+			end
+		end
+	end
+
+	----------------------------------------------------------
 
 	table.sort(decorators, function(a, b)
 		return a.order < b.order
