@@ -92,6 +92,30 @@ They can be enabled or disabled independently from buffers.
 
 `mantel.nvim` exposes a few user commands for interacting with the tabline.
 
+### `:MantelBufPrev`
+
+Focuses the previous buffer in the tabline.
+
+This command only works when `mode = "enhanced"` is enabled.
+
+Example mapping:
+
+```lua
+vim.keymap.set("n", "<leader>h", "<cmd>MantelBufPrev<CR>")
+```
+
+### `:MantelBufNext`
+
+Focuses the next buffer in the tabline.
+
+This command also requires `mode = "enhanced"`.
+
+Example mapping:
+
+```lua
+vim.keymap.set("n", "<leader>l", "<cmd>MantelBufNext<CR>")
+```
+
 ### `:MantelMoveBufLeft`
 
 Moves the current buffer **one position to the left** in the tabline.
@@ -126,12 +150,6 @@ This can be useful when:
 - tweaking highlight overrides
 - testing colors during development
 
-Example:
-
-```vim
-:MantelReloadColors
-```
-
 # Default configuration
 
 Everything has a default value, so configuration is optional.
@@ -146,11 +164,8 @@ require("mantel-nvim").setup({
       prefix = "| ",
       suffix = " ",
 
-      modified = {
-        order = 1,
-        text = " ●",
-        position = "suffix",
-      },
+      native = {},
+      extras = {},
     },
 
     min_width = 10,
@@ -159,8 +174,6 @@ require("mantel-nvim").setup({
       fill = "MantelFill",
       inactive = "MantelInactive",
       active = "MantelActive",
-      modified = "MantelModified",
-      duplicate = "MantelDuplicate",
       separator = "MantelSeparator",
     },
 
@@ -180,14 +193,8 @@ require("mantel-nvim").setup({
   tabs = {
     decorators = {
       sep = "",
-      prefix = "| ",
+      prefix = " ",
       suffix = " ",
-
-      modified = {
-        order = 1,
-        text = " ●",
-        position = "suffix",
-      },
     },
 
     enabled = "auto",
@@ -197,8 +204,6 @@ require("mantel-nvim").setup({
       fill = "MantelFill",
       inactive = "MantelInactive",
       active = "MantelActive",
-      modified = "MantelModified",
-      duplicate = "MantelDuplicate",
       separator = "MantelSeparator",
     },
   },
@@ -229,8 +234,11 @@ require("mantel-nvim").setup({
 require("mantel-nvim").setup({
   bufs = {
     decorators = {
-      modified = {
-        text = ""
+      native = {
+        {
+          name = "modified",
+          text = "",
+        }
       },
     },
   },
@@ -269,6 +277,7 @@ require("mantel-nvim").setup({
 require("mantel-nvim").setup({
   bufs = {
     overwrites = {
+      -- buf is an item from the return of `vim.fn.getbufinfo()` (see type `vim.fn.getbufinfo.ret.item`)
       name = function(buf) -- Use a function to generate the name however you want!
         return vim.fn.fnamemodify(buf.name, ":~:.")
       end,
@@ -324,8 +333,8 @@ require("mantel-nvim").setup({
 | `decorators.sep`               | `string`   | `""`          |
 | `decorators.prefix`            | `string`   | `""`          |
 | `decorators.suffix`            | `string`   | `" "`         |
-| `decorators.modified.text`     | `string`   | `" ●"`        |
-| `decorators.modified.position` | `"suffix"` | `"suffix"`    |
+| `decorators.native`            | `mantel-nvim.PositionableDecorator[]`   | `table`         |
+| `decorators.extras`            | `mantel-nvim.PositionableDecorator[]`   | `table`         |
 | `min_width`                    | `integer`  | `10`          |
 | `overwrites.no_name`           | `string`   | `"[No name]"` |
 
