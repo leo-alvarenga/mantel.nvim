@@ -3,20 +3,21 @@ local prefix = "Mantel"
 return {
 	prefix = prefix,
 
+	--- @type mantel-nvim.HighlightGroups
 	hl_groups = {
-		fill = "MantelFill",
-		inactive = "MantelInactive",
-		active = "MantelActive",
-		modified = "MantelModified",
-		duplicate = "MantelDuplicate",
-		separator = "MantelSeparator",
-	},
-
-	notifications = {
-		invalid_buf_movement = {
-			title = "Mantel: Invalid Buffer Movement",
-			message = "Buffer movement is only available in 'enhanced' mode",
-			level = vim.log.levels.WARN,
-		},
+		fill = prefix .. "Fill",
+		inactive = prefix .. "Inactive",
+		active = prefix .. "Active",
+		modified = prefix .. "Modified",
+		duplicate = prefix .. "Duplicate",
+		separator = prefix .. "Separator",
+		diagnostics_error = prefix .. "DiagnosticsError",
+		diagnostics_warn = prefix .. "DiagnosticsWarn",
+		diagnostics_info = prefix .. "DiagnosticsInfo",
+		diagnostics_hint = prefix .. "DiagnosticsHint",
+		diagnostics_error_inactive = prefix .. "DiagnosticsErrorInactive",
+		diagnostics_warn_inactive = prefix .. "DiagnosticsWarnInactive",
+		diagnostics_info_inactive = prefix .. "DiagnosticsInfoInactive",
+		diagnostics_hint_inactive = prefix .. "DiagnosticsHintInactive",
 	},
 }

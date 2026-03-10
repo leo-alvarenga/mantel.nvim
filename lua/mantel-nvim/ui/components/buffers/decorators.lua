@@ -30,7 +30,13 @@ function M.get_prefix(opts, buf, duplicate, modified)
 		return "", 0
 	end
 
-	return prefix .. decorators, len
+	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.inactive)
+
+	if utils.is_current_buf(buf.bufnr) then
+		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
+	end
+
+	return hl .. prefix .. "%*" .. decorators, len
 end
 
 --- @param opts mantel-nvim.Opts
@@ -48,7 +54,13 @@ function M.get_suffix(opts, buf, duplicate, modified)
 		return "", 0
 	end
 
-	return decorators .. suffix, len
+	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.inactive)
+
+	if utils.is_current_buf(buf.bufnr) then
+		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
+	end
+
+	return decorators .. hl .. suffix .. "%*", len
 end
 
 return M

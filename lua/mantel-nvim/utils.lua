@@ -2,6 +2,15 @@ local M = {}
 
 M.fmt = string.format
 
+function M.is_current_buf(bufnr)
+	return vim.api.nvim_get_current_buf() == bufnr
+end
+
+--- Wrapper around `vim.notify` that sets a default log level and title
+function M.notify(msg, level)
+	vim.notify(msg, level or vim.log.levels.INFO, { title = "Mantel" })
+end
+
 --- Wrapper around `nvim_get_hl` that returns an empty table if the highlight group doesn't exist
 --- @param name string
 --- @return table
@@ -21,11 +30,6 @@ end
 function M.bg(name)
 	local hl = M.get_hl(name)
 	return hl.bg and string.format("#%06x", hl.bg) or nil
-end
-
---- Gets the background color for the current buffer
-function M.get_buf_bg()
-	return M.bg("Normal") or M.bg("NormalNC") or M.bg("NormalFloat") or M.bg("StatusLine")
 end
 
 --- @param option string|fun(): string
@@ -70,11 +74,11 @@ function M.evaluate_table_option(option)
 	return {}
 end
 
---- @param option mantel-nvim.BufAwareText
+--- @param option mantel-nvim.BufAwareStr
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @return string val
 function M.evaluate_buf_aware_option(option, buf)
-	if type(option) == "string" then
+	if type(option) == "string" and #option > 0 then
 		return option
 	elseif type(option) == "function" then
 		return M.evaluate_buf_aware_option(option(buf), buf)
@@ -87,6 +91,19 @@ end
 --- @param hl string
 function M.hl(hl)
 	if type(hl) ~= "string" or #hl < 1 then
+		return ""
+	end
+
+	return M.fmt("%%#%s#", hl)
+end
+
+--- Formats a highlight group for use in the statusline/tabline
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @param hl mantel-nvim.BufAwareStr
+function M.buf_aware_hl(buf, hl)
+	local hl_val = M.evaluate_buf_aware_option(hl, buf)
+
+	if type(hl_val) ~= "string" or #hl_val < 1 then
 		return ""
 	end
 
@@ -112,5 +129,9 @@ function M.center_text(text, width, filler_char)
 
 	return left_padding .. text .. right_padding, padding
 end
+
+M.trigger_update = vim.schedule_wrap(function()
+	vim.cmd("redrawtabline")
+end)
 
 return M

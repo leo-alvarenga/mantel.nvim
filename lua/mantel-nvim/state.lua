@@ -1,3 +1,5 @@
+local utils = require("mantel-nvim.utils")
+
 local M = {}
 
 --- @type mantel-nvim.State
@@ -30,10 +32,7 @@ end
 --- @param call_update boolean? Whether to trigger an update after moving (default: true)
 function M.move_current_buf(delta, call_update)
 	if M._state.mode ~= "enhanced" then
-		local consts = require("mantel-nvim.constants")
-		local msg = consts.notifications.invalid_buf_movement
-
-		vim.notify(msg.message, msg.level, { title = msg.title })
+		utils.notify("Buffer movement is only available in 'enhanced' mode", vim.log.levels.WARN)
 		return
 	end
 

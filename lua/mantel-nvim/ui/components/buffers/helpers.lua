@@ -36,7 +36,17 @@ function M.add_decorators(opts, buf, position, duplicate, modified)
 	----------------------------------------------------------
 
 	if opts.bufs.decorators.extras and #opts.bufs.decorators.extras > 0 then
-		for _, extra in ipairs(opts.bufs.decorators.extras) do
+		for i, extra in ipairs(opts.bufs.decorators.extras) do
+			::continue::
+
+			if #extra.name <= 0 then
+				utils.notify(
+					"Extra decorator at position '" .. i .. "' is missing a name. Skipping...",
+					vim.log.levels.WARN
+				)
+				goto continue
+			end
+
 			if extra.position == position then
 				table.insert(decorators, extra)
 			end
@@ -49,12 +59,29 @@ function M.add_decorators(opts, buf, position, duplicate, modified)
 		return a.order < b.order
 	end)
 
+	--- @type table<string, boolean>
+	local rendered_decorators = {}
+
+	local fallback_hl = opts.bufs.hl.inactive
+
+	if utils.is_current_buf(buf.bufnr) then
+		fallback_hl = opts.bufs.hl.active
+	end
+
 	for _, decorator in ipairs(decorators) do
 		local text = utils.evaluate_buf_aware_option(decorator.text, buf)
 
-		if #text > 0 then
-			part = part .. text
+		if #text > 0 and not rendered_decorators[decorator.name] then
+			rendered_decorators[decorator.name] = true
 			len = len + #text
+
+			local hl = utils.evaluate_buf_aware_option(decorator.hl or fallback_hl, buf)
+
+			if type(hl) == "string" then
+				text = utils.hl(hl) .. text .. "%*"
+			end
+
+			part = part .. text
 		end
 	end
 

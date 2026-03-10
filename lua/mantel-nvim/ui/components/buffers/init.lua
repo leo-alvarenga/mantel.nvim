@@ -2,7 +2,7 @@ local utils = require("mantel-nvim.utils")
 
 local decorators = require("mantel-nvim.ui.components.buffers.decorators")
 
-local hl = utils.hl
+local hl = utils.buf_aware_hl
 
 local M = {}
 
@@ -22,6 +22,11 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 	local modified = buf.changed == 1
 
 	local name = buf.name
+	local name_hl = opts.bufs.hl.inactive
+
+	if is_current then
+		name_hl = opts.bufs.hl.active
+	end
 
 	if name == "" then
 		name = utils.evaluate_buf_aware_option(opts.bufs.overwrites.no_name, buf)
@@ -31,19 +36,18 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 		name = utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, buf)
 	end
 
-	local name_before, name_after = decorators.get_name_decorators(opts, buf, modified, is_ambiguos)
+	local name_before, name_after, name_before_len, name_after_len =
+		decorators.get_name_decorators(opts, buf, modified, is_ambiguos)
+
 	local prefix, prefix_len = decorators.get_prefix(opts, buf, is_ambiguos, modified)
 	local suffix, suffix_len = decorators.get_suffix(opts, buf, is_ambiguos, modified)
 
-	name = name_before .. name .. name_after
-	local part = prefix .. utils.center_text(name, opts.bufs.min_width - prefix_len - suffix_len) .. suffix
-	local len = #part
+	local centered_name = utils.center_text(name, opts.bufs.min_width - prefix_len - suffix_len)
+	local len = #centered_name + prefix_len + suffix_len + name_before_len + name_after_len
 
-	if is_current then
-		part = hl(opts.bufs.hl.active) .. part .. hl(opts.bufs.hl.inactive)
-	else
-		part = hl(opts.bufs.hl.inactive) .. part
-	end
+	centered_name = hl(buf, name_hl) .. centered_name .. "%*"
+	local part = name_before .. centered_name .. name_after
+	part = prefix .. part .. suffix
 
 	return part, len
 end
@@ -67,11 +71,11 @@ function M.get(opts)
 		total_len = total_len + len
 
 		if i == #bufs then
-			part = part .. hl(opts.bufs.hl.fill)
+			part = part .. hl(buf, opts.bufs.hl.fill)
 		elseif opts.bufs.decorators.sep then
 			local sep = utils.evaluate_buf_aware_option(opts.bufs.decorators.sep, buf)
 
-			part = part .. hl(opts.bufs.hl.separator) .. sep
+			part = part .. hl(buf, opts.bufs.hl.separator) .. sep .. "%*"
 			total_len = total_len + #sep
 		end
 	end

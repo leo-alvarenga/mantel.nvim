@@ -7,8 +7,8 @@ local function get_default_highlights()
 	local tabsel = utils.get_hl("TabLineSel")
 	local tabline = utils.get_hl("TabLine")
 
-	local comment = utils.get_hl("Comment")
 	local diag_info = utils.get_hl("DiagnosticInfo")
+	local diag_error = utils.get_hl("DiagnosticError")
 
 	return {
 		fill = {
@@ -25,17 +25,52 @@ local function get_default_highlights()
 			bold = true,
 		},
 		modified = {
-			fg = comment.fg,
-			bg = tabline.bg,
-			italic = true,
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
 		},
 		duplicate = {
-			fg = comment.fg,
-			bg = tabline.bg,
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
 		},
+
 		separator = {
-			fg = comment.fg,
-			bg = tabsel.fg,
+			fg = diag_info.fg or statusline.fg,
+		},
+
+		diagnostics_error = {
+			fg = diag_error.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
+		},
+		diagnostics_warn = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+		},
+		diagnostics_info = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+		},
+		diagnostics_hint = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+		},
+		diagnostics_error_inactive = {
+			fg = diag_error.fg or statusline.fg,
+			bg = statusline.bg,
+		},
+		diagnostics_warn_inactive = {
+			fg = diag_info.fg or statusline.fg,
+			bg = statusline.bg,
+		},
+		diagnostics_info_inactive = {
+			fg = diag_info.fg or statusline.fg,
+			bg = statusline.bg,
+		},
+		diagnostics_hint_inactive = {
+			fg = diag_info.fg or statusline.fg,
+			bg = statusline.bg,
 		},
 	}
 end
