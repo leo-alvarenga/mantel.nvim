@@ -18,10 +18,11 @@ function M.reset()
 	M._state.next_position = 1
 end
 
-function M.get_bufs()
+--- @param bypass_sorting boolean?
+function M.get_bufs(bypass_sorting)
 	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
 
-	if M._state.mode == "classic" then
+	if M._state.mode == "classic" or bypass_sorting == true then
 		return bufs
 	end
 
@@ -50,7 +51,7 @@ function M.add_buf(bufnr)
 end
 
 function M.sync_bufs()
-	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+	local bufs = M.get_bufs(true)
 	local existing_bufs = {}
 
 	for _, buf in ipairs(bufs) do
@@ -83,6 +84,11 @@ function M.go_to_buf_delta(delta, call_update)
 	end
 
 	local bufs = M.get_bufs()
+
+	if #bufs <= 1 then
+		return
+	end
+
 	local current_bufnr = vim.api.nvim_get_current_buf()
 
 	--- @type integer|nil

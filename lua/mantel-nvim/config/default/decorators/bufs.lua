@@ -1,6 +1,47 @@
 local utils = require("mantel-nvim.utils")
 local default_hl = require("mantel-nvim.config.default.highlights")
 
+--- @param bufnr integer
+--- @return integer?
+local function get_relevant_diagnostics(bufnr)
+	local diagnostics = vim.diagnostic.get(bufnr)
+
+	if #diagnostics == 0 then
+		return nil
+	end
+
+	--- @type integer
+	local diag = vim.iter(diagnostics):fold(vim.diagnostic.severity.HINT, function(acc, diagnostic)
+		if diagnostic.severity < acc then
+			return diagnostic.severity
+		end
+
+		return acc
+	end)
+
+	return diag
+end
+
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @return mantel-nvim.BufAwareStr
+local function get_diagnostics_hl(buf)
+	local is_curr = utils.is_current_buf(buf.bufnr)
+	local diag = get_relevant_diagnostics(buf.bufnr)
+
+	if not diag then
+		return ""
+	end
+
+	local options = {
+		[vim.diagnostic.severity.ERROR] = is_curr and default_hl.diagnostics_error
+			or default_hl.diagnostics_error_inactive,
+		[vim.diagnostic.severity.WARN] = is_curr and default_hl.diagnostics_warn
+			or default_hl.diagnostics_warn_inactive,
+	}
+
+	return options[diag] or ""
+end
+
 --- @type mantel-nvim.Decorators
 return {
 	sep = "",
@@ -16,33 +57,14 @@ return {
 	diagnostics = {
 		name = "diagnostics",
 		order = 2,
-		position = "name_before",
+		position = "prefix",
 		hl = function(buf)
-			local hl = default_hl.diagnostics_error_inactive
-
-			if utils.is_current_buf(buf.bufnr) then
-				hl = default_hl.diagnostics_error
-			end
+			local hl = get_diagnostics_hl(buf)
 
 			return utils.evaluate_buf_aware_option(hl, buf)
 		end,
 		text = function(buf)
-			local diagnostics = vim.diagnostic.get(buf.bufnr)
-
-			if #diagnostics == 0 then
-				return ""
-			end
-
-			--- @type integer
-			local diag = vim.iter(diagnostics):fold(vim.diagnostic.severity.HINT, function(acc, diagnostic)
-				if diagnostic.severity < acc then
-					return diagnostic.severity
-				end
-
-				return acc
-			end)
-
-			local res = ""
+			local diag = get_relevant_diagnostics(buf.bufnr) or 0
 
 			local symbols = {
 				[vim.diagnostic.severity.ERROR] = " ",
@@ -50,10 +72,10 @@ return {
 			}
 
 			if symbols[diag] then
-				res = symbols[diag] .. " "
+				return symbols[diag] .. " "
 			end
 
-			return res
+			return ""
 		end,
 	},
 }

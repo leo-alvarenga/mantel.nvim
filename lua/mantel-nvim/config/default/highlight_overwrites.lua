@@ -9,6 +9,7 @@ local function get_default_highlights()
 
 	local diag_info = utils.get_hl("DiagnosticInfo")
 	local diag_error = utils.get_hl("DiagnosticError")
+	local diag_warn = utils.get_hl("DiagnosticWarn")
 
 	return {
 		fill = {
@@ -45,7 +46,7 @@ local function get_default_highlights()
 			bold = true,
 		},
 		diagnostics_warn = {
-			fg = diag_info.fg or statusline.fg,
+			fg = diag_warn.fg or statusline.fg,
 			bg = normal.bg,
 		},
 		diagnostics_info = {
@@ -61,7 +62,7 @@ local function get_default_highlights()
 			bg = statusline.bg,
 		},
 		diagnostics_warn_inactive = {
-			fg = diag_info.fg or statusline.fg,
+			fg = diag_warn.fg or statusline.fg,
 			bg = statusline.bg,
 		},
 		diagnostics_info_inactive = {

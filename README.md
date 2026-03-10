@@ -35,11 +35,12 @@ Custom configuration example:
 ## Next on the roadmap
 
 - [x] Diagnostic indicators
-- [ ] Decorator custom HL improvements <- Current
-- [ ] Git indicators
+- [x] Decorator custom HL improvements
 - [ ] LSP status indicators
 
 # Installation
+
+> `mantel.nvim` requires Neovim **0.10** or higher
 
 ## Using vim-plug
 
