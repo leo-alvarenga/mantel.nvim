@@ -5,51 +5,31 @@ local M = {}
 --- @param opts mantel-nvim.Opts
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @param position mantel-nvim.Positionable
---- @param duplicate boolean
---- @param modified boolean
 --- @return string part, integer len
-function M.add_decorators(opts, buf, position, duplicate, modified)
+function M.add_decorators(opts, buf, position)
 	local part = ""
 
 	--- @type mantel-nvim.PositionableDecorator[]
 	local decorators = {}
 	local len = 0
 
-	----------------------------------------------------------
-	--- Native decorators
-	----------------------------------------------------------
+	--- @type mantel-nvim.PositionableDecorator[]
+	local all_decorators =
+		vim.tbl_extend("keep", {}, opts.bufs.decorators.extras or {}, opts.bufs.decorators.native or {})
 
-	if duplicate and opts.bufs.decorators.duplicate and opts.bufs.decorators.duplicate.position == position then
-		table.insert(decorators, opts.bufs.decorators.duplicate)
-	end
+	for i, decorator in ipairs(all_decorators) do
+		::continue::
 
-	if modified and opts.bufs.decorators.modified and opts.bufs.decorators.modified.position == position then
-		table.insert(decorators, opts.bufs.decorators.modified)
-	end
+		if #decorator.name <= 0 then
+			utils.notify(
+				"Extra decorator at position '" .. i .. "' is missing a name. Skipping...",
+				vim.log.levels.WARN
+			)
+			goto continue
+		end
 
-	if opts.bufs.decorators.diagnostics and opts.bufs.decorators.diagnostics.position == position then
-		table.insert(decorators, opts.bufs.decorators.diagnostics)
-	end
-
-	----------------------------------------------------------
-	--- Extra decorators
-	----------------------------------------------------------
-
-	if opts.bufs.decorators.extras and #opts.bufs.decorators.extras > 0 then
-		for i, extra in ipairs(opts.bufs.decorators.extras) do
-			::continue::
-
-			if #extra.name <= 0 then
-				utils.notify(
-					"Extra decorator at position '" .. i .. "' is missing a name. Skipping...",
-					vim.log.levels.WARN
-				)
-				goto continue
-			end
-
-			if extra.position == position then
-				table.insert(decorators, extra)
-			end
+		if not decorator.disabled and decorator.position == position then
+			table.insert(decorators, decorator)
 		end
 	end
 

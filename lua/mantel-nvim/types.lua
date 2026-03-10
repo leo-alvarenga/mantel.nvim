@@ -62,6 +62,7 @@
 --- | 'suffix'
 
 --- @class mantel-nvim.PositionableDecorator
+--- @field disabled boolean?
 --- @field name string A user-friendly name for the decorator, useful for configuration and debugging
 --- @field order mantel-nvim.BufAwareNumber
 --- @field text mantel-nvim.BufAwareStr
@@ -72,10 +73,7 @@
 --- @field sep mantel-nvim.BufAwareStr?
 --- @field prefix mantel-nvim.BufAwareStr?
 --- @field suffix mantel-nvim.BufAwareStr?
---- @field git mantel-nvim.PositionableDecorator?
---- @field diagnostics mantel-nvim.PositionableDecorator?
---- @field modified mantel-nvim.PositionableDecorator?
---- @field duplicate mantel-nvim.PositionableDecorator?
+--- @field native mantel-nvim.PositionableDecorator[]? Native decorators are those that mantel-nvim provides out of the box, such as diagnostics, modified status, and duplicate status
 --- @field extras mantel-nvim.PositionableDecorator[]?
 
 --- @class mantel-nvim.BufContentOverwrites

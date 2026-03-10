@@ -47,35 +47,46 @@ return {
 	sep = "",
 	prefix = "| ",
 	suffix = " ",
-	modified = {
-		name = "modified",
-		order = 1,
-		text = " ●",
-		position = "suffix",
-	},
 
-	diagnostics = {
-		name = "diagnostics",
-		order = 2,
-		position = "prefix",
-		hl = function(buf)
-			local hl = get_diagnostics_hl(buf)
+	native = {
+		----------------------------------------------------------
+		--- Prefix decorators
+		----------------------------------------------------------
+		{
+			name = "diagnostics",
+			order = 2,
+			position = "prefix",
+			hl = function(buf)
+				local hl = get_diagnostics_hl(buf)
 
-			return utils.evaluate_buf_aware_option(hl, buf)
-		end,
-		text = function(buf)
-			local diag = get_relevant_diagnostics(buf.bufnr) or 0
+				return utils.evaluate_buf_aware_option(hl, buf)
+			end,
+			text = function(buf)
+				local diag = get_relevant_diagnostics(buf.bufnr) or 0
 
-			local symbols = {
-				[vim.diagnostic.severity.ERROR] = " ",
-				[vim.diagnostic.severity.WARN] = " ",
-			}
+				local symbols = {
+					[vim.diagnostic.severity.ERROR] = " ",
+					[vim.diagnostic.severity.WARN] = " ",
+				}
 
-			if symbols[diag] then
+				if not symbols[diag] then
+					return ""
+				end
+
 				return symbols[diag] .. " "
-			end
+			end,
+		},
 
-			return ""
-		end,
+		----------------------------------------------------------
+		--- Suffix decorators
+		----------------------------------------------------------
+		{
+			name = "modified",
+			order = 1,
+			text = function(buf)
+				return buf.changed == 1 and " ●" or ""
+			end,
+			position = "suffix",
+		},
 	},
 }

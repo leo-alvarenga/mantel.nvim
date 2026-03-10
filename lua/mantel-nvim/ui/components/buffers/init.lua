@@ -19,8 +19,6 @@ end
 --- @param is_ambiguos boolean
 --- @return string res, integer len
 function M._private.render_buf(opts, buf, is_current, is_ambiguos)
-	local modified = buf.changed == 1
-
 	local name = buf.name
 	local name_hl = opts.bufs.hl.inactive
 
@@ -36,11 +34,10 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 		name = utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, buf)
 	end
 
-	local name_before, name_after, name_before_len, name_after_len =
-		decorators.get_name_decorators(opts, buf, modified, is_ambiguos)
+	local name_before, name_after, name_before_len, name_after_len = decorators.get_name_decorators(opts, buf)
 
-	local prefix, prefix_len = decorators.get_prefix(opts, buf, is_ambiguos, modified)
-	local suffix, suffix_len = decorators.get_suffix(opts, buf, is_ambiguos, modified)
+	local prefix, prefix_len = decorators.get_prefix(opts, buf)
+	local suffix, suffix_len = decorators.get_suffix(opts, buf)
 
 	local centered_name = utils.center_text(name, opts.bufs.min_width - prefix_len - suffix_len)
 	local len = #centered_name + prefix_len + suffix_len + name_before_len + name_after_len
