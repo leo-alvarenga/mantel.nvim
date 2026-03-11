@@ -47,31 +47,31 @@ function M.add_buf(bufnr)
 	if not existing_position or type(existing_position) ~= "number" then
 		M._state.buf_positions[bufnr] = M._state.next_position
 		M._state.next_position = M._state.next_position + 1
+
+		return M._state.buf_positions[bufnr]
 	end
+
+	return existing_position
 end
 
-function M.sync_bufs()
-	local bufs = M.get_bufs(true)
-	local existing_bufs = {}
+--- @param bufnr integer
+function M.remove_buf(bufnr)
+	--- @type table<integer, integer>
+	local positions = {}
 
-	for _, buf in ipairs(bufs) do
-		existing_bufs[buf.bufnr] = true
-
-		if not M._state.buf_positions[buf.bufnr] then
-			M.add_buf(buf.bufnr)
+	local i = 1
+	for _, buf in ipairs(M._state.buf_positions) do
+		if buf ~= bufnr then
+			positions[buf] = i
+			i = i + 1
 		end
 	end
 
-	for bufnr in pairs(M._state.buf_positions) do
-		if not existing_bufs[bufnr] then
-			M._state.buf_positions[bufnr] = nil
-		end
-	end
+	M._state.buf_positions = positions
+	M._state.next_position = i
 end
 
 function M.call_update()
-	M.sync_bufs()
-
 	vim.cmd("redrawtabline")
 end
 
@@ -131,35 +131,46 @@ function M.move_current_buf(delta, call_update)
 	local current_bufnr = vim.api.nvim_get_current_buf()
 	local current_position = M._state.buf_positions[current_bufnr]
 
-	if delta == 0 or delta < -1 or delta > 1 then
+	if delta == 0 or math.abs(delta) > 1 then
 		return
 	end
 
 	if not current_position then
-		M.add_buf(current_bufnr)
-		M.move_current_buf(delta, call_update)
-
-		return
-	end
-
-	if #M._state.buf_positions <= 1 then
-		return
+		current_position = M.add_buf(current_bufnr)
 	end
 
 	local new_position = current_position + delta
 
+	if new_position < 1 or new_position > M._state.next_position then
+		return
+	end
+
 	for bufnr, pos in pairs(M._state.buf_positions) do
 		if pos == new_position then
 			M._state.buf_positions[bufnr] = current_position
-			break
+			M._state.buf_positions[current_bufnr] = new_position
+
+			if call_update == true then
+				M.call_update()
+			end
+
+			return
 		end
 	end
+end
 
-	M._state.buf_positions[current_bufnr] = new_position
+function M.setup_autocmds()
+	vim.api.nvim_create_autocmd("BufAdd", {
+		callback = function(args)
+			M.add_buf(args.buf)
+		end,
+	})
 
-	if call_update == true then
-		M.call_update()
-	end
+	vim.api.nvim_create_autocmd("BufDelete", {
+		callback = function(args)
+			M.remove_buf(args.buf)
+		end,
+	})
 end
 
 function M.setup_cmds()
@@ -186,6 +197,10 @@ function M.init(opts)
 	M._state.mode = opts.mode
 
 	M.setup_cmds()
+
+	if opts.mode == "enhanced" then
+		M.setup_autocmds()
+	end
 end
 
 return M
