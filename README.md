@@ -30,11 +30,11 @@ If you want to know _why_, when there are already so many bufferline plugins, ch
 
 Default configuration:
 
-![Default preview](./docs/default.png)
+![Default preview](./docs/images/default.png)
 
 Custom configuration example:
 
-![Custom preview](./docs/custom.png)
+![Custom preview](./docs/images/custom.png)
 
 ## Features
 
