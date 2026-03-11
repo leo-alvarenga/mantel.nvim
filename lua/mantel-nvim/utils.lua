@@ -2,6 +2,15 @@ local M = {}
 
 M.fmt = string.format
 
+function M.is_current_buf(bufnr)
+	return vim.api.nvim_get_current_buf() == bufnr
+end
+
+--- Wrapper around `vim.notify` that sets a default log level and title
+function M.notify(msg, level)
+	vim.notify(msg, level or vim.log.levels.INFO, { title = "Mantel" })
+end
+
 --- Wrapper around `nvim_get_hl` that returns an empty table if the highlight group doesn't exist
 --- @param name string
 --- @return table
@@ -21,11 +30,6 @@ end
 function M.bg(name)
 	local hl = M.get_hl(name)
 	return hl.bg and string.format("#%06x", hl.bg) or nil
-end
-
---- Gets the background color for the current buffer
-function M.get_buf_bg()
-	return M.bg("Normal") or M.bg("NormalNC") or M.bg("NormalFloat") or M.bg("StatusLine")
 end
 
 --- @param option string|fun(): string
@@ -70,11 +74,11 @@ function M.evaluate_table_option(option)
 	return {}
 end
 
---- @param option mantel-nvim.BufAwareText
+--- @param option mantel-nvim.BufAwareStr
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @return string val
 function M.evaluate_buf_aware_option(option, buf)
-	if type(option) == "string" then
+	if type(option) == "string" and #option > 0 then
 		return option
 	elseif type(option) == "function" then
 		return M.evaluate_buf_aware_option(option(buf), buf)
@@ -93,67 +97,41 @@ function M.hl(hl)
 	return M.fmt("%%#%s#", hl)
 end
 
+--- Formats a highlight group for use in the statusline/tabline
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @param hl mantel-nvim.BufAwareStr
+function M.buf_aware_hl(buf, hl)
+	local hl_val = M.evaluate_buf_aware_option(hl, buf)
+
+	if type(hl_val) ~= "string" or #hl_val < 1 then
+		return ""
+	end
+
+	return M.fmt("%%#%s#", hl)
+end
+
 --- Centers the given text within a field of the specified width, using the specified filler character
 --- @param text string The text to center
 --- @param width integer The total width of the field
 --- @param filler_char string? The character to use for filling the space (default: " ")
+--- @return string centered_text, integer padding
 function M.center_text(text, width, filler_char)
 	local text_len = #text
 	filler_char = filler_char or " "
 
 	if text_len >= width then
-		return text
+		return text, 0
 	end
 
 	local padding = math.max(0, math.floor((width - #text) / 2))
 	local left_padding = string.rep(filler_char, padding)
-	local right_padding = string.rep(filler_char, width - text_len - padding)
+	local right_padding = string.rep(filler_char, math.max(0, width - text_len - padding))
 
-	return left_padding .. text .. right_padding
+	return left_padding .. text .. right_padding, padding
 end
 
---- @param opts mantel-nvim.Opts
---- @param position mantel-nvim.Positionable
---- @param duplicate boolean
---- @param modified boolean
---- @return string part, integer len
-function M.add_decorators(opts, position, duplicate, modified)
-	local part = ""
-
-	--- @type mantel-nvim.PositionableDecorator[]
-	local decorators = {}
-	local len = 0
-
-	if
-		duplicate
-		and opts.bufs.decorators.duplicate
-		and M.evaluate_toggle(opts.bufs.decorators.duplicate.enabled)
-		and opts.bufs.decorators.duplicate.position == position
-	then
-		table.insert(decorators, opts.bufs.decorators.duplicate)
-	end
-
-	if
-		modified
-		and opts.bufs.decorators.modified
-		and M.evaluate_toggle(opts.bufs.decorators.modified.enabled)
-		and opts.bufs.decorators.modified.position == position
-	then
-		table.insert(decorators, opts.bufs.decorators.modified)
-	end
-
-	table.sort(decorators, function(a, b)
-		return a.order < b.order
-	end)
-
-	for _, decorator in ipairs(decorators) do
-		local text = M.evaluate_option(decorator.text)
-
-		part = part .. text
-		len = len + #text
-	end
-
-	return part, len
-end
+M.trigger_update = vim.schedule_wrap(function()
+	vim.cmd("redrawtabline")
+end)
 
 return M
