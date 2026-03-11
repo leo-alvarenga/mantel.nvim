@@ -3,61 +3,36 @@
 Everything has a default value, so configuration is optional.
 
 ```lua
-require("mantel-nvim").setup({
-  mode = "classic",
-
-  bufs = {
-    decorators = {
-      sep = "",
-      prefix = "| ",
-      suffix = " ",
-
-      native = {},
-      extras = {},
-    },
-
-    min_width = 10,
-
-    hl = {
-      fill = "MantelFill",
-      inactive = "MantelInactive",
-      active = "MantelActive",
-      separator = "MantelSeparator",
-    },
-
-    overwrites = {
-      ambiguos = function(buf)
-        return vim.fn.fnamemodify(buf.name, ":.")
-      end,
-
-      name = function(buf)
-        return vim.fn.fnamemodify(buf.name, ":t")
-      end,
-
-      no_name = "[No name]",
-    },
-  },
-
-  tabs = {
-    decorators = {
-      sep = "",
-      prefix = " ",
-      suffix = " ",
-    },
-
-    enabled = "auto",
-    min_width = 5,
-
-    hl = {
-      fill = "MantelFill",
-      inactive = "MantelInactive",
-      active = "MantelActive",
-      separator = "MantelSeparator",
-    },
-  },
-
-  highlight_overwrites = function()
-    -- derived from colorscheme-agnostic defaults
-  end,
-})
+-- This will give a very close to native xp
+require("mantel-nvim").setup({})
 ```
+
+Another common use case is to keep the default look and feel, but enable the `enhanced` mode:
+
+```lua
+-- With lazy.nvim
+
+return {
+	"leo-alvarenga/mantel.nvim",
+	branch = "nightly",
+	config = function()
+		local mantel = require("mantel-nvim")
+
+		local opts = {
+			mode = "enhanced",
+		}
+
+		mantel.setup(opts)
+
+    vim.keymap.set("", "<leader>h", ":MantelBufPrev<CR>", { desc = "Focus previous buffer" })
+    vim.keymap.set("", "<leader>l", ":MantelBufNext<CR>", { desc = "Focus previous buffer" })
+    vim.keymap.set("", "<leader>H", ":MantelMoveBufLeft<CR>", { desc = "Move current buffer to the left" })
+    vim.keymap.set("", "<leader>L", ":MantelMoveBufRight<CR>", { desc = "Move current buffer to the right" })
+	end,
+}
+```
+
+For a complete list of options and their types, see the [References](./References.md) guide.
+For examples on different ways use these options, see the [Recipes](./Recipes.md) guide.
+
+[Back to README](../README.md)

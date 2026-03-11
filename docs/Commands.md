@@ -2,6 +2,13 @@
 
 `mantel.nvim` exposes a few user commands for interacting with the tabline.
 
+- [Command list](#commands)
+  - [`:MantelBufPrev`](#mantelbufprev)
+  - [`:MantelBufNext`](#mantelbufnext)
+  - [`:MantelMoveBufLeft`](#mantelmovebufleft)
+  - [`:MantelMoveBufRight`](#mantelmovebufright)
+  - [`:MantelReloadColors`](#mantelreloadcolors)
+
 ### `:MantelBufPrev`
 
 Focuses the previous buffer in the tabline.
@@ -59,3 +66,5 @@ This can be useful when:
 - changing colorschemes
 - tweaking highlight overrides
 - testing colors during development
+
+[Back to README](../README.md)
