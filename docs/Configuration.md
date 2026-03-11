@@ -15,6 +15,14 @@ Another common use case is to keep the default look and feel, but enable the `en
 return {
 	"leo-alvarenga/mantel.nvim",
 	branch = "nightly",
+
+	-- If you have a file icon plugin, you can add it as a dependency to have icons in the bufferline
+	dependencies = {
+		"nvim-tree/nvim-web-devicons",
+		-- or
+		'nvim-mini/mini.icons',
+	},
+
 	config = function()
 		local mantel = require("mantel-nvim")
 

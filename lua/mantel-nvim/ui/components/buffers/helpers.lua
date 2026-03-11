@@ -25,10 +25,11 @@ function M.add_decorators(opts, buf, position)
 				"Extra decorator at position '" .. i .. "' is missing a name. Skipping...",
 				vim.log.levels.WARN
 			)
+
 			goto continue
 		end
 
-		if not decorator.disabled and decorator.position == position then
+		if decorator.disabled ~= true and decorator.position == position then
 			table.insert(decorators, decorator)
 		end
 	end
