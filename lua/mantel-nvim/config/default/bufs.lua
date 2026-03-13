@@ -4,7 +4,8 @@ local default_hl = require("mantel-nvim.config.default.highlights")
 --- @type mantel-nvim.Bufs
 return {
 	decorators = buf_decorators,
-	min_width = 10,
+	min_padding = 4,
+	min_width = 20,
 	hl = default_hl,
 
 	overwrites = {

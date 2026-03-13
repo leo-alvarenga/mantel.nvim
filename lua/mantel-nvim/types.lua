@@ -41,6 +41,22 @@
 --- @field diagnostics_info_inactive mantel-nvim.BufAwareStr
 --- @field diagnostics_hint_inactive mantel-nvim.BufAwareStr
 
+--- @class mantel-nvim.TabHighlightGroups
+--- @field fill string
+--- @field inactive string
+--- @field active string
+--- @field modified string
+--- @field duplicate string
+--- @field separator string
+--- @field diagnostics_error string
+--- @field diagnostics_warn string
+--- @field diagnostics_info string
+--- @field diagnostics_hint string
+--- @field diagnostics_error_inactive string
+--- @field diagnostics_warn_inactive string
+--- @field diagnostics_info_inactive string
+--- @field diagnostics_hint_inactive string
+
 ------------------------------------------
 ---  Buffers
 ------------------------------------------
@@ -83,6 +99,7 @@
 --- @field decorators mantel-nvim.Decorators
 --- @field hl mantel-nvim.HighlightGroups
 --- @field min_width integer Minimum width for each buffer in the tabline
+--- @field min_padding integer Minimum padding (blank spaces) on each side of the buffer name
 --- @field overwrites mantel-nvim.BufContentOverwrites
 
 ------------------------------------------
@@ -95,7 +112,7 @@
 --- | "never"
 
 --- @class mantel-nvim.Tabs
---- @field hl mantel-nvim.HighlightGroups
+--- @field hl mantel-nvim.TabHighlightGroups
 --- @field enabled boolean|mantel-nvim.TabBehavior "auto" to enable only when more than 1 tab is open (default); 'true' 'always' to always enable; 'false' or 'never' to disable
 --- @field min_width integer Minimum width for each tab in the tabline
 

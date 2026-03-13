@@ -1,8 +1,3 @@
-local lazy = require("mantel-nvim.lazy")
-
-local utils = lazy.require("mantel-nvim.utils")
-local hl = utils.hl
-
 local M = {}
 
 M._private = {}
@@ -26,7 +21,10 @@ end
 --- @param is_current boolean
 --- @return string res, integer len
 function M._private.render_tab(opts, tab, is_current)
-	local label = utils.center_text(tostring(tab.tabnr or "?"), opts.tabs.min_width)
+	local utils = require("mantel-nvim.utils")
+	local hl = utils.hl
+
+	local label = utils.center_text({ text = tostring(tab.tabnr or "?"), width = opts.tabs.min_width })
 
 	if is_current then
 		return hl(opts.tabs.hl.active) .. label .. hl(opts.tabs.hl.inactive), #label

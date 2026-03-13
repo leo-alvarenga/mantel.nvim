@@ -59,7 +59,7 @@ function M.add_decorators(opts, buf, position)
 			local hl = utils.evaluate_buf_aware_option(decorator.hl or fallback_hl, buf)
 
 			if type(hl) == "string" then
-				text = utils.hl(hl) .. text .. "%*"
+				text = utils.hl(hl) .. text
 			end
 
 			part = part .. text

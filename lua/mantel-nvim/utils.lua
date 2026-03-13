@@ -110,22 +110,34 @@ function M.buf_aware_hl(buf, hl)
 	return M.fmt("%%#%s#", hl)
 end
 
+--- @class CenterTextOptions
+--- @field text string The text to center
+--- @field width integer The total width of the field
+--- @field filler_char string? The character to use for filling the space (default: " ")
+--- @field text_width integer? The display width of the text (if different from #text, e.g. due to multibyte characters)
+--- @field hl string? Optional highlight group
+--- @field min_padding integer? Minimum padding on each side (default: 0)
+
 --- Centers the given text within a field of the specified width, using the specified filler character
---- @param text string The text to center
---- @param width integer The total width of the field
---- @param filler_char string? The character to use for filling the space (default: " ")
+--- @param options CenterTextOptions
 --- @return string centered_text, integer padding
-function M.center_text(text, width, filler_char)
-	local text_len = #text
-	filler_char = filler_char or " "
+function M.center_text(options)
+	local text = options.text or ""
+	local text_len = options.text_width or #text
 
-	if text_len >= width then
-		return text, 0
-	end
+	local filler_char = options.filler_char or " "
 
-	local padding = math.max(0, math.floor((width - #text) / 2))
+	local width = options.width or 0
+	local hl = options.hl
+
+	local padding = math.max(options.min_padding or 0, math.floor((width - text_len) / 2))
 	local left_padding = string.rep(filler_char, padding)
-	local right_padding = string.rep(filler_char, math.max(0, width - text_len - padding))
+	local right_padding = string.rep(filler_char, math.max(options.min_padding or 0, width - text_len - padding))
+
+	if hl then
+		left_padding = M.hl(hl) .. left_padding
+		right_padding = M.hl(hl) .. right_padding
+	end
 
 	return left_padding .. text .. right_padding, padding
 end

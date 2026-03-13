@@ -32,7 +32,7 @@ function M.get_prefix(opts, buf)
 		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
 	end
 
-	return hl .. prefix .. "%*" .. decorators, len
+	return hl .. prefix .. decorators, len
 end
 
 --- @param opts mantel-nvim.Opts
@@ -54,7 +54,7 @@ function M.get_suffix(opts, buf)
 		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
 	end
 
-	return decorators .. hl .. suffix .. "%*", len
+	return decorators .. hl .. suffix, len
 end
 
 return M

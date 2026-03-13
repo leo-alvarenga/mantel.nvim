@@ -3,9 +3,9 @@ local icon = require("mantel-nvim.config.default.decorators.icon")
 
 --- @type mantel-nvim.Decorators
 return {
-	sep = "",
-	prefix = "| ",
-	suffix = " ",
+	sep = " ",
+	prefix = "",
+	suffix = "",
 
 	native = {
 		----------------------------------------------------------
@@ -23,7 +23,7 @@ return {
 			text = function(buf)
 				return buf.changed == 1 and " ●" or ""
 			end,
-			position = "suffix",
+			position = "name_after",
 		},
 	},
 }

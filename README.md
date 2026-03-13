@@ -24,6 +24,18 @@ Neovim’s built-in tabline works well... but can certainly look better. Many pl
 
 The idea is simple: give users a **clean way to render buffer and tab indicators** without too much hassle.
 
+### Roadmap
+
+- [x] Basic bufferline rendering
+- [x] Tabline support
+- [x] Decorator system
+- [x] Icon support
+- [x] Diagnostic indicators
+- [x] Configurable highlights
+- [ ] Document new sleek look! <- Currently in progress
+- [ ] Add buffer count indicators on overflow
+- [ ] Always center on the current buffer
+
 ## Preview
 
 Default configuration:

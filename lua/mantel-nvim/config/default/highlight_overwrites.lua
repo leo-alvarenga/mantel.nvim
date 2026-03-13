@@ -24,6 +24,7 @@ local function get_default_highlights()
 			fg = diag_info.fg or statusline.fg,
 			bg = normal.bg,
 			bold = true,
+			italic = true,
 		},
 		modified = {
 			fg = diag_info.fg or statusline.fg,

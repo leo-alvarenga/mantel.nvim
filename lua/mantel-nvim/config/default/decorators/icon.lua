@@ -19,7 +19,7 @@ local function try_nvim_web_devicons(buf)
 		return nil
 	end
 
-	return icon .. " "
+	return icon
 end
 
 --- @param buf vim.fn.getbufinfo.ret.item
@@ -41,17 +41,21 @@ local function try_mini_icons(buf)
 		return nil
 	end
 
-	return icon .. " "
+	return icon
 end
 
 --- @type mantel-nvim.PositionableDecorator
 return {
 	name = "fileicon",
 	order = 1,
-	position = "prefix",
+	position = "name_before",
 	--- @type fun(buf: vim.fn.getbufinfo.ret.item): string
 	text = function(buf)
 		local icon = try_nvim_web_devicons(buf) or try_mini_icons(buf)
+
+		if icon then
+			icon = icon .. "  "
+		end
 
 		return icon or ""
 	end,

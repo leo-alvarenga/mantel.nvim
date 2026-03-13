@@ -33,10 +33,8 @@ local function get_diagnostics_hl(buf)
 	end
 
 	local options = {
-		[vim.diagnostic.severity.ERROR] = is_curr and default_hl.diagnostics_error
-			or default_hl.diagnostics_error_inactive,
-		[vim.diagnostic.severity.WARN] = is_curr and default_hl.diagnostics_warn
-			or default_hl.diagnostics_warn_inactive,
+		[vim.diagnostic.severity.ERROR] = is_curr and default_hl.diagnostics_error or default_hl.inactive,
+		[vim.diagnostic.severity.WARN] = is_curr and default_hl.diagnostics_warn or default_hl.inactive,
 	}
 
 	return options[diag] or ""
@@ -46,7 +44,7 @@ end
 return {
 	name = "diagnostics",
 	order = 2,
-	position = "prefix",
+	position = "name_before",
 	hl = function(buf)
 		local hl = get_diagnostics_hl(buf)
 
