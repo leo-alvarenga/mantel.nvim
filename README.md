@@ -1,7 +1,5 @@
 # mantel.nvim
 
-> **Warning:** This is a toy project created to better understand Neovim's API and highlight features. It is not intended for daily use, even I do not use it regularly.
-
 A dead-simple, lightweight, customizable and _cozy_ tabline/bufferline for Neovim
 
 ## Table of Contents
@@ -19,8 +17,6 @@ A dead-simple, lightweight, customizable and _cozy_ tabline/bufferline for Neovi
   - [Recipes](./docs/Recipes.md)
 
 ## Motivation
-
-> **Note:** This project exists primarily as a way for me to better understand Neovim's APIs and highlight system. By building mantel.nvim, I'm able to explore how Neovim handles UI elements, buffer management, and custom highlighting, all while creating something useful for others.
 
 Neovim’s built-in tabline works well... but can certainly look better. Many plugins offer powerful bufferline features, but often introduce heavy abstractions or complex configuration.
 

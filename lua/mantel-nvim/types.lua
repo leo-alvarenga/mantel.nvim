@@ -108,7 +108,7 @@
 --- | "enhanced"
 
 --- @class mantel-nvim.Opts
---- @field disableWarning boolean? If true, mantel-nvim will not show the warning message when the user tries to use it
+--- @field displayWarning boolean? If true, mantel-nvim will show the warning message when the user tries to use it
 --- @field debug boolean?
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
 --- @field bufs mantel-nvim.Bufs

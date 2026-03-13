@@ -27,7 +27,7 @@ function M.setup(opts)
 
 	state.init(config.opts)
 
-	if not opts.disableWarning then
+	if opts.displayWarning then
 		vim.schedule(function()
 			vim.notify_once(
 				"This plugins IS NOT meant for daily use. It is a playground for testing out ideas and concepts ",
