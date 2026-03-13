@@ -21,7 +21,7 @@ return {
 			name = "modified",
 			order = 1,
 			text = function(buf)
-				return buf.changed == 1 and " ●" or ""
+				return buf.changed == 1 and "  ●" or ""
 			end,
 			position = "name_after",
 		},
