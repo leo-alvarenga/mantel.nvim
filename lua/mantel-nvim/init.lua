@@ -8,7 +8,7 @@ local tabline = lazy.require("mantel-nvim.ui.tabline")
 local M = {}
 
 M.patch = "0"
-M.minor = "15"
+M.minor = "16"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch
@@ -26,6 +26,28 @@ function M.setup(opts)
 	highlights.reload_colors(config.opts)
 
 	state.init(config.opts)
+
+	if not opts.disableWarning then
+		vim.schedule(function()
+			vim.notify_once(
+				"This plugins IS NOT meant for daily use. It is a playground for testing out ideas and concepts ",
+				vim.log.levels.WARN,
+				{ title = "mantel-nvim", timeout = 8000 }
+			)
+
+			vim.notify_once(
+				"Even though it may be stable, it is certainly NOT the best approach for it. Use at your own risk",
+				vim.log.levels.WARN,
+				{ title = "mantel-nvim", timeout = 8000 }
+			)
+
+			vim.notify_once(
+				"Disable this warning by setting `disableWarning` to `true` in the setup options",
+				vim.log.levels.WARN,
+				{ title = "mantel-nvim", timeout = 8000 }
+			)
+		end)
+	end
 
 	vim.o.showtabline = 2
 	vim.o.tabline = "%!v:lua.require'mantel-nvim'.render()"

@@ -5,6 +5,8 @@ local get_default_highlights = require("mantel-nvim.config.default.highlight_ove
 
 --- @type mantel-nvim.Opts
 return {
+	disableWarning = false,
+
 	mode = "classic",
 
 	bufs = bufs,

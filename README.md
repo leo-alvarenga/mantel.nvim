@@ -1,5 +1,7 @@
 # mantel.nvim
 
+> **Warning:** This is a toy project created to better understand Neovim's API and highlight features. It is not intended for daily use, even I do not use it regularly.
+
 A dead-simple, lightweight, customizable and _cozy_ tabline/bufferline for Neovim
 
 ## Table of Contents
@@ -18,13 +20,13 @@ A dead-simple, lightweight, customizable and _cozy_ tabline/bufferline for Neovi
 
 ## Motivation
 
+> **Note:** This project exists primarily as a way for me to better understand Neovim's APIs and highlight system. By building mantel.nvim, I'm able to explore how Neovim handles UI elements, buffer management, and custom highlighting, all while creating something useful for others.
+
 Neovim’s built-in tabline works well... but can certainly look better. Many plugins offer powerful bufferline features, but often introduce heavy abstractions or complex configuration.
 
 `mantel.nvim` aims to provide a **simple, predictable, and hackable tabline layer** that stays close to Neovim’s native behavior while still allowing deep customization (if and when desired).
 
 The idea is simple: give users a **clean way to render buffer and tab indicators** without too much hassle.
-
-If you want to know _why_, when there are already so many bufferline plugins, check out the [Comparison](#comparison) section at the end of this README.
 
 ## Preview
 
@@ -48,13 +50,9 @@ Custom configuration example:
 - Configurable highlight groups
 - Colorscheme-friendly defaults
 - Simple, predictable configuration
+- Icon support (optional)
+- Diagnostic indicators (optional)
 - Minimal runtime overhead
-
-### Next on the roadmap
-
-- [x] Diagnostic indicators
-- [x] Decorator custom HL improvements
-- [ ] LSP status indicators
 
 ## Installation
 
@@ -107,39 +105,6 @@ Each buffer entry supports:
 Tabs represent Neovim tabpages.
 
 They can be enabled or disabled independently from buffers.
-
-## Comparison
-
-`mantel.nvim` focuses on **simplicity and flexibility**, not feature overload.
-
-| Plugin          | Philosophy                                           |
-| --------------- | ---------------------------------------------------- |
-| bufferline.nvim | Feature-rich UI with many integrations               |
-| barbar.nvim     | Full tab-like buffer management                      |
-| `mantel.nvim`   | Minimal, customizable tabline close to native Neovim |
-
-### Key differences
-
-**mantel.nvim**
-
-- simple architecture
-- minimal logic
-- very customizable rendering
-- predictable behavior
-
-**bufferline.nvim**
-
-- advanced UI
-- animations, groups
-
-**barbar.nvim**
-
-- full tab-like buffer workflow
-- navigation commands
-
-If you want a **powerful UI**, use those plugins.
-
-If you want a **simple tabline you can fully control**, `mantel.nvim` may fit better.
 
 ## License
 
