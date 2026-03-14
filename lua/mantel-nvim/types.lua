@@ -9,6 +9,10 @@
 --- @field inactive mantel-nvim.HlEntry
 --- @field active mantel-nvim.HlEntry
 --- @field separator mantel-nvim.HlEntry
+--- @field prefix mantel-nvim.HlEntry
+--- @field suffix mantel-nvim.HlEntry
+--- @field prefix_inactive mantel-nvim.HlEntry
+--- @field suffix_inactive mantel-nvim.HlEntry
 --- @field diagnostics_error mantel-nvim.HlEntry
 --- @field diagnostics_warn mantel-nvim.HlEntry
 --- @field diagnostics_info mantel-nvim.HlEntry
@@ -32,6 +36,10 @@
 --- @field modified mantel-nvim.BufAwareStr
 --- @field duplicate mantel-nvim.BufAwareStr
 --- @field separator mantel-nvim.BufAwareStr
+--- @field prefix mantel-nvim.BufAwareStr
+--- @field suffix mantel-nvim.BufAwareStr
+--- @field prefix_inactive mantel-nvim.BufAwareStr
+--- @field suffix_inactive mantel-nvim.BufAwareStr
 --- @field diagnostics_error mantel-nvim.BufAwareStr
 --- @field diagnostics_warn mantel-nvim.BufAwareStr
 --- @field diagnostics_info mantel-nvim.BufAwareStr
@@ -124,10 +132,16 @@
 --- | "classic"
 --- | "enhanced"
 
+--- @alias mantel-nvim.StylePreset
+--- | "default"
+--- | "slanted"
+--- | "sloped"
+
 --- @class mantel-nvim.Opts
 --- @field displayWarning boolean? If true, mantel-nvim will show the warning message when the user tries to use it
 --- @field debug boolean?
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
+--- @field style mantel-nvim.StylePreset "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
 --- @field bufs mantel-nvim.Bufs
 --- @field tabs mantel-nvim.Tabs
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites

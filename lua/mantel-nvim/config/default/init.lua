@@ -8,6 +8,7 @@ return {
 	disableWarning = false,
 
 	mode = "classic",
+	style = "default",
 
 	bufs = bufs,
 	tabs = tabs,

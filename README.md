@@ -38,7 +38,7 @@ The idea is simple: give users a **clean way to render buffer and tab indicators
 
 ## Preview
 
-Default configuration:
+Default configuration (using the `default` style):
 
 ![Default preview](./docs/images/with_icons.png)
 
@@ -46,9 +46,17 @@ Or without icons:
 
 ![Default preview](./docs/images/default.png)
 
-Custom configuration example:
+With the `slanted` style:
 
-![Custom preview](./docs/images/custom.png)
+![Slanted preview](./docs/images/style_slanted.png)
+
+With the `sloped` style:
+
+![Sloped preview](./docs/images/style_sloped.png)
+
+With a custom separator:
+
+![Separator preview](./docs/images/separator_example1.png)
 
 ## Features
 

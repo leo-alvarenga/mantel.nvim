@@ -39,17 +39,17 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 	local prefix, prefix_len = decorators.get_prefix(opts, buf)
 	local suffix, suffix_len = decorators.get_suffix(opts, buf)
 
-	local len = #name
+	local len = #name + name_before_len + name_after_len
 	name = hl(buf, name_hl) .. name
 
-	local centered_name = utils.center_text({
+	local centered_name, padding_len = utils.center_text({
 		text = name_before .. name .. name_after,
 		width = opts.bufs.min_width - prefix_len - suffix_len,
-		text_width = len + name_before_len + name_after_len,
+		text_width = len,
 		min_padding = opts.bufs.min_padding,
 	})
 
-	len = #centered_name + prefix_len + suffix_len + name_before_len + name_after_len
+	len = len + prefix_len + suffix_len + padding_len
 	local part = prefix .. hl(buf, name_hl) .. centered_name .. suffix
 
 	return part, len
@@ -75,7 +75,7 @@ function M.get(opts)
 
 		if i == #bufs then
 			part = part .. hl(buf, opts.bufs.hl.fill)
-		elseif opts.bufs.decorators.sep then
+		elseif #opts.bufs.decorators.sep > 0 then
 			local sep = utils.evaluate_buf_aware_option(opts.bufs.decorators.sep, buf)
 
 			part = part .. hl(buf, opts.bufs.hl.separator) .. sep

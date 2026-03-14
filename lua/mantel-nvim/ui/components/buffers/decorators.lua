@@ -26,10 +26,10 @@ function M.get_prefix(opts, buf)
 		return "", 0
 	end
 
-	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.inactive)
+	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.prefix_inactive)
 
 	if utils.is_current_buf(buf.bufnr) then
-		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
+		hl = utils.buf_aware_hl(buf, opts.bufs.hl.prefix)
 	end
 
 	return hl .. prefix .. decorators, len
@@ -48,10 +48,10 @@ function M.get_suffix(opts, buf)
 		return "", 0
 	end
 
-	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.inactive)
+	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.suffix_inactive)
 
 	if utils.is_current_buf(buf.bufnr) then
-		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
+		hl = utils.buf_aware_hl(buf, opts.bufs.hl.suffix)
 	end
 
 	return decorators .. hl .. suffix, len
