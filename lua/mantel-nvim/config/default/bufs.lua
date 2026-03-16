@@ -15,6 +15,6 @@ return {
 		name = function(buf)
 			return vim.fn.fnamemodify(buf.name, ":t")
 		end,
-		no_name = "[No name]",
+		no_name = "[Empty buffer]",
 	},
 }
