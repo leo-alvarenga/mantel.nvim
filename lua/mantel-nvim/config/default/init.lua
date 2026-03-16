@@ -9,6 +9,11 @@ return {
 
 	mode = "classic",
 
+	style = {
+		preset = "default",
+		ignore_first_buffer_prefix = false,
+	},
+
 	bufs = bufs,
 	tabs = tabs,
 

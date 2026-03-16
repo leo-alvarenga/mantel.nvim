@@ -3,7 +3,7 @@ local icon = require("mantel-nvim.config.default.decorators.icon")
 
 --- @type mantel-nvim.Decorators
 return {
-	sep = " ",
+	sep = "",
 	prefix = "",
 	suffix = "",
 

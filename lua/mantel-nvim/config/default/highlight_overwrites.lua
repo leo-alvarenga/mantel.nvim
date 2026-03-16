@@ -36,9 +36,25 @@ local function get_default_highlights()
 			bg = normal.bg,
 			bold = true,
 		},
-
 		separator = {
 			fg = diag_info.fg or statusline.fg,
+			bg = statusline.bg,
+		},
+		prefix = {
+			bg = normal.bg,
+			fg = statusline.bg,
+		},
+		suffix = {
+			bg = normal.bg,
+			fg = statusline.bg,
+		},
+		prefix_inactive = {
+			fg = statusline.bg,
+			bg = statusline.bg,
+		},
+		suffix_inactive = {
+			fg = statusline.bg,
+			bg = statusline.bg,
 		},
 
 		diagnostics_error = {

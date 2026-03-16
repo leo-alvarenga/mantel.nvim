@@ -32,13 +32,15 @@ The idea is simple: give users a **clean way to render buffer and tab indicators
 - [x] Icon support
 - [x] Diagnostic indicators
 - [x] Configurable highlights
-- [ ] Document new sleek look! <- Currently in progress
-- [ ] Add buffer count indicators on overflow
-- [ ] Always center on the current buffer
+- [x] Document new sleek look!
+- [ ] Add overflow handling <- Currently in progress
+  - [ ] Add buffer count indicators on overflow
+  - [ ] Always center on the current buffer
+  - [ ] Ensure spacing is done correctly
 
 ## Preview
 
-Default configuration:
+Default configuration (using the `default` style preset):
 
 ![Default preview](./docs/images/with_icons.png)
 
@@ -46,9 +48,17 @@ Or without icons:
 
 ![Default preview](./docs/images/default.png)
 
-Custom configuration example:
+With the `slanted` style preset:
 
-![Custom preview](./docs/images/custom.png)
+![Slanted preview](./docs/images/style_slanted.png)
+
+With the `sloped` style preset:
+
+![Sloped preview](./docs/images/style_sloped.png)
+
+With a custom separator:
+
+![Separator preview](./docs/images/separator_example1.png)
 
 ## Features
 

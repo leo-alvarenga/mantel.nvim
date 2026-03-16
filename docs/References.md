@@ -155,13 +155,29 @@ Selects the plugin's operational mode: "classic" for traditional tabline, "enhan
 
 - One of: `"classic"`, `"enhanced"`.
 
+#### `mantel-nvim.StylePreset`
+
+The style preset to use for the tabline's appearance. Each preset builds on the existing highlight groups and decorators, by adding a custom glyphs for a better look and feel.
+
+- One of:
+  - `default`: No special glyphs
+  - `slanted`: Uses slanted prefix and suffix glyphs for buffers, which gives a nice dynamic and modern look to the tabline. The separators are designed to create a sense of flow and movement
+  - `slanted_inverted`: Similar to `slanted`, but with inverts the glyphs
+  - `sloped`: Uses sloped prefix and suffix glyphs for buffers, which creates a more angular and edgy look. This will give an appearance very similar to tabs in VSCode
+  - `sloped_inverted`: Similar to `sloped`, but with inverts the glyphs
+
+#### `mantel-nvim.Style`
+
+- `preset`: `mantel-nvim.StylePreset` See `StylePreset` for available options and their descriptions.
+- `ignore_first_buffer_prefix`: `boolean?` If true, the first buffer (left to right) will not have a custom glyph as a prefix
+
 #### `mantel-nvim.Opts`
 
-Top-level plugin options. Includes debug mode, operational mode, buffer and tab settings, and highlight overwrites.
+Top-level plugin options. Includes operational mode, style preset, buffer and tab settings, and highlight overwrites.
 
 - Main plugin options.
-  - `debug`: `boolean?`
   - `mode`: `OptsBehavior`
+  - `style`: `mantel-nvim.Style`
   - `bufs`: `Bufs`
   - `tabs`: `Tabs`
   - `highlight_overwrites`: `HighlightOverwrites | fun(): HighlightOverwrites`

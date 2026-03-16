@@ -15,8 +15,9 @@ end
 
 --- @param opts mantel-nvim.Opts
 --- @param buf vim.fn.getbufinfo.ret.item
+--- @param is_first boolean
 --- @return string part, integer len
-function M.get_prefix(opts, buf)
+function M.get_prefix(opts, buf, is_first)
 	local decorators, decorators_len = helpers.add_decorators(opts, buf, "prefix")
 	local prefix = utils.evaluate_buf_aware_option(opts.bufs.decorators.prefix, buf)
 
@@ -26,10 +27,19 @@ function M.get_prefix(opts, buf)
 		return "", 0
 	end
 
-	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.inactive)
+	if is_first and opts.style.ignore_first_buffer_prefix and opts.style.preset ~= "default" then
+		local consts = require("mantel-nvim.constants")
+		local preset = consts.styles[opts.style.preset]
+
+		if preset and prefix == preset.prefix then
+			return "", 0
+		end
+	end
+
+	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.prefix_inactive)
 
 	if utils.is_current_buf(buf.bufnr) then
-		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
+		hl = utils.buf_aware_hl(buf, opts.bufs.hl.prefix)
 	end
 
 	return hl .. prefix .. decorators, len
@@ -48,10 +58,10 @@ function M.get_suffix(opts, buf)
 		return "", 0
 	end
 
-	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.inactive)
+	local hl = utils.buf_aware_hl(buf, opts.bufs.hl.suffix_inactive)
 
 	if utils.is_current_buf(buf.bufnr) then
-		hl = utils.buf_aware_hl(buf, opts.bufs.hl.active)
+		hl = utils.buf_aware_hl(buf, opts.bufs.hl.suffix)
 	end
 
 	return decorators .. hl .. suffix, len

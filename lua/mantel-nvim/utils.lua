@@ -139,7 +139,7 @@ function M.center_text(options)
 		right_padding = M.hl(hl) .. right_padding
 	end
 
-	return left_padding .. text .. right_padding, padding
+	return left_padding .. text .. right_padding, #left_padding + #right_padding
 end
 
 M.trigger_update = vim.schedule_wrap(function()
