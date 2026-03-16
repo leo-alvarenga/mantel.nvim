@@ -32,9 +32,11 @@ The idea is simple: give users a **clean way to render buffer and tab indicators
 - [x] Icon support
 - [x] Diagnostic indicators
 - [x] Configurable highlights
-- [ ] Document new sleek look! <- Currently in progress
-- [ ] Add buffer count indicators on overflow
-- [ ] Always center on the current buffer
+- [x] Document new sleek look!
+- [ ] Add overflow handling <- Currently in progress
+  - [ ] Add buffer count indicators on overflow
+  - [ ] Always center on the current buffer
+  - [ ] Ensure spacing is done correctly
 
 ## Preview
 
