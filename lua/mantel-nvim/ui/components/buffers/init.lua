@@ -17,8 +17,9 @@ end
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @param is_current boolean
 --- @param is_ambiguos boolean
+--- @param index integer
 --- @return string res, integer len
-function M._private.render_buf(opts, buf, is_current, is_ambiguos)
+function M._private.render_buf(opts, buf, is_current, is_ambiguos, index)
 	local name = buf.name
 	local name_hl = opts.bufs.hl.inactive
 
@@ -36,7 +37,7 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos)
 
 	local name_before, name_after, name_before_len, name_after_len = decorators.get_name_decorators(opts, buf)
 
-	local prefix, prefix_len = decorators.get_prefix(opts, buf)
+	local prefix, prefix_len = decorators.get_prefix(opts, buf, index == 1)
 	local suffix, suffix_len = decorators.get_suffix(opts, buf)
 
 	local len = #name + name_before_len + name_after_len
@@ -64,11 +65,16 @@ function M.get(opts)
 	local bufs = M._private.get_bufs()
 
 	for i, buf in ipairs(bufs) do
-		local buf_text, len =
-			M._private.render_buf(opts, buf, buf.bufnr == vim.api.nvim_get_current_buf(), #vim.tbl_filter(function(b)
-				return utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, b)
-					== utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, buf)
-			end, bufs) > 1)
+		local is_current = utils.is_current_buf(buf.bufnr)
+
+		local ambiguity_list = vim.tbl_filter(function(b)
+			return utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, b)
+				== utils.evaluate_buf_aware_option(opts.bufs.overwrites.name, buf)
+		end, bufs)
+
+		local is_ambiguos = #ambiguity_list > 1
+
+		local buf_text, len = M._private.render_buf(opts, buf, is_current, is_ambiguos, i)
 
 		part = part .. buf_text
 		total_len = total_len + len

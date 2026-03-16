@@ -85,7 +85,7 @@
 
 --- @class mantel-nvim.PositionableDecorator
 --- @field disabled boolean?
---- @field name string A user-friendly name for the decorator, useful for configuration and debugging
+--- @field name string A user-friendly name for the decorator, useful for configuration
 --- @field order mantel-nvim.BufAwareNumber
 --- @field text mantel-nvim.BufAwareStr
 --- @field position mantel-nvim.Positionable
@@ -135,13 +135,18 @@
 --- @alias mantel-nvim.StylePreset
 --- | "default"
 --- | "slanted"
+--- | "slanted_inverted"
 --- | "sloped"
+--- | "sloped_inverted"
+
+--- @class mantel-nvim.Style
+--- @field preset mantel-nvim.StylePreset
+--- @field ignore_first_buffer_prefix boolean? If true, the first buffer (left to right) will not have a custom prefix
 
 --- @class mantel-nvim.Opts
 --- @field displayWarning boolean? If true, mantel-nvim will show the warning message when the user tries to use it
---- @field debug boolean?
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
---- @field style mantel-nvim.StylePreset "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
+--- @field style mantel-nvim.Style "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
 --- @field bufs mantel-nvim.Bufs
 --- @field tabs mantel-nvim.Tabs
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites

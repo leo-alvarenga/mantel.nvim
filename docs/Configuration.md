@@ -28,6 +28,10 @@ return {
 
 		local opts = {
 			mode = "enhanced",
+
+			style = {
+				preset = "slanted", -- This applies slanted glyphs to the buffers listed in the bufferline. The default is "default", which applies NO glyphs
+			}
 		}
 
 		mantel.setup(opts)

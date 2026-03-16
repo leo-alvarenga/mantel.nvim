@@ -3,6 +3,25 @@ local prefix = "Mantel"
 return {
 	prefix = prefix,
 
+	styles = {
+		slanted = {
+			prefix = "",
+			suffix = "",
+		},
+		slanted_inverted = {
+			prefix = "",
+			suffix = "",
+		},
+		sloped = {
+			prefix = "",
+			suffix = "",
+		},
+		sloped_inverted = {
+			prefix = "",
+			suffix = "",
+		},
+	},
+
 	--- @type mantel-nvim.HighlightGroups
 	hl_groups = {
 		fill = prefix .. "Fill",
