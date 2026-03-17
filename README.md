@@ -33,6 +33,7 @@ The idea is simple: give users a **clean way to render buffer and tab indicators
 - [x] Diagnostic indicators
 - [x] Configurable highlights
 - [x] Document new sleek look!
+- [x] Breadcrumbs support!
 - [ ] Add overflow handling <- Currently in progress
   - [ ] Add buffer count indicators on overflow
   - [ ] Always center on the current buffer
@@ -59,6 +60,9 @@ With the `sloped` style preset:
 With a custom separator:
 
 ![Separator preview](./docs/images/separator_example1.png)
+
+With the Breadcrumbs enable:
+![Breadcrumbs preview](./docs/images/breadcrumbs.png)
 
 ## Features
 
