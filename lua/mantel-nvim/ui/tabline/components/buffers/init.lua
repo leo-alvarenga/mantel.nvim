@@ -1,6 +1,6 @@
 local utils = require("mantel-nvim.utils")
 
-local decorators = require("mantel-nvim.ui.components.buffers.decorators")
+local decorators = require("mantel-nvim.ui.tabline.components.buffers.decorators")
 
 local hl = utils.buf_aware_hl
 
@@ -40,7 +40,7 @@ function M._private.render_buf(opts, buf, is_current, is_ambiguos, index)
 	local prefix, prefix_len = decorators.get_prefix(opts, buf, index == 1)
 	local suffix, suffix_len = decorators.get_suffix(opts, buf)
 
-	local len = #name + name_before_len + name_after_len
+	local len = utils.strlen(name) + name_before_len + name_after_len
 	name = hl(buf, name_hl) .. name
 
 	local centered_name, padding_len = utils.center_text({
@@ -78,14 +78,13 @@ function M.get(opts)
 
 		part = part .. buf_text
 		total_len = total_len + len
+		local sep = utils.evaluate_buf_aware_option(opts.bufs.decorators.sep or "", buf)
 
 		if i == #bufs then
-			part = part .. hl(buf, opts.bufs.hl.fill)
-		elseif #opts.bufs.decorators.sep > 0 then
-			local sep = utils.evaluate_buf_aware_option(opts.bufs.decorators.sep, buf)
-
+			part = part .. hl(buf, opts.bufs.hl.active)
+		elseif utils.strlen(sep) > 0 then
 			part = part .. hl(buf, opts.bufs.hl.separator) .. sep
-			total_len = total_len + #sep
+			total_len = total_len + utils.strlen(sep)
 		end
 	end
 

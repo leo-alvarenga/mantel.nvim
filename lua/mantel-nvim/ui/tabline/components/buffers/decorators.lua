@@ -1,4 +1,4 @@
-local helpers = require("mantel-nvim.ui.components.buffers.helpers")
+local helpers = require("mantel-nvim.ui.tabline.components.buffers.helpers")
 local utils = require("mantel-nvim.utils")
 
 local M = {}
@@ -21,7 +21,7 @@ function M.get_prefix(opts, buf, is_first)
 	local decorators, decorators_len = helpers.add_decorators(opts, buf, "prefix")
 	local prefix = utils.evaluate_buf_aware_option(opts.bufs.decorators.prefix, buf)
 
-	local len = #prefix + decorators_len
+	local len = utils.strlen(prefix) + decorators_len
 
 	if len <= 0 then
 		return "", 0
@@ -52,7 +52,7 @@ function M.get_suffix(opts, buf)
 	local decorators, decorators_len = helpers.add_decorators(opts, buf, "suffix")
 	local suffix = utils.evaluate_buf_aware_option(opts.bufs.decorators.suffix, buf)
 
-	local len = #suffix + decorators_len
+	local len = utils.strlen(suffix) + decorators_len
 
 	if len <= 0 then
 		return "", 0

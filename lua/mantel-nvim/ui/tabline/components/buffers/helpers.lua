@@ -20,7 +20,7 @@ function M.add_decorators(opts, buf, position)
 	for i, decorator in ipairs(all_decorators) do
 		::continue::
 
-		if #decorator.name <= 0 then
+		if utils.strlen(decorator.name) <= 0 then
 			utils.notify(
 				"Extra decorator at position '" .. i .. "' is missing a name. Skipping...",
 				vim.log.levels.WARN
@@ -52,9 +52,9 @@ function M.add_decorators(opts, buf, position)
 	for _, decorator in ipairs(decorators) do
 		local text = utils.evaluate_buf_aware_option(decorator.text, buf)
 
-		if #text > 0 and not rendered_decorators[decorator.name] then
+		if utils.strlen(text) > 0 and not rendered_decorators[decorator.name] then
 			rendered_decorators[decorator.name] = true
-			len = len + #text
+			len = len + utils.strlen(text)
 
 			local hl = utils.evaluate_buf_aware_option(decorator.hl or fallback_hl, buf)
 

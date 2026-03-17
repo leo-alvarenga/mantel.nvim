@@ -27,10 +27,10 @@ function M._private.render_tab(opts, tab, is_current)
 	local label = utils.center_text({ text = tostring(tab.tabnr or "?"), width = opts.tabs.min_width })
 
 	if is_current then
-		return hl(opts.tabs.hl.active) .. label .. hl(opts.tabs.hl.inactive), #label
+		return hl(opts.tabs.hl.active) .. label .. hl(opts.tabs.hl.inactive), utils.strlen(label)
 	end
 
-	return hl(opts.tabs.hl.inactive) .. label, #label
+	return hl(opts.tabs.hl.inactive) .. label, utils.strlen(label)
 end
 
 --- @param opts mantel-nvim.Opts

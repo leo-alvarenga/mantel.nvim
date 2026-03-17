@@ -4,11 +4,12 @@ local state = require("mantel-nvim.state")
 
 local highlights = require("mantel-nvim.highlights")
 local tabline = lazy.require("mantel-nvim.ui.tabline")
+local winbar = lazy.require("mantel-nvim.ui.breadcrumbs")
 
 local M = {}
 
 M.patch = "0"
-M.minor = "20"
+M.minor = "22"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch
@@ -27,26 +28,12 @@ function M.setup(opts)
 
 	state.init(config.opts)
 
-	if opts.displayWarning then
-		vim.schedule(function()
-			vim.notify_once(
-				"This plugins IS NOT meant for daily use. It is a playground for testing out ideas and concepts ",
-				vim.log.levels.WARN,
-				{ title = "mantel-nvim", timeout = 8000 }
-			)
+	if winbar and config.opts.breadcrumbs.enabled then
+		pcall(winbar.setup_winbar, config.opts)
+	end
 
-			vim.notify_once(
-				"Even though it may be stable, it is certainly NOT the best approach for it. Use at your own risk",
-				vim.log.levels.WARN,
-				{ title = "mantel-nvim", timeout = 8000 }
-			)
-
-			vim.notify_once(
-				"Disable this warning by setting `disableWarning` to `true` in the setup options",
-				vim.log.levels.WARN,
-				{ title = "mantel-nvim", timeout = 8000 }
-			)
-		end)
+	if not config.opts.style.preset or config.opts.style.preset == "disabled" then
+		return
 	end
 
 	vim.o.showtabline = 2

@@ -82,14 +82,16 @@
 --- | 'name_after'
 --- | 'prefix'
 --- | 'suffix'
-
---- @class mantel-nvim.PositionableDecorator
+---
+--- @class mantel-nvim.Decorator
 --- @field disabled boolean?
 --- @field name string A user-friendly name for the decorator, useful for configuration
 --- @field order mantel-nvim.BufAwareNumber
 --- @field text mantel-nvim.BufAwareStr
---- @field position mantel-nvim.Positionable
 --- @field hl mantel-nvim.BufAwareStr?
+
+--- @class mantel-nvim.PositionableDecorator : mantel-nvim.Decorator
+--- @field position mantel-nvim.Positionable
 
 --- @class mantel-nvim.Decorators
 --- @field sep mantel-nvim.BufAwareStr?
@@ -125,6 +127,26 @@
 --- @field min_width integer Minimum width for each tab in the tabline
 
 ------------------------------------------
+---  Breadcrumbs/Winbar
+------------------------------------------
+
+--- @class mantel-nvim.BreadcrumbPart
+--- @field text mantel-nvim.BufAwareStr
+--- @field len integer - Actual text length, excluding HLs
+
+--- @alias mantel-nvim.BufAwareBreadcrumbPart
+--- | fun(buf: vim.fn.getbufinfo.ret.item): mantel-nvim.BreadcrumbPart[]
+--- | mantel-nvim.BreadcrumbPart[]
+
+--- @class mantel-nvim.Breadcrumbs
+--- @field enabled boolean If false, breadcrumbs will not be rendered at all; Default: true
+--- @field sep mantel-nvim.BufAwareStr?
+--- @field padding_left integer? Blank space to add at the start
+--- @field padding_right integer? Blank space to add at the end
+--- @field hl mantel-nvim.HighlightGroups
+--- @field parts mantel-nvim.BufAwareBreadcrumbPart
+
+------------------------------------------
 ---  Opts
 ------------------------------------------
 
@@ -138,17 +160,19 @@
 --- | "slanted_inverted"
 --- | "sloped"
 --- | "sloped_inverted"
+--- | "disabled"
 
 --- @class mantel-nvim.Style
---- @field preset mantel-nvim.StylePreset
+--- @field preset boolean|mantel-nvim.StylePreset If set to a preset, the style will be set according to the preset's definition; If set to false or "disabled", Tabline/Bufferline will not be rendered at all
 --- @field ignore_first_buffer_prefix boolean? If true, the first buffer (left to right) will not have a custom prefix
 
 --- @class mantel-nvim.Opts
---- @field displayWarning boolean? If true, mantel-nvim will show the warning message when the user tries to use it
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
 --- @field style mantel-nvim.Style "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
 --- @field bufs mantel-nvim.Bufs
 --- @field tabs mantel-nvim.Tabs
+--- @field breadcrumbs mantel-nvim.Breadcrumbs
+--- @field ellipsis string String to be used to demark overflow; Default: ' ... ' (5 chars)
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites
 
 ------------------------------------------

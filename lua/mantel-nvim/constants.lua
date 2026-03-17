@@ -3,6 +3,10 @@ local prefix = "Mantel"
 return {
 	prefix = prefix,
 
+	augrops = {
+		winbar = prefix .. "Breadcrumbs",
+	},
+
 	styles = {
 		slanted = {
 			prefix = "",
