@@ -4,6 +4,7 @@ local utils = require("mantel-nvim.utils")
 --- @type mantel-nvim.Breadcrumbs
 return {
 	enabled = true,
+	mode = "auto-inclusive",
 
 	hl = {
 		breadcrumb_fill = consts.hl_groups.breadcrumb_fill,
@@ -17,6 +18,12 @@ return {
 
 	sep = "  ",
 
+	dir_root = {
+		text = ".",
+		len = 1,
+		focused = false,
+	},
+
 	parts = function(buf)
 		local icon = utils.get_icon_from_bufinfo(buf) or ""
 		local full_name = vim.fn.fnamemodify(buf.name, ":~:.")
@@ -25,13 +32,6 @@ return {
 
 		--- @type mantel-nvim.BreadcrumbPart[]
 		local parts = {}
-
-		if #str_parts <= 1 then
-			table.insert(parts, {
-				text = ".",
-				len = 1,
-			})
-		end
 
 		for i, str in ipairs(str_parts) do
 			local str_len = utils.strlen(str)

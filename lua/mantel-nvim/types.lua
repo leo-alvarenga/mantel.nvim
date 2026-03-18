@@ -144,18 +144,28 @@
 --- @field text mantel-nvim.BufAwareStr
 --- @field len integer Actual text length, excluding HLs
 --- @field focused boolean? Whether or not to apply a special highlight to make this part stand out
-
+---
 --- @alias mantel-nvim.BufAwareBreadcrumbPart
+--- | fun(buf: vim.fn.getbufinfo.ret.item): mantel-nvim.BreadcrumbPart
+--- | mantel-nvim.BreadcrumbPart
+
+--- @alias mantel-nvim.BufAwareBreadcrumbParts
 --- | fun(buf: vim.fn.getbufinfo.ret.item): mantel-nvim.BreadcrumbPart[]
 --- | mantel-nvim.BreadcrumbPart[]
 
+--- @alias mantel-nvim.BreadcrumbBehavior
+--- | 'auto-inclusive'   Enabled for all items, disabled for items manually untoggled (Default)
+--- | 'manual-only'      Only enabled for items manually added/toggled
+
 --- @class mantel-nvim.Breadcrumbs
 --- @field enabled boolean If false, breadcrumbs will not be rendered at all; Default: true
+--- @field mode mantel-nvim.BreadcrumbBehavior 'auto-inclusive': Enabled for all items, disabled for items manually untoggled (Default); 'manual-only': Only enabled for items manually added/toggled
 --- @field sep mantel-nvim.BufAwareStr
 --- @field padding_left integer? Blank space to add at the start
 --- @field padding_right integer? Blank space to add at the end
 --- @field hl mantel-nvim.BreadcrumbHighlightGroups
---- @field parts mantel-nvim.BufAwareBreadcrumbPart
+--- @field parts mantel-nvim.BufAwareBreadcrumbParts
+--- @field dir_root mantel-nvim.BreadcrumbPart Special part to be placed when denoting the current workdir's root (Default: '.')
 
 ------------------------------------------
 ---  Opts
@@ -194,5 +204,7 @@
 --- @field mode mantel-nvim.OptsBehavior
 --- @field buf_positions table<integer, integer>
 --- @field next_position integer
+--- @field winids integer[]
+--- @field breadcrumb_mode mantel-nvim.BreadcrumbBehavior
 
 return {}

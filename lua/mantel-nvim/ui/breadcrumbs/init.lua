@@ -1,3 +1,5 @@
+local config = require("mantel-nvim.config")
+local state = require("mantel-nvim.state")
 local utils = require("mantel-nvim.utils")
 
 local M = {}
@@ -20,12 +22,13 @@ function M.is_win_valid(winid)
 		and bufinfo.filetype ~= ""
 		and bufinfo.buftype == ""
 
-	return not is_win_floating and is_buf_valid
+	local has_breadcrumbs = state.does_win_has_breadcrumbs(winid)
+
+	return not is_win_floating and is_buf_valid and has_breadcrumbs
 end
 
---- @param opts mantel-nvim.Opts
 --- @param winid integer?
-function M.render(opts, winid)
+function M.render(winid)
 	local contents = ""
 
 	if not winid or not M.is_win_valid(winid) then
@@ -40,7 +43,7 @@ function M.render(opts, winid)
 
 	--- @type mantel-nvim.BreadcrumbPart[]
 	local parts = {}
-	local raw_parts = opts.breadcrumbs.parts
+	local raw_parts = config.opts.breadcrumbs.parts
 
 	if type(raw_parts) == "function" then
 		parts = raw_parts(buf)
@@ -48,10 +51,13 @@ function M.render(opts, winid)
 		parts = raw_parts
 	end
 
-	local active_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_item_focus, buf)
-	local item_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_item, buf)
-	local fill_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_fill, buf)
-	local sep_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_separator, buf)
+	local active_hl = utils.evaluate_buf_aware_option(config.opts.breadcrumbs.hl.breadcrumb_item_focus, buf)
+	local item_hl = utils.evaluate_buf_aware_option(config.opts.breadcrumbs.hl.breadcrumb_item, buf)
+	local fill_hl = utils.evaluate_buf_aware_option(config.opts.breadcrumbs.hl.breadcrumb_fill, buf)
+	local sep_hl = utils.evaluate_buf_aware_option(config.opts.breadcrumbs.hl.breadcrumb_separator, buf)
+
+	local dir_root = config.opts.breadcrumbs.dir_root
+	table.insert(parts, 1, dir_root)
 
 	local len = 0
 	local expected_total_len = 0
@@ -65,13 +71,13 @@ function M.render(opts, winid)
 		end
 
 		expected_total_len = len
-			+ opts.breadcrumbs.padding_left
-			+ opts.breadcrumbs.padding_right
-			+ utils.strlen(opts.ellipsis)
+			+ config.opts.breadcrumbs.padding_left
+			+ config.opts.breadcrumbs.padding_right
+			+ utils.strlen(config.opts.ellipsis)
 			+ part.len
 
 		if expected_total_len >= win_width then
-			contents = utils.hl(item_hl) .. opts.ellipsis .. contents
+			contents = utils.hl(item_hl) .. config.opts.ellipsis .. contents
 			break
 		end
 
@@ -85,29 +91,32 @@ function M.render(opts, winid)
 		contents = text .. contents
 
 		if i > 1 then
-			local sep = utils.evaluate_buf_aware_option(opts.breadcrumbs.sep, buf)
+			local sep = utils.evaluate_buf_aware_option(config.opts.breadcrumbs.sep, buf)
 
 			len = len + utils.strlen(sep)
 			contents = utils.hl(sep_hl) .. sep .. contents
 		end
 	end
 
-	contents = utils.hl(fill_hl) .. string.rep(" ", opts.breadcrumbs.padding_left) .. contents
-	contents = contents .. utils.hl(fill_hl) .. string.rep(" ", opts.breadcrumbs.padding_right)
+	contents = utils.hl(fill_hl) .. string.rep(" ", config.opts.breadcrumbs.padding_left) .. contents
+	contents = contents .. utils.hl(fill_hl) .. string.rep(" ", config.opts.breadcrumbs.padding_right)
 
 	vim.wo[winid].winbar = contents
 	return contents
 end
 
---- @param opts mantel-nvim.Opts
-function M.setup_winbar(opts)
+function M.setup()
+	if not config.opts.breadcrumbs.enabled then
+		return
+	end
+
 	local consts = require("mantel-nvim.constants")
 	local augroup = vim.api.nvim_create_augroup(consts.augrops.winbar, { clear = true })
 
 	vim.api.nvim_create_autocmd({ "WinNew", "BufWinEnter", "WinEnter" }, {
 		group = augroup,
 		callback = function()
-			M.render(opts, vim.api.nvim_get_current_win())
+			M.render(vim.api.nvim_get_current_win())
 		end,
 	})
 end

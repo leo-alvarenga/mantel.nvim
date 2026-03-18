@@ -1,12 +1,12 @@
+local config = require("mantel-nvim.config")
 local utils = require("mantel-nvim.utils")
 
 local M = {}
 
---- @param opts mantel-nvim.Opts
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @param position mantel-nvim.Positionable
 --- @return string part, integer len
-function M.add_decorators(opts, buf, position)
+function M.add_decorators(buf, position)
 	local part = ""
 
 	--- @type mantel-nvim.PositionableDecorator[]
@@ -15,7 +15,7 @@ function M.add_decorators(opts, buf, position)
 
 	--- @type mantel-nvim.PositionableDecorator[]
 	local all_decorators =
-		vim.tbl_extend("keep", {}, opts.bufs.decorators.extras or {}, opts.bufs.decorators.native or {})
+		vim.tbl_extend("keep", {}, config.opts.bufs.decorators.extras or {}, config.opts.bufs.decorators.native or {})
 
 	for i, decorator in ipairs(all_decorators) do
 		::continue::
@@ -43,10 +43,10 @@ function M.add_decorators(opts, buf, position)
 	--- @type table<string, boolean>
 	local rendered_decorators = {}
 
-	local fallback_hl = opts.bufs.hl.inactive
+	local fallback_hl = config.opts.bufs.hl.inactive
 
 	if utils.is_current_buf(buf.bufnr) then
-		fallback_hl = opts.bufs.hl.active
+		fallback_hl = config.opts.bufs.hl.active
 	end
 
 	for _, decorator in ipairs(decorators) do

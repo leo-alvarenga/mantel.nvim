@@ -7,6 +7,9 @@ M._state = {
 	mode = "classic",
 	buf_positions = {},
 	next_position = 1,
+
+	winids = {},
+	breadcrumb_mode = "auto-inclusive",
 }
 
 function M.get_state()
@@ -16,6 +19,19 @@ end
 function M.reset()
 	M._state.buf_positions = {}
 	M._state.next_position = 1
+
+	M._state.winids = {}
+end
+
+--- @param winid integer
+function M.does_win_has_breadcrumbs(winid)
+	local auto_inclusive = M._state.breadcrumb_mode == "auto-inclusive"
+
+	local has_been_added = vim.iter(M._state.winids):any(function(win)
+		return win == winid
+	end)
+
+	return (auto_inclusive and not has_been_added) or (not auto_inclusive and has_been_added)
 end
 
 --- @param bypass_sorting boolean?
@@ -191,14 +207,16 @@ function M.setup_cmds()
 	end, {})
 end
 
---- @param opts mantel-nvim.Opts
-function M.init(opts)
+function M.init()
+	local config = require("mantel-nvim.config")
+
 	M.reset()
-	M._state.mode = opts.mode
+	M._state.mode = config.opts.mode
+	M._state.breadcrumb_mode = config.opts.breadcrumbs.mode
 
 	M.setup_cmds()
 
-	if opts.mode == "enhanced" then
+	if config.opts.mode == "enhanced" then
 		M.setup_autocmds()
 	end
 end
