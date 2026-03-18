@@ -48,37 +48,48 @@ function M.render(opts, winid)
 		parts = raw_parts
 	end
 
+	local active_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_item_focus, buf)
+	local item_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_item, buf)
+	local fill_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_fill, buf)
+	local sep_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.breadcrumb_separator, buf)
+
 	local len = 0
-
-	local active_hl = utils.evaluate_buf_aware_option(opts.breadcrumbs.hl.active, buf)
-	local fill_hl = active_hl
-	local sep_hl = active_hl
-
-	for i, part in ipairs(parts) do
+	local expected_total_len = 0
+	for i = #parts, 1, -1 do
 		::continue::
+		local part = parts[i]
 
 		local text = utils.evaluate_buf_aware_option(part.text, buf)
 		if part.len <= 0 then
 			goto continue
 		end
 
+		expected_total_len = len
+			+ opts.breadcrumbs.padding_left
+			+ opts.breadcrumbs.padding_right
+			+ utils.strlen(opts.ellipsis)
+			+ part.len
+
+		if expected_total_len >= win_width then
+			contents = utils.hl(item_hl) .. opts.ellipsis .. contents
+			break
+		end
+
+		if part.focused then
+			text = utils.hl(active_hl) .. text
+		else
+			text = utils.hl(item_hl) .. text
+		end
+
+		len = len + part.len
+		contents = text .. contents
+
 		if i > 1 then
 			local sep = utils.evaluate_buf_aware_option(opts.breadcrumbs.sep, buf)
 
 			len = len + utils.strlen(sep)
-			contents = contents .. utils.hl(sep_hl) .. sep
+			contents = utils.hl(sep_hl) .. sep .. contents
 		end
-
-		len = len + part.len
-		contents = contents .. utils.hl(active_hl) .. text
-	end
-
-	local expected_total_len = len + opts.breadcrumbs.padding_left + opts.breadcrumbs.padding_right
-
-	if expected_total_len > win_width then
-		local diff = win_width - expected_total_len
-
-		contents = opts.ellipsis .. string.sub(contents, diff + utils.strlen(opts.ellipsis))
 	end
 
 	contents = utils.hl(fill_hl) .. string.rep(" ", opts.breadcrumbs.padding_left) .. contents

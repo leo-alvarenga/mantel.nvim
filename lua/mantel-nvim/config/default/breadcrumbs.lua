@@ -1,14 +1,19 @@
-local default_hl = require("mantel-nvim.config.default.highlights")
+local consts = require("mantel-nvim.constants")
 local utils = require("mantel-nvim.utils")
 
 --- @type mantel-nvim.Breadcrumbs
 return {
 	enabled = true,
 
-	hl = default_hl,
+	hl = {
+		breadcrumb_fill = consts.hl_groups.breadcrumb_fill,
+		breadcrumb_item = consts.hl_groups.breadcrumb_item,
+		breadcrumb_item_focus = consts.hl_groups.breadcrumb_item_focus,
+		breadcrumb_separator = consts.hl_groups.breadcrumb_separator,
+	},
 
-	padding_left = 4,
-	padding_right = 4,
+	padding_left = 2,
+	padding_right = 2,
 
 	sep = "  ",
 
@@ -39,6 +44,7 @@ return {
 				table.insert(parts, {
 					text = str,
 					len = str_len,
+					focused = i == #str_parts,
 				})
 			end
 		end
