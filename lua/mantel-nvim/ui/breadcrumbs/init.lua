@@ -57,7 +57,9 @@ function M.render(winid)
 	local sep_hl = utils.evaluate_buf_aware_option(config.opts.breadcrumbs.hl.breadcrumb_separator, buf)
 
 	local dir_root = config.opts.breadcrumbs.dir_root
-	table.insert(parts, 1, dir_root)
+	if dir_root.len > 0 then
+		table.insert(parts, 1, dir_root)
+	end
 
 	local len = 0
 	local expected_total_len = 0

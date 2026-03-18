@@ -165,7 +165,7 @@
 --- @field padding_right integer? Blank space to add at the end
 --- @field hl mantel-nvim.BreadcrumbHighlightGroups
 --- @field parts mantel-nvim.BufAwareBreadcrumbParts
---- @field dir_root mantel-nvim.BreadcrumbPart Special part to be placed when denoting the current workdir's root (Default: '.')
+--- @field dir_root mantel-nvim.BreadcrumbPart Special part to be placed when denoting the current workdir's root (Default: '')
 
 ------------------------------------------
 ---  Opts

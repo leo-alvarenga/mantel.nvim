@@ -19,8 +19,8 @@ return {
 	sep = "  ",
 
 	dir_root = {
-		text = ".",
-		len = 1,
+		text = "",
+		len = 0,
 		focused = false,
 	},
 
@@ -32,6 +32,14 @@ return {
 
 		--- @type mantel-nvim.BreadcrumbPart[]
 		local parts = {}
+
+		if #str_parts > 0 and str_parts[1] ~= "~" and str_parts[1] ~= "/" then
+			table.insert(parts, {
+				text = ".",
+				len = 1,
+				focused = false,
+			})
+		end
 
 		for i, str in ipairs(str_parts) do
 			local str_len = utils.strlen(str)
