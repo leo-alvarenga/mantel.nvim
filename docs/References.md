@@ -80,16 +80,17 @@ Below are the options used by Mantel. For examples on different ways use these o
 
 ### Breadcrumbs Options
 
-| Field         | Type / Alias                            | Description                                                                 | Example                                                     |
-| ------------- | --------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| enabled       | `boolean`                               | If false, breadcrumbs will not be rendered at all. Default: true.           | `enabled = true`                                            |
-| mode          | `mantel-nvim.BreadcrumbBehavior`        | Controls breadcrumb rendering: 'auto-inclusive' (default) or 'manual-only'. | `"auto-inclusive"`                                          |
-| sep           | `mantel-nvim.BufAwareStr`               | Separator string between breadcrumb items.                                  | `"/"`                                                       |
-| padding_left  | `integer?`                              | Blank space to add at the start of breadcrumbs.                             | `padding_left = 1`                                          |
-| padding_right | `integer?`                              | Blank space to add at the end of breadcrumbs.                               | `padding_right = 1`                                         |
-| hl            | `mantel-nvim.BreadcrumbHighlightGroups` | Highlight groups for breadcrumb elements.                                   | See Breadcrumb Highlight Groups                             |
-| parts         | `mantel-nvim.BufAwareBreadcrumbParts`   | Array of breadcrumb parts, can be function or array.                        | `{ { text = "src", len = 3 }, { text = "main", len = 4 } }` |
-| dir_root      | `mantel-nvim.BreadcrumbPart`            | Special part for workdir's root. Default: `''`                              | `{ text = "/", len = 1, focused = true }`                   |
+| Field         | Type / Alias                            | Description                                                                                         | Example                                                     |
+| ------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| enabled       | `boolean`                               | If false, breadcrumbs will not be rendered at all. Default: true.                                   | `enabled = true`                                            |
+| refresh_on    | `string[]`                              | Array of events that trigger breadcrumb refresh. Default: `{ "WinNew", "BufWinEnter", "WinEnter" }` | `refresh_on = { "WinNew", "BufWinEnter", "WinEnter" }`      |
+| mode          | `mantel-nvim.BreadcrumbBehavior`        | Controls breadcrumb rendering: 'auto-inclusive' (default) or 'manual-only'.                         | `"auto-inclusive"`                                          |
+| sep           | `mantel-nvim.BufAwareStr`               | Separator string between breadcrumb items.                                                          | `"/"`                                                       |
+| padding_left  | `integer?`                              | Blank space to add at the start of breadcrumbs.                                                     | `padding_left = 1`                                          |
+| padding_right | `integer?`                              | Blank space to add at the end of breadcrumbs.                                                       | `padding_right = 1`                                         |
+| hl            | `mantel-nvim.BreadcrumbHighlightGroups` | Highlight groups for breadcrumb elements.                                                           | See Breadcrumb Highlight Groups                             |
+| parts         | `mantel-nvim.BufAwareBreadcrumbParts`   | Array of breadcrumb parts, can be function or array.                                                | `{ { text = "src", len = 3 }, { text = "main", len = 4 } }` |
+| dir_root      | `mantel-nvim.BreadcrumbPart`            | Special part for workdir's root. Default: `''`                                                      | `{ text = "/", len = 1, focused = true }`                   |
 
 #### Breadcrumb Highlight Groups
 

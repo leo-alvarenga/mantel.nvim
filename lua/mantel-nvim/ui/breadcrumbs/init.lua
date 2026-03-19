@@ -115,7 +115,7 @@ function M.setup()
 	local consts = require("mantel-nvim.constants")
 	local augroup = vim.api.nvim_create_augroup(consts.augrops.winbar, { clear = true })
 
-	vim.api.nvim_create_autocmd({ "WinNew", "BufWinEnter", "WinEnter" }, {
+	vim.api.nvim_create_autocmd(config.opts.breadcrumbs.refresh_on, {
 		group = augroup,
 		callback = function()
 			M.render(vim.api.nvim_get_current_win())
