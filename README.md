@@ -146,6 +146,8 @@ So, in summary, to drastically customize your `mantel.nvim` experience, you:
 
 In `mantel.nvim`, the bufferline is designed to show both buffers and tabs in a cohesive way, while balacing flexibility and simplicity.
 
+![Sloped preview](./docs/images/style_sloped.png)
+
 #### Buffers
 
 Buffers represent open files.
@@ -174,6 +176,8 @@ There are three modes for tabs, configured via the `opts.tabs.enabled` option:
 > `winbar` is a Neovim option that allows you to display information at the top of each window (windows are the **splits**, FYI). In `mantel.nvim`, we use this term to refer to the line that can show breadcrumbs, which typically include the file path (by default).
 
 **Breadcrumbs** are a separate component that can be enabled to show the current file path and context in the `winbar`.
+
+![Breadcrumbs preview](./docs/images/breadcrumbs.png)
 
 Different from the bufferline, breadcrumbs are designed to show contextual information about the current file and its location within the project. Here, there are no decorators, instead **parts** can be used to define different sections of the breadcrumbs (e.g., file path, LSP symbols, etc).
 
