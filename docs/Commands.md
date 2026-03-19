@@ -67,4 +67,15 @@ This can be useful when:
 - tweaking highlight overrides
 - testing colors during development
 
+### `:MantelBreadcrumbs`
+
+Toggles the breadcrumbs (winbar) component.
+
+> The behavior of this command depends on the value of `opts.breadcrumbs.mode`
+
+> There are two breadcrumbs behavior modes, configured via the `opts.breadcrumbs.behavior` option:
+>
+> - `auto-inclusive`: (Default) breadcrumbs are shown in all windows, automatically. You can toggle individual windows on or off, but by default they are all on
+> - `manual`: breadcrumbs are hidden by default, and you have to toggle them on for each window you want to see them
+
 [Back to README](../README.md)

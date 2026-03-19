@@ -7,6 +7,8 @@ In `mantel.nvim`, everything has a default value, so configuration is optional.
 require("mantel-nvim").setup({})
 ```
 
+> **Tip**: You can use `require("mantel-nvim").get_opts()` at any time to see all your current options
+
 Another common use case is to keep the default look and feel, but enable the `enhanced` mode:
 
 ```lua
