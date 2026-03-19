@@ -1,6 +1,6 @@
 # mantel.nvim
 
-A lightweight, customizable and cozy tabline/bufferline for Neovim
+A lightweight, customizable and cozy tabline/bufferline (with breadcrumbs) for Neovim
 
 ## Table of Contents
 
