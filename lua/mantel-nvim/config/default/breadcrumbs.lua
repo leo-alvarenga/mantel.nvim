@@ -5,6 +5,7 @@ local utils = require("mantel-nvim.utils")
 return {
 	enabled = true,
 	mode = "auto-inclusive",
+	refresh_on = { "WinNew", "BufWinEnter", "WinEnter" },
 
 	hl = {
 		breadcrumb_fill = consts.hl_groups.breadcrumb_fill,

@@ -21,4 +21,8 @@ function M.set_opts(user_opts)
 	M.apply_style()
 end
 
+function M.get_opts()
+	return M.opts
+end
+
 return M

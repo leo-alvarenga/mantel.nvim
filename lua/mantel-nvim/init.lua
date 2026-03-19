@@ -8,7 +8,7 @@ local tabline = require("mantel-nvim.ui.tabline")
 local M = {}
 
 M.patch = "0"
-M.minor = "27"
+M.minor = "29"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch
@@ -32,6 +32,8 @@ function M.setup(opts)
 	pcall(breadcrumbs.setup)
 	pcall(tabline.setup)
 end
+
+M.get_opts = config.get_opts
 
 M.helpers = {
 	lazy = lazy,

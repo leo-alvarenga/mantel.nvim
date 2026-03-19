@@ -159,6 +159,7 @@
 
 --- @class mantel-nvim.Breadcrumbs
 --- @field enabled boolean If false, breadcrumbs will not be rendered at all; Default: true
+--- @field refresh_on string[] List of that will trigger a refresh of the winbar's breadcrumbs; Default: { "WinNew", "BufWinEnter", "WinEnter" }
 --- @field mode mantel-nvim.BreadcrumbBehavior 'auto-inclusive': Enabled for all items, disabled for items manually untoggled (Default); 'manual-only': Only enabled for items manually added/toggled
 --- @field sep mantel-nvim.BufAwareStr
 --- @field padding_left integer? Blank space to add at the start
