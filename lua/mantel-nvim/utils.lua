@@ -2,6 +2,12 @@ local M = {}
 
 M.fmt = string.format
 
+--- @param str string
+--- @return integer
+function M.strlen(str)
+	return vim.api.nvim_strwidth(str)
+end
+
 function M.is_current_buf(bufnr)
 	return vim.api.nvim_get_current_buf() == bufnr
 end
@@ -78,7 +84,7 @@ end
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @return string val
 function M.evaluate_buf_aware_option(option, buf)
-	if type(option) == "string" and #option > 0 then
+	if type(option) == "string" and M.strlen(option) > 0 then
 		return option
 	elseif type(option) == "function" then
 		return M.evaluate_buf_aware_option(option(buf), buf)
@@ -90,7 +96,7 @@ end
 --- Formats a highlight group for use in the statusline/tabline
 --- @param hl string
 function M.hl(hl)
-	if type(hl) ~= "string" or #hl < 1 then
+	if type(hl) ~= "string" or M.strlen(hl) < 1 then
 		return ""
 	end
 
@@ -103,7 +109,7 @@ end
 function M.buf_aware_hl(buf, hl)
 	local hl_val = M.evaluate_buf_aware_option(hl, buf)
 
-	if type(hl_val) ~= "string" or #hl_val < 1 then
+	if type(hl_val) ~= "string" or M.strlen(hl_val) < 1 then
 		return ""
 	end
 
@@ -123,7 +129,7 @@ end
 --- @return string centered_text, integer padding
 function M.center_text(options)
 	local text = options.text or ""
-	local text_len = options.text_width or #text
+	local text_len = options.text_width or M.strlen(text)
 
 	local filler_char = options.filler_char or " "
 
@@ -139,7 +145,59 @@ function M.center_text(options)
 		right_padding = M.hl(hl) .. right_padding
 	end
 
-	return left_padding .. text .. right_padding, #left_padding + #right_padding
+	return left_padding .. text .. right_padding, M.strlen(left_padding) + M.strlen(right_padding)
+end
+
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @return string?
+local function try_nvim_web_devicons(buf)
+	local ok, icons = pcall(require, "nvim-web-devicons")
+
+	if not ok then
+		return nil
+	end
+
+	if not icons.has_loaded() then
+		return nil
+	end
+
+	local filename = vim.fn.fnamemodify(buf.name, ":t")
+	local extension = vim.fn.fnamemodify(buf.name, ":e")
+	local icon = icons.get_icon(filename, extension)
+
+	if not icon then
+		return nil
+	end
+
+	return icon
+end
+
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @return string?
+local function try_mini_icons(buf)
+	--- @diagnostic disable-next-line: undefined-global
+	local icons = MiniIcons
+
+	if not icons or type(icons) ~= "table" or type(icons.get) ~= "function" then
+		return nil
+	end
+
+	local filename = vim.fn.fnamemodify(buf.name, ":t")
+	local extension = vim.fn.fnamemodify(buf.name, ":e")
+
+	local ok, icon = pcall(icons.get, filename, extension)
+
+	if not ok or not icon then
+		return nil
+	end
+
+	return icon
+end
+
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @return string?
+function M.get_icon_from_bufinfo(buf)
+	return try_nvim_web_devicons(buf) or try_mini_icons(buf)
 end
 
 M.trigger_update = vim.schedule_wrap(function()

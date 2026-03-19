@@ -1,3 +1,4 @@
+local config = require("mantel-nvim.config")
 local utils = require("mantel-nvim.utils")
 
 local M = {}
@@ -7,6 +8,9 @@ M._state = {
 	mode = "classic",
 	buf_positions = {},
 	next_position = 1,
+
+	winids = {},
+	breadcrumb_mode = "auto-inclusive",
 }
 
 function M.get_state()
@@ -16,6 +20,19 @@ end
 function M.reset()
 	M._state.buf_positions = {}
 	M._state.next_position = 1
+
+	M._state.winids = {}
+end
+
+--- @param winid integer
+function M.does_win_has_breadcrumbs(winid)
+	local auto_inclusive = M._state.breadcrumb_mode == "auto-inclusive"
+
+	local has_been_added = vim.iter(M._state.winids):any(function(win)
+		return win == winid
+	end)
+
+	return (auto_inclusive and not has_been_added) or (not auto_inclusive and has_been_added)
 end
 
 --- @param bypass_sorting boolean?
@@ -173,6 +190,29 @@ function M.setup_autocmds()
 	})
 end
 
+function M.toggle_breadcrumbs()
+	local win = vim.api.nvim_get_current_win()
+
+	if not win or not vim.api.nvim_win_is_valid(win) then
+		return
+	end
+
+	local iter = vim.iter(M._state.winids)
+	iter = iter:filter(function(w)
+		return w ~= win
+	end)
+
+	local result = iter:totable()
+
+	if #result < #M._state.winids then
+		M._state.winids = result
+	else
+		table.insert(M._state.winids, win)
+	end
+
+	require("mantel-nvim.ui.breadcrumbs").render(win)
+end
+
 function M.setup_cmds()
 	vim.api.nvim_create_user_command("MantelBufNext", function()
 		M.go_to_buf_delta(1, true)
@@ -189,16 +229,18 @@ function M.setup_cmds()
 	vim.api.nvim_create_user_command("MantelMoveBufRight", function()
 		M.move_current_buf(1, true)
 	end, {})
+
+	vim.api.nvim_create_user_command("MantelBreadcrumbs", M.toggle_breadcrumbs, {})
 end
 
---- @param opts mantel-nvim.Opts
-function M.init(opts)
+function M.init()
 	M.reset()
-	M._state.mode = opts.mode
+	M._state.mode = config.opts.mode
+	M._state.breadcrumb_mode = config.opts.breadcrumbs.mode
 
 	M.setup_cmds()
 
-	if opts.mode == "enhanced" then
+	if config.opts.mode == "enhanced" then
 		M.setup_autocmds()
 	end
 end

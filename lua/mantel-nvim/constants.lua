@@ -3,6 +3,10 @@ local prefix = "Mantel"
 return {
 	prefix = prefix,
 
+	augrops = {
+		winbar = prefix .. "Breadcrumbs",
+	},
+
 	styles = {
 		slanted = {
 			prefix = "",
@@ -22,7 +26,6 @@ return {
 		},
 	},
 
-	--- @type mantel-nvim.HighlightGroups
 	hl_groups = {
 		fill = prefix .. "Fill",
 		inactive = prefix .. "Inactive",
@@ -42,5 +45,10 @@ return {
 		diagnostics_warn_inactive = prefix .. "DiagnosticsWarnInactive",
 		diagnostics_info_inactive = prefix .. "DiagnosticsInfoInactive",
 		diagnostics_hint_inactive = prefix .. "DiagnosticsHintInactive",
+
+		breadcrumb_fill = prefix .. "BreadcrumbFill",
+		breadcrumb_item = prefix .. "BreadcrumbItem",
+		breadcrumb_item_focus = prefix .. "BreadcrumbItemFocus",
+		breadcrumb_separator = prefix .. "BreadcrumbSeparator",
 	},
 }

@@ -1,9 +1,9 @@
 # Configuration
 
-Everything has a default value, so configuration is optional.
+In `mantel.nvim`, everything has a default value, so configuration is optional.
 
 ```lua
--- This will give a very close to native xp
+-- This will give a very polished look and feel out of the box, with no extra configuration required
 require("mantel-nvim").setup({})
 ```
 

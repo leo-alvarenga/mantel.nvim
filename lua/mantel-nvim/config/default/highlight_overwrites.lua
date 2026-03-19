@@ -3,6 +3,7 @@ local function get_default_highlights()
 	local utils = require("mantel-nvim.utils")
 
 	local normal = utils.get_hl("Normal")
+	local comment = utils.get_hl("Comment")
 	local statusline = utils.get_hl("StatusLine")
 	local tabsel = utils.get_hl("TabLineSel")
 	local tabline = utils.get_hl("TabLine")
@@ -17,7 +18,7 @@ local function get_default_highlights()
 			bg = statusline.bg,
 		},
 		inactive = {
-			fg = tabsel.bg,
+			fg = comment.fg or tabsel.bg,
 			bg = statusline.bg,
 		},
 		active = {
@@ -89,6 +90,25 @@ local function get_default_highlights()
 		diagnostics_hint_inactive = {
 			fg = diag_info.fg or statusline.fg,
 			bg = statusline.bg,
+		},
+
+		breadcrumb_fill = {
+			fg = tabline.fg,
+			bg = normal.bg,
+		},
+		breadcrumb_item = {
+			fg = comment.fg or statusline.fg,
+			bg = normal.bg,
+		},
+		breadcrumb_item_focus = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
+			italic = true,
+		},
+		breadcrumb_separator = {
+			fg = comment.fg or statusline.fg,
+			bg = normal.bg,
 		},
 	}
 end

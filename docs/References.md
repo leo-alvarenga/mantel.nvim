@@ -1,185 +1,107 @@
 # References
 
-Below are references for the options and types used by Mantel. For examples on different ways use these options, see the [Recipes](./Recipes.md) guide.
+Below are the options used by Mantel. For examples on different ways use these options, see the [Recipes](./Recipes.md) guide.
+
+## Options
+
+> Types with `BufAware` in their name are functions that receive buffer information and returns a value based on that. For example, `BufAwareStr` can be a string or a function that returns a string based on the buffer's state (active, modified, etc). This allows for dynamic configuration that can adapt to different buffer states.
+
+### Global Options
+
+| Field                | Type / Alias                                 | Description                                                                                 | Example                       |
+| -------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------- |
+| mode                 | `mantel-nvim.OptsBehavior`                   | Controls bufferline mode: "classic" (traditional) or "enhanced" (enables buffer reordering) | `"classic"`                   |
+| style                | `mantel-nvim.Style`                          | Visual style preset and options. If preset is "disabled", disables rendering                | `{ preset = "slanted" }`      |
+| bufs                 | `mantel-nvim.Bufs`                           | Buffer-related configuration (decorators, highlights, etc)                                  | See Buffer Options table      |
+| tabs                 | `mantel-nvim.Tabs`                           | Tab-related configuration (highlights, enable mode, etc)                                    | See Tab Options table         |
+| breadcrumbs          | `mantel-nvim.Breadcrumbs`                    | Breadcrumbs configuration.                                                                  | See Breadcrumbs Options table |
+| ellipsis             | `string`                                     | String used to indicate overflow in tabline. Default: `' ... '`                             | `" ... "`                     |
+| highlight_overwrites | `mantel-nvim.HighlightOverwrites` or `fun()` | Custom highlight group overwrites for advanced theming                                      | `function() return {...} end` |
+
+### Buffer Options
+
+| Field       | Type / Alias                       | Description                                                             | Example                            |
+| ----------- | ---------------------------------- | ----------------------------------------------------------------------- | ---------------------------------- |
+| decorators  | `mantel-nvim.Decorators`           | Buffer decorators (prefix, suffix, native, extras).                     | `{ prefix = ">", native = {...} }` |
+| hl          | `mantel-nvim.HighlightGroups`      | Highlight groups for buffer elements (active, inactive, modified, etc). | See Buffer Highlight Groups table  |
+| min_width   | `integer`                          | Minimum width for each buffer in the tabline.                           | `min_width = 10`                   |
+| min_padding | `integer`                          | Minimum padding (spaces) on each side of buffer name.                   | `min_padding = 2`                  |
+| overwrites  | `mantel-nvim.BufContentOverwrites` | Custom content for ambiguous, named, or unnamed buffers.                | `"[No Name]"`                      |
+
+#### Buffer Highlight Groups
+
+| Field                      | Type / Alias              | Description                                                                    | Default                            |
+| -------------------------- | ------------------------- | ------------------------------------------------------------------------------ | ---------------------------------- |
+| fill                       | `string`                  | Highlight group for background fill of buffer section.                         | `"MantelFill"`                     |
+| inactive                   | `mantel-nvim.BufAwareStr` | Highlight for inactive buffer. Can be a string or function returning a string. | `"MantelInactive"`                 |
+| active                     | `mantel-nvim.BufAwareStr` | Highlight for active buffer.                                                   | `"MantelActive"`                   |
+| modified                   | `mantel-nvim.BufAwareStr` | Highlight for modified buffer.                                                 | `"MantelModified"`                 |
+| duplicate                  | `mantel-nvim.BufAwareStr` | Highlight for duplicate buffer names.                                          | `"MantelDuplicate"`                |
+| separator                  | `mantel-nvim.BufAwareStr` | Highlight for separator between buffers.                                       | `"MantelSeparator"`                |
+| prefix                     | `mantel-nvim.BufAwareStr` | Highlight for prefix before buffer name.                                       | `"MantelPrefix"`                   |
+| suffix                     | `mantel-nvim.BufAwareStr` | Highlight for suffix after buffer name.                                        | `"MantelSuffix"`                   |
+| prefix_inactive            | `mantel-nvim.BufAwareStr` | Highlight for prefix in inactive buffer.                                       | `"MantelPrefixInactive"`           |
+| suffix_inactive            | `mantel-nvim.BufAwareStr` | Highlight for suffix in inactive buffer.                                       | `"MantelSuffixInactive"`           |
+| diagnostics_error          | `mantel-nvim.BufAwareStr` | Highlight for error diagnostics indicator.                                     | `"MantelDiagnosticsError"`         |
+| diagnostics_warn           | `mantel-nvim.BufAwareStr` | Highlight for warning diagnostics indicator.                                   | `"MantelDiagnosticsWarn"`          |
+| diagnostics_info           | `mantel-nvim.BufAwareStr` | Highlight for info diagnostics indicator.                                      | `"MantelDiagnosticsInfo"`          |
+| diagnostics_hint           | `mantel-nvim.BufAwareStr` | Highlight for hint diagnostics indicator.                                      | `"MantelDiagnosticsHint"`          |
+| diagnostics_error_inactive | `mantel-nvim.BufAwareStr` | Highlight for error diagnostics in inactive buffer.                            | `"MantelDiagnosticsErrorInactive"` |
+| diagnostics_warn_inactive  | `mantel-nvim.BufAwareStr` | Highlight for warning diagnostics in inactive buffer.                          | `"MantelDiagnosticsWarnInactive"`  |
+| diagnostics_info_inactive  | `mantel-nvim.BufAwareStr` | Highlight for info diagnostics in inactive buffer.                             | `"MantelDiagnosticsInfoInactive"`  |
+| diagnostics_hint_inactive  | `mantel-nvim.BufAwareStr` | Highlight for hint diagnostics in inactive buffer.                             | `"MantelDiagnosticsHintInactive"`  |
+
+### Tab Options
+
+| Field     | Type / Alias                           | Description                                                                     | Example                        |
+| --------- | -------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------ |
+| hl        | `mantel-nvim.TabHighlightGroups`       | Highlight groups for tab elements (active, inactive, modified, etc).            | See Tab Highlight Groups table |
+| enabled   | `boolean` or `mantel-nvim.TabBehavior` | Controls tab rendering: "auto" (only if >1 tab), "always", "never", or boolean. | `"auto"` or `true`             |
+| min_width | `integer`                              | Minimum width for each tab in the tabline.                                      | `min_width = 12`               |
+
+#### Tab Highlight Groups
+
+| Field                      | Type / Alias | Description                                         | Default                    |
+| -------------------------- | ------------ | --------------------------------------------------- | -------------------------- |
+| fill                       | `string`     | Highlight group for background fill of tab section. | `"MantelTabFill"`          |
+| inactive                   | `string`     | Highlight for inactive tab.                         | `"MantelTabInactive"`      |
+| active                     | `string`     | Highlight for active tab.                           | `"MantelTabActive"`        |
+| modified                   | `string`     | Highlight for modified tab.                         | `"MantelTabModified"`      |
+| duplicate                  | `string`     | Highlight for duplicate tab names.                  | `"MantelTabDuplicate"`     |
+| separator                  | `string`     | Highlight for separator between tabs.               | `"MantelTabSeparator"`     |
+| diagnostics_error          | `string`     | Highlight for error diagnostics indicator in tab.   | `"MantelTabError"`         |
+| diagnostics_warn           | `string`     | Highlight for warning diagnostics indicator in tab. | `"MantelTabWarn"`          |
+| diagnostics_info           | `string`     | Highlight for info diagnostics indicator in tab.    | `"MantelTabInfo"`          |
+| diagnostics_hint           | `string`     | Highlight for hint diagnostics indicator in tab.    | `"MantelTabHint"`          |
+| diagnostics_error_inactive | `string`     | Highlight for error diagnostics in inactive tab.    | `"MantelTabErrorInactive"` |
+| diagnostics_warn_inactive  | `string`     | Highlight for warning diagnostics in inactive tab.  | `"MantelTabWarnInactive"`  |
+| diagnostics_info_inactive  | `string`     | Highlight for info diagnostics in inactive tab.     | `"MantelTabInfoInactive"`  |
+| diagnostics_hint_inactive  | `string`     | Highlight for hint diagnostics in inactive tab.     | `"MantelTabHintInactive"`  |
+
+### Breadcrumbs Options
+
+| Field         | Type / Alias                            | Description                                                                 | Example                                                     |
+| ------------- | --------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| enabled       | `boolean`                               | If false, breadcrumbs will not be rendered at all. Default: true.           | `enabled = true`                                            |
+| mode          | `mantel-nvim.BreadcrumbBehavior`        | Controls breadcrumb rendering: 'auto-inclusive' (default) or 'manual-only'. | `"auto-inclusive"`                                          |
+| sep           | `mantel-nvim.BufAwareStr`               | Separator string between breadcrumb items.                                  | `"/"`                                                       |
+| padding_left  | `integer?`                              | Blank space to add at the start of breadcrumbs.                             | `padding_left = 1`                                          |
+| padding_right | `integer?`                              | Blank space to add at the end of breadcrumbs.                               | `padding_right = 1`                                         |
+| hl            | `mantel-nvim.BreadcrumbHighlightGroups` | Highlight groups for breadcrumb elements.                                   | See Breadcrumb Highlight Groups                             |
+| parts         | `mantel-nvim.BufAwareBreadcrumbParts`   | Array of breadcrumb parts, can be function or array.                        | `{ { text = "src", len = 3 }, { text = "main", len = 4 } }` |
+| dir_root      | `mantel-nvim.BreadcrumbPart`            | Special part for workdir's root. Default: `''`                              | `{ text = "/", len = 1, focused = true }`                   |
+
+#### Breadcrumb Highlight Groups
+
+| Field                 | Type / Alias              | Description                                                | Example                       |
+| --------------------- | ------------------------- | ---------------------------------------------------------- | ----------------------------- |
+| breadcrumb_fill       | `string`                  | Highlight group for background fill of breadcrumb section. | `"MantelBreadcrumbFill"`      |
+| breadcrumb_item       | `mantel-nvim.BufAwareStr` | Highlight for breadcrumb item.                             | `"MantelBreadcrumbItem"`      |
+| breadcrumb_item_focus | `mantel-nvim.BufAwareStr` | Highlight for focused breadcrumb item.                     | `"MantelBreadcrumbItemFocus"` |
+| breadcrumb_separator  | `mantel-nvim.BufAwareStr` | Highlight for separator between breadcrumb items.          | `"MantelBreadcrumbSeparator"` |
 
 ## Types
 
-Below are the relevant types used by `mantel-nvim` for options. These types are used to ensure correct configuration and to provide structure for the plugin's behavior.
-
-It's generally a good idea to refer to these types when configuring the plugin, especially if you're using a Lua language server that can provide type hints and autocompletion based on these definitions.
-
-> Note: Types that include `BufAware` in their name indicate that they can either be a static value or a function that returns a value based on buffer information. This allows for dynamic configuration that can adapt to different buffers or logic related to the buffer's state
-
-#### `mantel-nvim.HlEntry`
-
-Defines how highlight groups are specified for mantel-nvim components. Can be a highlight table or a function returning one based on buffer info.
-
-- Either a `vim.api.keyset.highlight` table or a function returning one for a buffer.
-
-#### `mantel-nvim.HighlightOverwrites`
-
-Allows users to override default highlight settings for specific buffer and tabline states. Used for customizing appearance.
-
-> Use case: Use this if you want to provide different styles for certain states or parts of the buffer/tabline without registering your own new highlight groups to use with [`mantel-nvim.HighlightGroups`](#mantel-nvimhighlightgroups)
-
-- Custom highlight definitions for various buffer/tabline states
-  - `fill`: `HlEntry`
-  - `inactive`: `HlEntry`
-  - `active`: `HlEntry`
-  - `separator`: `HlEntry`
-  - `diagnostics_error`: `HlEntry`
-  - `diagnostics_warn`: `HlEntry`
-  - `diagnostics_info`: `HlEntry`
-  - `diagnostics_hint`: `HlEntry`
-  - `diagnostics_error_inactive`: `HlEntry`
-  - `diagnostics_warn_inactive`: `HlEntry`
-  - `diagnostics_info_inactive`: `HlEntry`
-  - `diagnostics_hint_inactive`: `HlEntry`
-
-#### `mantel-nvim.HighlightGroups`
-
-Specifies the highlight group names used by mantel-nvim for various UI elements. Supports static or buffer-aware values
-
-- Highlight group names for buffer/tabline components.
-  - `fill`: `string` - This one is static, as it applies to the whole tabline, not individual buffers
-  - `inactive`: `BufAwareStr`
-  - `active`: `BufAwareStr`
-  - `modified`: `BufAwareStr`
-  - `duplicate`: `BufAwareStr`
-  - `separator`: `BufAwareStr`
-  - `diagnostics_error`: `BufAwareStr`
-  - `diagnostics_warn`: `BufAwareStr`
-  - `diagnostics_info`: `BufAwareStr`
-  - `diagnostics_hint`: `BufAwareStr`
-  - `diagnostics_error_inactive`: `BufAwareStr`
-  - `diagnostics_warn_inactive`: `BufAwareStr`
-  - `diagnostics_info_inactive`: `BufAwareStr`
-  - `diagnostics_hint_inactive`: `BufAwareStr`
-
-### Buffer Types
-
-#### `mantel-nvim.BufAwareNumber`
-
-Represents a number or a function returning a number based on buffer info. Used for dynamic configuration per buffer.
-
-- Either a `number` or a function returning a number for a buffer.
-
-#### `mantel-nvim.BufAwareStr`
-
-Represents a string or a function returning a string based on buffer info. Used for dynamic text or highlight group names.
-
-- Either a `string` or a function returning a string for a buffer.
-
-#### `mantel-nvim.Positionable`
-
-Enumerates possible positions for decorators relative to buffer names in the tabline.
-
-- One of: `'name_before'`, `'name_after'`, `'prefix'`, `'suffix'`.
-
-Buffer decorator positions:
-
-```plaintext
-{a}{prefix}{name_before}{b}{name_after}{suffix}{c}
-
-- {a} prefix value
-- {b} name value
-- {c} suffix value
-```
-
-#### `mantel-nvim.PositionableDecorator`
-
-Defines a decorator element for buffers or tabs, including its position, text, highlight, and order. Used to add custom or built-in decorations.
-
-- Decorator for buffer/tabline elements.
-  - `disabled`: `boolean?` (particularly useful to disable built-in decorators without removing them from the configuration table)
-  - `name`: `string` (user-friendly name to identify the decorator, not used for display; only a single instance of a decorator with a given name will be shown, so use this to prevent duplicates if needed)
-  - `order`: `BufAwareNumber` (determines display order; lower numbers are shown first)
-  - `text`: `BufAwareStr` (the actual string to display, which can be dynamic based on buffer info)
-  - `position`: `Positionable`
-  - `hl`: `BufAwareStr?`
-
-#### `mantel-nvim.Decorators`
-
-Groups all decorators for buffers, including separators, prefixes, suffixes, and arrays of native or extra decorators.
-
-Notice that the `sep`, `prefix`, and `suffix` fields are separate from the `native` and `extras` arrays. This is because they serve a different purpose: they are simple string decorators that are commonly used and have a fixed position relative to the buffer name, while the `native` and `extras` arrays can contain any number of decorators with more flexible positioning and ordering.
-
-- Collection of decorators for buffers.
-  - `sep`: `BufAwareStr?`
-  - `prefix`: `BufAwareStr?`
-  - `suffix`: `BufAwareStr?`
-  - `native`: `PositionableDecorator[]?` (built-in decorators, hackable and completely customizable)
-  - `extras`: `PositionableDecorator[]?` (user-defined decorators; it's a good idea to use this if you want to add custom decorators without modifying the built-in ones)
-
-#### `mantel-nvim.BufContentOverwrites`
-
-Allows custom strings for ambiguous, named, or unnamed buffers. Used to control buffer display text.
-
-- Custom buffer content strings.
-  - `ambiguos`: `BufAwareStr`
-  - `name`: `BufAwareStr`
-  - `no_name`: `BufAwareStr`
-
-#### `mantel-nvim.Bufs`
-
-Main buffer configuration object. Controls decorators, highlights, minimum width, and content overwrites for buffers in the tabline.
-
-- Buffer configuration.
-  - `decorators`: `Decorators`
-  - `hl`: `HighlightGroups`
-  - `min_width`: `integer`
-  - `overwrites`: `BufContentOverwrites`
-
-### Tab Types
-
-#### `mantel-nvim.TabBehavior`
-
-Controls when tabs are shown in the tabline: automatically, always, or never.
-
-- One of: `"auto"`, `"always"`, `"never"`.
-
-#### `mantel-nvim.Tabs`
-
-Main tab configuration object. Sets highlight groups, enable behavior, and minimum width for tabs in the tabline.
-
-- Tab configuration.
-  - `hl`: `HighlightGroups`
-  - `enabled`: `boolean | TabBehavior`
-  - `min_width`: `integer`
-
-### Option Types
-
-#### `mantel-nvim.OptsBehavior`
-
-Selects the plugin's operational mode: "classic" for traditional tabline, "enhanced" for dynamic buffer ordering.
-
-- One of: `"classic"`, `"enhanced"`.
-
-#### `mantel-nvim.StylePreset`
-
-The style preset to use for the tabline's appearance. Each preset builds on the existing highlight groups and decorators, by adding a custom glyphs for a better look and feel.
-
-- One of:
-  - `default`: No special glyphs
-  - `slanted`: Uses slanted prefix and suffix glyphs for buffers, which gives a nice dynamic and modern look to the tabline. The separators are designed to create a sense of flow and movement
-  - `slanted_inverted`: Similar to `slanted`, but with inverts the glyphs
-  - `sloped`: Uses sloped prefix and suffix glyphs for buffers, which creates a more angular and edgy look. This will give an appearance very similar to tabs in VSCode
-  - `sloped_inverted`: Similar to `sloped`, but with inverts the glyphs
-
-#### `mantel-nvim.Style`
-
-- `preset`: `mantel-nvim.StylePreset` See `StylePreset` for available options and their descriptions.
-- `ignore_first_buffer_prefix`: `boolean?` If true, the first buffer (left to right) will not have a custom glyph as a prefix
-
-#### `mantel-nvim.Opts`
-
-Top-level plugin options. Includes operational mode, style preset, buffer and tab settings, and highlight overwrites.
-
-- Main plugin options.
-  - `mode`: `OptsBehavior`
-  - `style`: `mantel-nvim.Style`
-  - `bufs`: `Bufs`
-  - `tabs`: `Tabs`
-  - `highlight_overwrites`: `HighlightOverwrites | fun(): HighlightOverwrites`
+Types are available for all options in the plugin, and they are defined in the `types` module. These types provide a clear definition of what kind of values each option can accept, which can be especially helpful when configuring the plugin or when using a Lua language server that supports type hints.
 
 [Back to README](../README.md)

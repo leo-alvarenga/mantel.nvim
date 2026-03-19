@@ -21,6 +21,10 @@
 --- @field diagnostics_warn_inactive mantel-nvim.HlEntry
 --- @field diagnostics_info_inactive mantel-nvim.HlEntry
 --- @field diagnostics_hint_inactive mantel-nvim.HlEntry
+--- @field breadcrumb_fill mantel-nvim.HlEntry
+--- @field breadcrumb_item mantel-nvim.HlEntry
+--- @field breadcrumb_item_focus mantel-nvim.HlEntry
+--- @field breadcrumb_separator mantel-nvim.HlEntry
 
 --- Represents the highlight groups used by a component/section of mantel-nvim. These groups should be:
 ---
@@ -82,14 +86,16 @@
 --- | 'name_after'
 --- | 'prefix'
 --- | 'suffix'
-
---- @class mantel-nvim.PositionableDecorator
+---
+--- @class mantel-nvim.Decorator
 --- @field disabled boolean?
 --- @field name string A user-friendly name for the decorator, useful for configuration
 --- @field order mantel-nvim.BufAwareNumber
 --- @field text mantel-nvim.BufAwareStr
---- @field position mantel-nvim.Positionable
 --- @field hl mantel-nvim.BufAwareStr?
+
+--- @class mantel-nvim.PositionableDecorator : mantel-nvim.Decorator
+--- @field position mantel-nvim.Positionable
 
 --- @class mantel-nvim.Decorators
 --- @field sep mantel-nvim.BufAwareStr?
@@ -125,6 +131,43 @@
 --- @field min_width integer Minimum width for each tab in the tabline
 
 ------------------------------------------
+---  Breadcrumbs/Winbar
+------------------------------------------
+
+--- @class mantel-nvim.BreadcrumbHighlightGroups
+--- @field breadcrumb_fill string
+--- @field breadcrumb_item mantel-nvim.BufAwareStr
+--- @field breadcrumb_item_focus mantel-nvim.BufAwareStr
+--- @field breadcrumb_separator mantel-nvim.BufAwareStr
+
+--- @class mantel-nvim.BreadcrumbPart
+--- @field text mantel-nvim.BufAwareStr
+--- @field len integer Actual text length, excluding HLs
+--- @field focused boolean? Whether or not to apply a special highlight to make this part stand out
+---
+--- @alias mantel-nvim.BufAwareBreadcrumbPart
+--- | fun(buf: vim.fn.getbufinfo.ret.item): mantel-nvim.BreadcrumbPart
+--- | mantel-nvim.BreadcrumbPart
+
+--- @alias mantel-nvim.BufAwareBreadcrumbParts
+--- | fun(buf: vim.fn.getbufinfo.ret.item): mantel-nvim.BreadcrumbPart[]
+--- | mantel-nvim.BreadcrumbPart[]
+
+--- @alias mantel-nvim.BreadcrumbBehavior
+--- | 'auto-inclusive'   Enabled for all items, disabled for items manually untoggled (Default)
+--- | 'manual-only'      Only enabled for items manually added/toggled
+
+--- @class mantel-nvim.Breadcrumbs
+--- @field enabled boolean If false, breadcrumbs will not be rendered at all; Default: true
+--- @field mode mantel-nvim.BreadcrumbBehavior 'auto-inclusive': Enabled for all items, disabled for items manually untoggled (Default); 'manual-only': Only enabled for items manually added/toggled
+--- @field sep mantel-nvim.BufAwareStr
+--- @field padding_left integer? Blank space to add at the start
+--- @field padding_right integer? Blank space to add at the end
+--- @field hl mantel-nvim.BreadcrumbHighlightGroups
+--- @field parts mantel-nvim.BufAwareBreadcrumbParts
+--- @field dir_root mantel-nvim.BreadcrumbPart Special part to be placed when denoting the current workdir's root (Default: '')
+
+------------------------------------------
 ---  Opts
 ------------------------------------------
 
@@ -138,17 +181,19 @@
 --- | "slanted_inverted"
 --- | "sloped"
 --- | "sloped_inverted"
+--- | "disabled"
 
 --- @class mantel-nvim.Style
---- @field preset mantel-nvim.StylePreset
+--- @field preset boolean|mantel-nvim.StylePreset If set to a preset, the style will be set according to the preset's definition; If set to false or "disabled", Tabline/Bufferline will not be rendered at all
 --- @field ignore_first_buffer_prefix boolean? If true, the first buffer (left to right) will not have a custom prefix
 
 --- @class mantel-nvim.Opts
---- @field displayWarning boolean? If true, mantel-nvim will show the warning message when the user tries to use it
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
 --- @field style mantel-nvim.Style "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
 --- @field bufs mantel-nvim.Bufs
 --- @field tabs mantel-nvim.Tabs
+--- @field breadcrumbs mantel-nvim.Breadcrumbs
+--- @field ellipsis string String to be used to demark overflow; Default: ' ... ' (5 chars)
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites
 
 ------------------------------------------
@@ -159,5 +204,7 @@
 --- @field mode mantel-nvim.OptsBehavior
 --- @field buf_positions table<integer, integer>
 --- @field next_position integer
+--- @field winids integer[]
+--- @field breadcrumb_mode mantel-nvim.BreadcrumbBehavior
 
 return {}
