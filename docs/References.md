@@ -4,7 +4,7 @@ Below are the options used by Mantel. For examples on different ways use these o
 
 ## Options
 
-> **Important**: Types with `BufAware` in their name are functions that receive buffer information and returns a value based on that. For example, `BufAwareStr` can be a string or a function that returns a string based on the buffer's state (active, modified, etc). This allows for dynamic configuration that can adapt to different buffer states.
+> **Important**: Types with `BufAware` in their name can be either plain values or functions that receive buffer information and returns a value based on that. For example, `BufAwareStr` can be a string or a function that returns a string based on the buffer's state (active, modified, etc). This allows for dynamic configuration that can adapt to different buffer states.
 
 ### Global Options
 
