@@ -4,7 +4,7 @@ Below are the options used by Mantel. For examples on different ways use these o
 
 ## Options
 
-> Types with `BufAware` in their name are functions that receive buffer information and returns a value based on that. For example, `BufAwareStr` can be a string or a function that returns a string based on the buffer's state (active, modified, etc). This allows for dynamic configuration that can adapt to different buffer states.
+> [!IMPORTANT] Types with `BufAware` in their name are functions that receive buffer information and returns a value based on that. For example, `BufAwareStr` can be a string or a function that returns a string based on the buffer's state (active, modified, etc). This allows for dynamic configuration that can adapt to different buffer states.
 
 ### Global Options
 
@@ -51,6 +51,26 @@ Below are the options used by Mantel. For examples on different ways use these o
 | diagnostics_info_inactive  | `mantel-nvim.BufAwareStr` | Highlight for info diagnostics in inactive buffer.                             | `"MantelDiagnosticsInfoInactive"`  |
 | diagnostics_hint_inactive  | `mantel-nvim.BufAwareStr` | Highlight for hint diagnostics in inactive buffer.                             | `"MantelDiagnosticsHintInactive"`  |
 
+##### `mantel-nvim.Decorators`
+
+| Field  | Type / Alias                          | Description                                                                                                            | Example            |
+| ------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| prefix | `mantel-nvim.BufAwareStr`             | String or function that returns a string to prefix the buffer name. Can be used for icons, indicators or visual flair. | `prefix = ""`      |
+| suffix | `mantel-nvim.BufAwareStr`             | String or function that returns a string to suffix the buffer name. Can be used for icons, indicators or visual flair. | `suffix = ""`      |
+| native | `mantel-nvim.PositionableDecorator[]` | List of native (built-in) decorators. Can also be used to disable them                                                 | `native = {...}`   |
+| extras | `mantel-nvim.PositionableDecorator[]` | Additional custom decorators. Can be used for complex setups or multiple indicators.                                   | `extras = { ... }` |
+
+##### `mantel-nvim.PositionableDecorator`
+
+| Field    | Type / Alias                              | Description                                                                                             | Example         |
+| -------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------- |
+| disabled | `boolean?`                                |                                                                                                         | `true`          |
+| name     | `string`                                  | A readable name for the decorator; It is internally used to ensure each decorator is rendered only once | `"Star"`        |
+| position | `prefix\|name_before\|name_after\|suffix` | Where to place the decorator in relation to the buffer name                                             | `"name_before"` |
+| order    | `mantel-nvim.BufAwareNumber`              | The decorator index amongst other decorators placed in the same position                                | `1`             |
+| text     | `mantel-nvim.BufAwareStr`                 | The value to be rendered. If left empty, the decorator will be skipped                                  | `"*"`           |
+| hl       | `mantel-nvim.BufAwareStr?`                | A Highlight group to be used instead of the default ones                                                | `"Commment"`    |
+
 ### Tab Options
 
 | Field     | Type / Alias                           | Description                                                                     | Example                        |
@@ -80,17 +100,17 @@ Below are the options used by Mantel. For examples on different ways use these o
 
 ### Breadcrumbs Options
 
-| Field         | Type / Alias                            | Description                                                                                         | Example                                                     |
-| ------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| enabled       | `boolean`                               | If false, breadcrumbs will not be rendered at all. Default: true.                                   | `enabled = true`                                            |
-| refresh_on    | `string[]`                              | Array of events that trigger breadcrumb refresh. Default: `{ "WinNew", "BufWinEnter", "WinEnter" }` | `refresh_on = { "WinNew", "BufWinEnter", "WinEnter" }`      |
-| mode          | `mantel-nvim.BreadcrumbBehavior`        | Controls breadcrumb rendering: 'auto-inclusive' (default) or 'manual-only'.                         | `"auto-inclusive"`                                          |
-| sep           | `mantel-nvim.BufAwareStr`               | Separator string between breadcrumb items.                                                          | `"/"`                                                       |
-| padding_left  | `integer?`                              | Blank space to add at the start of breadcrumbs.                                                     | `padding_left = 1`                                          |
-| padding_right | `integer?`                              | Blank space to add at the end of breadcrumbs.                                                       | `padding_right = 1`                                         |
-| hl            | `mantel-nvim.BreadcrumbHighlightGroups` | Highlight groups for breadcrumb elements.                                                           | See Breadcrumb Highlight Groups                             |
-| parts         | `mantel-nvim.BufAwareBreadcrumbParts`   | Array of breadcrumb parts, can be function or array.                                                | `{ { text = "src", len = 3 }, { text = "main", len = 4 } }` |
-| dir_root      | `mantel-nvim.BreadcrumbPart`            | Special part for workdir's root. Default: `''`                                                      | `{ text = "/", len = 1, focused = true }`                   |
+| Field         | Type / Alias                            | Description                                                                                                                                                                                                                      | Example                                                     |
+| ------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| enabled       | `boolean`                               | If false, breadcrumbs will not be rendered at all. Default: true.                                                                                                                                                                | `enabled = true`                                            |
+| refresh_on    | `string[]`                              | **Misconfiguring this option may cause breaks in the breadcrumbs component, in most cases, you do not need to modify this**. Array of events that trigger breadcrumb refresh. Default: `{ "WinNew", "BufWinEnter", "WinEnter" }` | `refresh_on = { "WinNew", "BufWinEnter", "WinEnter" }`      |
+| mode          | `mantel-nvim.BreadcrumbBehavior`        | Controls breadcrumb rendering: 'auto-inclusive' (default) or 'manual-only'.                                                                                                                                                      | `"auto-inclusive"`                                          |
+| sep           | `mantel-nvim.BufAwareStr`               | Separator string between breadcrumb items.                                                                                                                                                                                       | `"/"`                                                       |
+| padding_left  | `integer?`                              | Blank space to add at the start of breadcrumbs.                                                                                                                                                                                  | `padding_left = 1`                                          |
+| padding_right | `integer?`                              | Blank space to add at the end of breadcrumbs.                                                                                                                                                                                    | `padding_right = 1`                                         |
+| hl            | `mantel-nvim.BreadcrumbHighlightGroups` | Highlight groups for breadcrumb elements.                                                                                                                                                                                        | See Breadcrumb Highlight Groups                             |
+| parts         | `mantel-nvim.BufAwareBreadcrumbParts`   | Array of breadcrumb parts, can be function or array.                                                                                                                                                                             | `{ { text = "src", len = 3 }, { text = "main", len = 4 } }` |
+| dir_root      | `mantel-nvim.BreadcrumbPart`            | Special part for workdir's root. Default: `''`                                                                                                                                                                                   | `{ text = "/", len = 1, focused = true }`                   |
 
 #### Breadcrumb Highlight Groups
 
@@ -100,9 +120,5 @@ Below are the options used by Mantel. For examples on different ways use these o
 | breadcrumb_item       | `mantel-nvim.BufAwareStr` | Highlight for breadcrumb item.                             | `"MantelBreadcrumbItem"`      |
 | breadcrumb_item_focus | `mantel-nvim.BufAwareStr` | Highlight for focused breadcrumb item.                     | `"MantelBreadcrumbItemFocus"` |
 | breadcrumb_separator  | `mantel-nvim.BufAwareStr` | Highlight for separator between breadcrumb items.          | `"MantelBreadcrumbSeparator"` |
-
-## Types
-
-Types are available for all options in the plugin, and they are defined in the `types` module. These types provide a clear definition of what kind of values each option can accept, which can be especially helpful when configuring the plugin or when using a Lua language server that supports type hints.
 
 [Back to README](../README.md)
