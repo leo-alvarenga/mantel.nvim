@@ -10,7 +10,7 @@ A lightweight, hackable tabline and winbar for Neovim
 - [Installation](#installation)
 - [Usage](#usage)
 - [Concepts](#concepts)
-  - [Performance](#performance)
+- [Performance](#performance)
 - [License](#license)
 - More
   - [References](./docs/References.md)
