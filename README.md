@@ -191,18 +191,22 @@ There are two breadcrumbs behavior modes, configured via the `opts.breadcrumbs.m
 `mantel.nvim` uses a stateless, pull-based rendering model; no background timers, no polling, no cached state to maintain. The renderer is only called when Neovim decides the tabline needs redrawing.
 The numbers below were measured using `vim.uv.hrtime()` directly around the render call, averaged over 10 runs.
 
+> Both scenarios were measured under active LSP clients and formatting tools running concurrently, representing realistic everyday use
+> **Test environment**: Intel Core i7-1165G7 (4C, 2.8–4.7GHz, 12MB cache), 16GB DDR4 3200MHz.
+
 ### Bufferline
 
-| Scenario                               | Average  | Worst     |
-| -------------------------------------- | -------- | --------- |
-| 2 buffers (lua_ls + Copilot + Stylua)  | 0.8523ms | 0.9584ms  |
-| 30 buffers (lua_ls + Copilot + Stylua) | 8.5712ms | 14.8602ms |
+| Scenario                                           | Average  | Worst     | Best     |
+| -------------------------------------------------- | -------- | --------- | -------- |
+| 2 buffers, 1 window (lua_ls + Copilot + Stylua)    | 0.8523ms | 0.9584ms  | 0.3815ms |
+| 30 buffers, 20 windows (lua_ls + Copilot + Stylua) | 8.5712ms | 14.8602ms | 6.2086ms |
 
-Both scenarios were measured under active LSP clients and formatting tools running concurrently, representing realistic everyday use.
+### Breadcrumbs
 
-Test environment: Intel Core i7-1165G7 (4C, 2.8–4.7GHz, 12MB cache), 16GB DDR4 3200MHz.
-
-> Breadcrumbs benchmarks coming soon.
+| Scenario                                           | Average  | Worst    | Best   |
+| -------------------------------------------------- | -------- | -------- | ------ |
+| 2 buffers, 1 window (lua_ls + Copilot + Stylua)    | 0.2157ms | 0.9584ms | 0.04ms |
+| 30 buffers, 20 windows (lua_ls + Copilot + Stylua) | 0.9315ms | 1.0581ms | 0.2ms  |
 
 ## License
 
