@@ -3,7 +3,8 @@ local config = require("mantel-nvim.config")
 local M = {}
 
 M.log_file = vim.fs.joinpath(vim.fn.stdpath("log"), "mantel-nvim.log")
-M.file = io.open(M.log_file, "w+")
+--- @type file*?
+M.file = nil
 
 vim.api.nvim_create_autocmd("VimLeave", {
 	callback = function()
@@ -13,14 +14,30 @@ vim.api.nvim_create_autocmd("VimLeave", {
 	end,
 })
 
+function M.open_log_file()
+	if not config.opts.debug then
+		return
+	end
+
+	if M.file then
+		return M.file
+	end
+
+	local ok, file = pcall(io.open, M.log_file, "w+")
+	if not ok then
+		vim.notify("Failed to open mantel-nvim log file: " .. tostring(file), vim.log.levels.ERROR)
+		return
+	end
+
+	M.file = file
+end
+
 --- @type table<string, number>
 M.timers = {}
 
 --- @param msgs any[]
 function M.log(msgs)
-	if not config.opts.debug then
-		return
-	end
+	M.open_log_file()
 
 	if not M.file then
 		return

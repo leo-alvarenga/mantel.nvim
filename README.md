@@ -10,6 +10,7 @@ A lightweight, hackable tabline and winbar for Neovim
 - [Installation](#installation)
 - [Usage](#usage)
 - [Concepts](#concepts)
+  - [Performance](#performance)
 - [License](#license)
 - More
   - [References](./docs/References.md)
@@ -184,6 +185,24 @@ There are two breadcrumbs behavior modes, configured via the `opts.breadcrumbs.m
 
 - `auto-inclusive`: (Default) breadcrumbs are shown in all windows, automatically. You can toggle individual windows on or off, but by default they are all on
 - `manual-only`: breadcrumbs are hidden by default, and you have to toggle them on for each window you want to see them
+
+## Performance
+
+`mantel.nvim` uses a stateless, pull-based rendering model; no background timers, no polling, no cached state to maintain. The renderer is only called when Neovim decides the tabline needs redrawing.
+The numbers below were measured using `vim.uv.hrtime()` directly around the render call, averaged over 10 runs.
+
+### Bufferline
+
+| Scenario                               | Average  | Worst     |
+| -------------------------------------- | -------- | --------- |
+| 2 buffers (lua_ls + Copilot + Stylua)  | 0.8523ms | 0.9584ms  |
+| 30 buffers (lua_ls + Copilot + Stylua) | 8.5712ms | 14.8602ms |
+
+Both scenarios were measured under active LSP clients and formatting tools running concurrently, representing realistic everyday use.
+
+Test environment: Intel Core i7-1165G7 (4C, 2.8–4.7GHz, 12MB cache), 16GB DDR4 3200MHz.
+
+> Breadcrumbs benchmarks coming soon.
 
 ## License
 
