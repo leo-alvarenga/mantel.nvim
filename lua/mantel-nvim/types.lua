@@ -189,6 +189,7 @@
 --- @field ignore_first_buffer_prefix boolean? If true, the first buffer (left to right) will not have a custom prefix
 
 --- @class mantel-nvim.Opts
+--- @field debug boolean?
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
 --- @field style mantel-nvim.Style "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
 --- @field bufs mantel-nvim.Bufs

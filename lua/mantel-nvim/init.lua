@@ -8,7 +8,7 @@ local tabline = require("mantel-nvim.ui.tabline")
 local M = {}
 
 M.patch = "0"
-M.minor = "29"
+M.minor = "30"
 M.major = "0"
 
 M.version = M.major .. "." .. M.minor .. "." .. M.patch

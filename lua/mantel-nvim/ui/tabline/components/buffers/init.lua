@@ -1,4 +1,5 @@
 local config = require("mantel-nvim.config")
+local debug = require("mantel-nvim.debug")
 local decorators = require("mantel-nvim.ui.tabline.components.buffers.decorators")
 local utils = require("mantel-nvim.utils")
 
@@ -61,6 +62,8 @@ function M.get()
 	local total_len = 0
 
 	local bufs = M._private.get_bufs()
+	debug.log({ "Starting buffer render now for " .. #bufs .. " buffers" })
+	debug.start_timer("render_buffers")
 
 	for i, buf in ipairs(bufs) do
 		local is_current = utils.is_current_buf(buf.bufnr)
@@ -85,6 +88,8 @@ function M.get()
 			total_len = total_len + utils.strlen(sep)
 		end
 	end
+
+	debug.log_timer("render_buffers")
 
 	return part, total_len
 end

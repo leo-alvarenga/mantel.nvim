@@ -1,5 +1,6 @@
-local config = require("mantel-nvim.config")
 local buffers = require("mantel-nvim.ui.tabline.components.buffers")
+local config = require("mantel-nvim.config")
+local debug = require("mantel-nvim.debug")
 local tabs = require("mantel-nvim.ui.tabline.components.tabs")
 local utils = require("mantel-nvim.utils")
 
@@ -25,6 +26,8 @@ function M.render()
 	local line = ""
 	local len = 0
 
+	debug.start_timer("render_tabline")
+
 	line, len = add_component(line, buffers.get, 0)
 	line = add_component(line, function()
 		-- Wrap the tabs component in a function to get the length of the tabs part, so we can calculate the padding correctly
@@ -33,6 +36,8 @@ function M.render()
 
 		return padding .. tabs_part, tabs_len
 	end, len)
+
+	debug.log_timer("render_tabline")
 
 	return line
 end

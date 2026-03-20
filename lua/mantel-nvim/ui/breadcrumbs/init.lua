@@ -1,4 +1,5 @@
 local config = require("mantel-nvim.config")
+local debug = require("mantel-nvim.debug")
 local state = require("mantel-nvim.state")
 local utils = require("mantel-nvim.utils")
 
@@ -35,6 +36,9 @@ function M.render(winid)
 		vim.wo[winid].winbar = contents
 		return contents
 	end
+
+	debug.log({ "Rendering winbar for winid " .. winid })
+	debug.start_timer("render_winbar")
 
 	local bufid = vim.api.nvim_win_get_buf(winid)
 	local buf = vim.fn.getbufinfo(bufid)[1]
@@ -102,6 +106,8 @@ function M.render(winid)
 
 	contents = utils.hl(fill_hl) .. string.rep(" ", config.opts.breadcrumbs.padding_left) .. contents
 	contents = contents .. utils.hl(fill_hl) .. string.rep(" ", config.opts.breadcrumbs.padding_right)
+
+	debug.log_timer("render_winbar")
 
 	vim.wo[winid].winbar = contents
 	return contents
