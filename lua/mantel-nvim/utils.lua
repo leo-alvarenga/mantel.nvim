@@ -5,7 +5,7 @@ M.fmt = string.format
 --- @param str string
 --- @return integer
 function M.strlen(str)
-	return vim.api.nvim_strwidth(str)
+	return vim.fn.strdisplaywidth(str)
 end
 
 function M.is_current_buf(bufnr)
@@ -146,6 +146,17 @@ function M.center_text(options)
 	end
 
 	return left_padding .. text .. right_padding, M.strlen(left_padding) + M.strlen(right_padding)
+end
+
+--- @param text_len integer
+--- @param min_width integer
+--- @param min_padding integer
+--- @return integer padding_left, integer padding_right
+function M.get_padding_len(text_len, min_width, min_padding)
+	local pl = math.max(min_padding, math.floor((min_width - text_len) / 2))
+	local pr = math.max(min_padding, min_width - text_len - pl)
+
+	return pl, pr
 end
 
 --- @param buf vim.fn.getbufinfo.ret.item

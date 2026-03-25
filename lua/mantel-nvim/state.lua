@@ -11,6 +11,8 @@ M._state = {
 
 	winids = {},
 	breadcrumb_mode = "auto-inclusive",
+
+	decorators = {},
 }
 
 function M.get_state()

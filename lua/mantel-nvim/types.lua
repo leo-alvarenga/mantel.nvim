@@ -1,5 +1,11 @@
 --- @meta
 
+--- @class mantel-nvim.Part
+--- @field text string
+--- @field hl string
+--- @field len integer
+--- @field name string
+
 --- @alias mantel-nvim.HlEntry
 --- | vim.api.keyset.highlight
 --- | fun(buf: vim.fn.getbufinfo.ret.item): vim.api.keyset.highlight
@@ -197,6 +203,9 @@
 --- @field breadcrumbs mantel-nvim.Breadcrumbs
 --- @field ellipsis string String to be used to demark overflow; Default: ' ... ' (5 chars)
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites
+
+--- @class mantel-nvim.ConfigCache
+--- @field decorators table<mantel-nvim.Positionable, mantel-nvim.PositionableDecorator[]>
 
 ------------------------------------------
 ---  State
