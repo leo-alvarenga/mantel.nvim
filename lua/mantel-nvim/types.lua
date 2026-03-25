@@ -1,5 +1,9 @@
 --- @meta
 
+--- @alias mantel-nvim.HorizontalDirection
+--- | "left-to-right"
+--- | "right-to-left"
+
 --- @class mantel-nvim.Part
 --- @field text string
 --- @field hl string

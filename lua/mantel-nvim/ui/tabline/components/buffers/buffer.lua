@@ -255,26 +255,41 @@ end
 --- @param has_separator boolean
 --- @param index integer
 --- @param remaining_len integer
+--- @param direction mantel-nvim.HorizontalDirection
 --- @return string part, integer remaining_len, integer total_len
-function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remaining_len)
+function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remaining_len, direction)
 	local result = ""
 	local total_len = 0
+
+	if remaining_len <= 0 then
+		return result, remaining_len, total_len
+	end
+
 	local parts = M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, index)
 
+	if direction == "right-to-left" then
+		vim.fn.reverse(parts)
+	end
+
 	for _, part in ipairs(parts) do
-		if part.len <= remaining_len then
-			local text = part.text
+		if part.len > remaining_len then
+			part.text = utils.strslice(part.text, part.len - remaining_len, direction)
+			part.len = utils.strlen(part.text)
+		end
 
-			if part.hl and part.hl ~= "" then
-				text = utils.hl(part.hl) .. text
-			end
-
-			result = result .. text
-			remaining_len = remaining_len - part.len
-			total_len = total_len + part.len
-		else
+		if remaining_len <= 0 then
 			break
 		end
+
+		local text = part.text
+
+		if part.hl and part.hl ~= "" then
+			text = utils.hl(part.hl) .. text
+		end
+
+		result = result .. text
+		remaining_len = remaining_len - part.len
+		total_len = total_len + part.len
 	end
 
 	return result, remaining_len, total_len

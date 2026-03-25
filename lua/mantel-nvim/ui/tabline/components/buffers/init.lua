@@ -31,10 +31,18 @@ function M.get()
 
 		local is_ambiguos = #ambiguity_list > 1
 
-		local buf_text, remaining, len = _buffer.render_buf(buf, is_current, is_ambiguos, i < #bufs, i, max_len)
+		local buf_text, remaining, len =
+			_buffer.render_buf(buf, is_current, is_ambiguos, i < #bufs, i, max_len, "left-to-right")
+
 		total_len = total_len + len
+		max_len = remaining
 
 		part = part .. buf_text
+
+		if max_len <= 0 then
+			debug.log({ "Max length reached, stopping buffer render" })
+			break
+		end
 	end
 
 	debug.log_timer("render_buffers")

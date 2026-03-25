@@ -8,6 +8,18 @@ function M.strlen(str)
 	return vim.fn.strdisplaywidth(str)
 end
 
+--- @param str string
+--- @param count integer
+--- @param direction mantel-nvim.HorizontalDirection
+--- @return string
+function M.strslice(str, count, direction)
+	if direction == "left-to-right" then
+		return str:sub(1, M.strlen(str) - count)
+	end
+
+	return str:sub(count + 1)
+end
+
 function M.is_current_buf(bufnr)
 	return vim.api.nvim_get_current_buf() == bufnr
 end
