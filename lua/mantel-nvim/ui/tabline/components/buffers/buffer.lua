@@ -260,6 +260,7 @@ end
 function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remaining_len, direction)
 	local result = ""
 	local total_len = 0
+	local is_reversed = direction == "right-to-left"
 
 	if remaining_len <= 0 then
 		return result, remaining_len, total_len
@@ -267,7 +268,7 @@ function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remain
 
 	local parts = M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, index)
 
-	if direction == "right-to-left" then
+	if is_reversed then
 		vim.fn.reverse(parts)
 	end
 
@@ -287,9 +288,10 @@ function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remain
 			text = utils.hl(part.hl) .. text
 		end
 
-		result = result .. text
 		remaining_len = remaining_len - part.len
 		total_len = total_len + part.len
+
+		result = result .. text
 	end
 
 	return result, remaining_len, total_len

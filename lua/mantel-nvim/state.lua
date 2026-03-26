@@ -38,6 +38,7 @@ function M.does_win_has_breadcrumbs(winid)
 end
 
 --- @param bypass_sorting boolean?
+--- @return vim.fn.getbufinfo.ret.item[] bufs
 function M.get_bufs(bypass_sorting)
 	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
 
@@ -57,6 +58,23 @@ function M.get_bufs(bypass_sorting)
 	end)
 
 	return bufs
+end
+
+--- @param bypass_sorting boolean?
+--- @return vim.fn.getbufinfo.ret.item[] bufs, integer? current_index
+function M.get_bufs_and_current_index(bypass_sorting)
+	local bufs = M.get_bufs(bypass_sorting)
+	local current_bufnr = vim.api.nvim_get_current_buf()
+
+	local current_index = nil
+	for i, buf in ipairs(bufs) do
+		if buf.bufnr == current_bufnr then
+			current_index = i
+			break
+		end
+	end
+
+	return bufs, current_index
 end
 
 --- @param bufnr integer
