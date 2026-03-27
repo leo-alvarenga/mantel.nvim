@@ -35,6 +35,15 @@ end
 --- @type table<string, number>
 M.timers = {}
 
+function M.clear_log()
+	if M.file then
+		M.file:close()
+		M.file = nil
+	end
+
+	os.remove(M.log_file)
+end
+
 --- @param msgs any[]
 function M.log(msgs)
 	M.open_log_file()

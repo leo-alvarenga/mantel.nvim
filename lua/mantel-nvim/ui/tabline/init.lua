@@ -26,6 +26,7 @@ function M.render()
 	local line = ""
 	local len = 0
 
+	debug.clear_log()
 	debug.start_timer("render_tabline")
 
 	line, len = add_component(line, buffers.get, 0)

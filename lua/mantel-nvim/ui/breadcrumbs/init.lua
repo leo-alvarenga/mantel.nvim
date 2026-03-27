@@ -37,6 +37,7 @@ function M.render(winid)
 		return contents
 	end
 
+	debug.clear_log()
 	debug.log({ "Rendering winbar for winid " .. winid })
 	debug.start_timer("render_winbar")
 
