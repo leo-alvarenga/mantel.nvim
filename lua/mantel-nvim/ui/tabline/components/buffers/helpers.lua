@@ -14,8 +14,12 @@ function M.add_decorators(buf, position)
 	local len = 0
 
 	--- @type mantel-nvim.PositionableDecorator[]
-	local all_decorators =
-		vim.tbl_extend("keep", {}, config.opts.bufs.decorators.extras or {}, config.opts.bufs.decorators.native or {})
+	local all_decorators = vim.tbl_extend(
+		"keep",
+		{},
+		config.opts.tabline.bufs.decorators.extras or {},
+		config.opts.tabline.bufs.decorators.native or {}
+	)
 
 	for i, decorator in ipairs(all_decorators) do
 		::continue::
@@ -43,10 +47,10 @@ function M.add_decorators(buf, position)
 	--- @type table<string, boolean>
 	local rendered_decorators = {}
 
-	local fallback_hl = config.opts.bufs.hl.inactive
+	local fallback_hl = config.opts.tabline.hl.inactive
 
 	if utils.is_current_buf(buf.bufnr) then
-		fallback_hl = config.opts.bufs.hl.active
+		fallback_hl = config.opts.tabline.hl.active
 	end
 
 	for _, decorator in ipairs(decorators) do

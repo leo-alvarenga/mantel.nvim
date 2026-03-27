@@ -92,6 +92,19 @@ local function get_default_highlights()
 			bg = statusline.bg,
 		},
 
+		section_separator = {
+			fg = diag_info.fg or statusline.fg,
+			bg = statusline.bg,
+		},
+		tab_active = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+		},
+		tab_inactive = {
+			fg = comment.fg or tabsel.bg,
+			bg = normal.bg,
+		},
+
 		breadcrumb_fill = {
 			fg = tabline.fg,
 			bg = normal.bg,

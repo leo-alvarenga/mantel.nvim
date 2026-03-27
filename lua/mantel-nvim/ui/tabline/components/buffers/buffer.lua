@@ -7,7 +7,7 @@ local M = {}
 --- @param is_first boolean
 --- @return mantel-nvim.Part prefix
 function M.get_prefix(buf, is_first)
-	local prefix = utils.evaluate_buf_aware_option(config.opts.bufs.decorators.prefix, buf)
+	local prefix = utils.evaluate_buf_aware_option(config.opts.tabline.bufs.decorators.prefix, buf)
 
 	--- @type mantel-nvim.Part
 	local part = {
@@ -41,9 +41,9 @@ function M.get_prefix(buf, is_first)
 	end
 
 	if utils.is_current_buf(buf.bufnr) then
-		part.hl = utils.evaluate_buf_aware_option(config.opts.bufs.hl.prefix, buf)
+		part.hl = utils.evaluate_buf_aware_option(config.opts.tabline.hl.prefix, buf)
 	else
-		part.hl = utils.evaluate_buf_aware_option(config.opts.bufs.hl.prefix_inactive, buf)
+		part.hl = utils.evaluate_buf_aware_option(config.opts.tabline.hl.prefix_inactive, buf)
 	end
 
 	return part
@@ -52,7 +52,7 @@ end
 --- @param buf vim.fn.getbufinfo.ret.item
 --- @return mantel-nvim.Part suffix
 function M.get_suffix(buf)
-	local suffix = utils.evaluate_buf_aware_option(config.opts.bufs.decorators.suffix, buf)
+	local suffix = utils.evaluate_buf_aware_option(config.opts.tabline.bufs.decorators.suffix, buf)
 
 	--- @type mantel-nvim.Part
 	local part = {
@@ -72,9 +72,9 @@ function M.get_suffix(buf)
 	end
 
 	if utils.is_current_buf(buf.bufnr) then
-		part.hl = utils.evaluate_buf_aware_option(config.opts.bufs.hl.suffix, buf)
+		part.hl = utils.evaluate_buf_aware_option(config.opts.tabline.hl.suffix, buf)
 	else
-		part.hl = utils.evaluate_buf_aware_option(config.opts.bufs.hl.suffix_inactive, buf)
+		part.hl = utils.evaluate_buf_aware_option(config.opts.tabline.hl.suffix_inactive, buf)
 	end
 
 	return part
@@ -91,10 +91,10 @@ function M.get_decorator_parts(buf, position)
 	--- @type table<string, boolean>
 	local rendered_decorators = {}
 
-	local fallback_hl = config.opts.bufs.hl.inactive
+	local fallback_hl = config.opts.tabline.hl.inactive
 
 	if utils.is_current_buf(buf.bufnr) then
-		fallback_hl = config.opts.bufs.hl.active
+		fallback_hl = config.opts.tabline.hl.active
 	end
 
 	for _, decorator in ipairs(config.cache.decorators[position]) do
@@ -133,21 +133,30 @@ function M.get_buffer_name(buf, is_current, is_ambiguos)
 	local text = buf.name
 
 	--- @type mantel-nvim.BufAwareStr
-	local hl = config.opts.bufs.hl.inactive
+	local hl = config.opts.tabline.hl.inactive
 
 	if is_current then
-		hl = utils.evaluate_buf_aware_option(config.opts.bufs.hl.active, buf)
+		hl = utils.evaluate_buf_aware_option(config.opts.tabline.hl.active, buf)
 	end
 
 	if text == "" then
-		text = config.opts.bufs.overwrites.no_name
+		text = config.opts.tabline.bufs.overwrites.no_name
 	elseif is_ambiguos then
-		text = config.opts.bufs.overwrites.ambiguos
+		text = config.opts.tabline.bufs.overwrites.ambiguos
 	else
-		text = config.opts.bufs.overwrites.name
+		text = config.opts.tabline.bufs.overwrites.name
 	end
 
 	local name = utils.evaluate_buf_aware_option(text, buf)
+
+	if utils.strlen(name) > config.opts.tabline.bufs.max_name_len and config.opts.tabline.bufs.overwrites.overflow then
+		name = config.opts.tabline.bufs.overwrites.overflow(
+			buf,
+			name,
+			config.opts.tabline.bufs.max_name_len,
+			config.opts.ellipsis
+		)
+	end
 
 	--- @type mantel-nvim.Part
 	local part = {
@@ -171,7 +180,7 @@ function M.get_separator(buf)
 		hl = "",
 	}
 
-	part.text = utils.evaluate_buf_aware_option(config.opts.bufs.decorators.sep or "", buf)
+	part.text = utils.evaluate_buf_aware_option(config.opts.tabline.bufs.decorators.sep or "", buf)
 	part.len = utils.strlen(part.text)
 
 	if part.len <= 0 then
@@ -183,7 +192,7 @@ function M.get_separator(buf)
 		}
 	end
 
-	part.hl = utils.evaluate_buf_aware_option(config.opts.bufs.hl.separator or "", buf)
+	part.hl = utils.evaluate_buf_aware_option(config.opts.tabline.hl.separator or "", buf)
 	return part
 end
 
@@ -191,8 +200,9 @@ end
 --- @param is_current boolean
 --- @param is_ambiguos boolean
 --- @param has_separator boolean
---- @param index integer
-function M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, index)
+--- @param is_first boolean
+--- @return mantel-nvim.Part[] parts
+function M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, is_first)
 	--- @type mantel-nvim.Part[]
 	local parts = {}
 
@@ -208,12 +218,13 @@ function M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, index)
 		+ name_after_decorators_len
 		+ suffix_decorators_len
 
-	local pl, pr = utils.get_padding_len(inner_len, config.opts.bufs.min_width, config.opts.bufs.min_padding)
+	local pl, pr =
+		utils.get_padding_len(inner_len, config.opts.tabline.bufs.min_width, config.opts.tabline.bufs.min_padding)
 
 	--------------------------
 	--- Prefix and its decorators
 	--------------------------
-	table.insert(parts, M.get_prefix(buf, index == 1))
+	table.insert(parts, M.get_prefix(buf, is_first))
 	vim.list_extend(parts, prefix_decorators)
 	--------------------------
 
@@ -253,11 +264,11 @@ end
 --- @param is_current boolean
 --- @param is_ambiguos boolean
 --- @param has_separator boolean
---- @param index integer
+--- @param is_first boolean
 --- @param remaining_len integer
 --- @param direction mantel-nvim.HorizontalDirection
 --- @return string part, integer remaining_len, integer total_len
-function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remaining_len, direction)
+function M.render_buf(buf, is_current, is_ambiguos, has_separator, is_first, remaining_len, direction)
 	local result = ""
 	local total_len = 0
 	local is_reversed = direction == "right-to-left"
@@ -266,20 +277,22 @@ function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remain
 		return result, remaining_len, total_len
 	end
 
-	local parts = M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, index)
+	local parts = M.get_buffer_parts(buf, is_current, is_ambiguos, has_separator, is_first)
 
 	if is_reversed then
-		vim.fn.reverse(parts)
+		parts = vim.iter(parts):rev():totable()
 	end
 
 	for _, part in ipairs(parts) do
-		if part.len > remaining_len then
-			part.text = utils.strslice(part.text, part.len - remaining_len, direction)
-			part.len = utils.strlen(part.text)
-		end
-
 		if remaining_len <= 0 then
 			break
+		end
+
+		remaining_len = remaining_len - part.len
+		if part.len >= remaining_len then
+			part.text = utils.strslice(part.text, part.len - remaining_len, direction)
+			part.len = utils.strlen(part.text)
+			remaining_len = 0
 		end
 
 		local text = part.text
@@ -288,10 +301,13 @@ function M.render_buf(buf, is_current, is_ambiguos, has_separator, index, remain
 			text = utils.hl(part.hl) .. text
 		end
 
-		remaining_len = remaining_len - part.len
 		total_len = total_len + part.len
 
-		result = result .. text
+		if is_reversed then
+			result = text .. result
+		else
+			result = result .. text
+		end
 	end
 
 	return result, remaining_len, total_len

@@ -93,9 +93,17 @@ function M.evaluate_table_option(option)
 end
 
 --- @param option mantel-nvim.BufAwareStr
---- @param buf vim.fn.getbufinfo.ret.item
+--- @param buf vim.fn.getbufinfo.ret.item?
 --- @return string val
 function M.evaluate_buf_aware_option(option, buf)
+	if not buf then
+		if type(option) == "string" then
+			return option
+		end
+
+		return ""
+	end
+
 	if type(option) == "string" and M.strlen(option) > 0 then
 		return option
 	elseif type(option) == "function" then

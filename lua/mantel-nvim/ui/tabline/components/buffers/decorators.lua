@@ -18,7 +18,7 @@ end
 --- @return string part, integer len
 function M.get_prefix(buf, is_first)
 	local decorators, decorators_len = helpers.add_decorators(buf, "prefix")
-	local prefix = utils.evaluate_buf_aware_option(config.opts.bufs.decorators.prefix, buf)
+	local prefix = utils.evaluate_buf_aware_option(config.opts.tabline.bufs.decorators.prefix, buf)
 
 	local len = utils.strlen(prefix) + decorators_len
 
@@ -35,10 +35,10 @@ function M.get_prefix(buf, is_first)
 		end
 	end
 
-	local hl = utils.buf_aware_hl(buf, config.opts.bufs.hl.prefix_inactive)
+	local hl = utils.buf_aware_hl(buf, config.opts.tabline.hl.prefix_inactive)
 
 	if utils.is_current_buf(buf.bufnr) then
-		hl = utils.buf_aware_hl(buf, config.opts.bufs.hl.prefix)
+		hl = utils.buf_aware_hl(buf, config.opts.tabline.hl.prefix)
 	end
 
 	return hl .. prefix .. decorators, len
@@ -48,7 +48,7 @@ end
 --- @return string part, integer len
 function M.get_suffix(buf)
 	local decorators, decorators_len = helpers.add_decorators(buf, "suffix")
-	local suffix = utils.evaluate_buf_aware_option(config.opts.bufs.decorators.suffix, buf)
+	local suffix = utils.evaluate_buf_aware_option(config.opts.tabline.bufs.decorators.suffix, buf)
 
 	local len = utils.strlen(suffix) + decorators_len
 
@@ -56,10 +56,10 @@ function M.get_suffix(buf)
 		return "", 0
 	end
 
-	local hl = utils.buf_aware_hl(buf, config.opts.bufs.hl.suffix_inactive)
+	local hl = utils.buf_aware_hl(buf, config.opts.tabline.hl.suffix_inactive)
 
 	if utils.is_current_buf(buf.bufnr) then
-		hl = utils.buf_aware_hl(buf, config.opts.bufs.hl.suffix)
+		hl = utils.buf_aware_hl(buf, config.opts.tabline.hl.suffix)
 	end
 
 	return decorators .. hl .. suffix, len

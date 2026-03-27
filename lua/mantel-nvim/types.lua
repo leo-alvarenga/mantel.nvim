@@ -18,6 +18,9 @@
 --- @field fill mantel-nvim.HlEntry
 --- @field inactive mantel-nvim.HlEntry
 --- @field active mantel-nvim.HlEntry
+--- @field section_separator mantel-nvim.HlEntry
+--- @field tab_inactive mantel-nvim.HlEntry
+--- @field tab_active mantel-nvim.HlEntry
 --- @field separator mantel-nvim.HlEntry
 --- @field prefix mantel-nvim.HlEntry
 --- @field suffix mantel-nvim.HlEntry
@@ -47,13 +50,16 @@
 --- @field fill string
 --- @field inactive mantel-nvim.BufAwareStr
 --- @field active mantel-nvim.BufAwareStr
+--- @field section_separator string
+--- @field tab_inactive string
+--- @field tab_active string
 --- @field modified mantel-nvim.BufAwareStr
 --- @field duplicate mantel-nvim.BufAwareStr
 --- @field separator mantel-nvim.BufAwareStr
---- @field prefix mantel-nvim.BufAwareStr
---- @field suffix mantel-nvim.BufAwareStr
---- @field prefix_inactive mantel-nvim.BufAwareStr
---- @field suffix_inactive mantel-nvim.BufAwareStr
+--- @field prefix string
+--- @field suffix string
+--- @field prefix_inactive string
+--- @field suffix_inactive string
 --- @field diagnostics_error mantel-nvim.BufAwareStr
 --- @field diagnostics_warn mantel-nvim.BufAwareStr
 --- @field diagnostics_info mantel-nvim.BufAwareStr
@@ -62,22 +68,6 @@
 --- @field diagnostics_warn_inactive mantel-nvim.BufAwareStr
 --- @field diagnostics_info_inactive mantel-nvim.BufAwareStr
 --- @field diagnostics_hint_inactive mantel-nvim.BufAwareStr
-
---- @class mantel-nvim.TabHighlightGroups
---- @field fill string
---- @field inactive string
---- @field active string
---- @field modified string
---- @field duplicate string
---- @field separator string
---- @field diagnostics_error string
---- @field diagnostics_warn string
---- @field diagnostics_info string
---- @field diagnostics_hint string
---- @field diagnostics_error_inactive string
---- @field diagnostics_warn_inactive string
---- @field diagnostics_info_inactive string
---- @field diagnostics_hint_inactive string
 
 ------------------------------------------
 ---  Buffers
@@ -118,11 +108,12 @@
 --- @field ambiguos mantel-nvim.BufAwareStr
 --- @field name mantel-nvim.BufAwareStr
 --- @field no_name mantel-nvim.BufAwareStr
+--- @field overflow (fun(buf: vim.fn.getbufinfo.ret.item, name: string, max_len: integer, ellipsis: string): string)?
 
 --- @class mantel-nvim.Bufs
 --- @field decorators mantel-nvim.Decorators
---- @field hl mantel-nvim.HighlightGroups
 --- @field min_width integer Minimum width for each buffer in the tabline
+--- @field max_name_len integer Maximum length for the buffer name (excluding decorators and padding); If the name exceeds this length, it will be truncated according to the logic defined in `buf_content_overwrites.overflow` (default: 20)
 --- @field min_padding integer Minimum padding (blank spaces) on each side of the buffer name
 --- @field overwrites mantel-nvim.BufContentOverwrites
 
@@ -135,10 +126,18 @@
 --- | "always"
 --- | "never"
 
+--- @class mantel-nvim.TabPart
+--- @field text string
+--- @field active boolean?
+--- @field len integer
+
 --- @class mantel-nvim.Tabs
---- @field hl mantel-nvim.TabHighlightGroups
 --- @field enabled boolean|mantel-nvim.TabBehavior "auto" to enable only when more than 1 tab is open (default); 'true' 'always' to always enable; 'false' or 'never' to disable
 --- @field min_width integer Minimum width for each tab in the tabline
+--- @field min_padding integer Minimum padding (blank spaces) on each side of the buffer name
+--- @field prefix string
+--- @field content fun(): mantel-nvim.TabPart[]
+--- @field suffix string
 
 ------------------------------------------
 ---  Breadcrumbs/Winbar
@@ -182,6 +181,12 @@
 ---  Opts
 ------------------------------------------
 
+--- @class mantel-nvim.TablineOpts
+--- @field bufs mantel-nvim.Bufs
+--- @field tabs mantel-nvim.Tabs
+--- @field hl mantel-nvim.HighlightGroups
+--- @field section_separator string? String to separate different sections of the tabline (e.g. tabs vs buffers); Default: ' | ' (3 chars)
+
 --- @alias mantel-nvim.OptsBehavior
 --- | "classic"
 --- | "enhanced"
@@ -197,13 +202,13 @@
 --- @class mantel-nvim.Style
 --- @field preset boolean|mantel-nvim.StylePreset If set to a preset, the style will be set according to the preset's definition; If set to false or "disabled", Tabline/Bufferline will not be rendered at all
 --- @field ignore_first_buffer_prefix boolean? If true, the first buffer (left to right) will not have a custom prefix
+--- @field ignore_tabs_suffix boolean? If true, the tab indicator suffix will not have a custom suffix
 
 --- @class mantel-nvim.Opts
 --- @field debug boolean?
 --- @field mode mantel-nvim.OptsBehavior "classic" for a traditional tabline/bufferline xp (default); "enhanced" for a more dynamic approach, keeping buffers in order of opening
 --- @field style mantel-nvim.Style "default" for straight edges (default); "slanted" for slanted edges; "sloped" for sloped edges
---- @field bufs mantel-nvim.Bufs
---- @field tabs mantel-nvim.Tabs
+--- @field tabline mantel-nvim.TablineOpts
 --- @field breadcrumbs mantel-nvim.Breadcrumbs
 --- @field ellipsis string String to be used to demark overflow; Default: ' ... ' (5 chars)
 --- @field highlight_overwrites mantel-nvim.HighlightOverwrites|fun(): mantel-nvim.HighlightOverwrites

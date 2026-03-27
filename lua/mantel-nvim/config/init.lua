@@ -22,8 +22,13 @@ function M.apply_style()
 
 	local preset = consts.styles[M.opts.style.preset]
 	if preset then
-		M.opts.bufs.decorators.prefix = preset.prefix
-		M.opts.bufs.decorators.suffix = preset.suffix
+		M.opts.tabline.bufs.decorators.prefix = preset.prefix
+		M.opts.tabline.bufs.decorators.suffix = preset.suffix
+
+		M.opts.tabline.tabs.prefix = preset.prefix
+		M.opts.tabline.tabs.suffix = preset.suffix
+
+		M.opts.breadcrumbs.sep = preset.breadcrumbs_separator
 	end
 end
 
@@ -37,8 +42,12 @@ function M.cache_decorators()
 	}
 
 	--- @type mantel-nvim.PositionableDecorator[]
-	local all_decorators =
-		vim.tbl_extend("keep", {}, M.opts.bufs.decorators.extras or {}, M.opts.bufs.decorators.native or {})
+	local all_decorators = vim.tbl_extend(
+		"keep",
+		{},
+		M.opts.tabline.bufs.decorators.extras or {},
+		M.opts.tabline.bufs.decorators.native or {}
+	)
 
 	for i, decorator in ipairs(all_decorators) do
 		::continue::

@@ -1,5 +1,6 @@
 local breadcrumbs = require("mantel-nvim.config.default.breadcrumbs")
 local bufs = require("mantel-nvim.config.default.bufs")
+local default_hl = require("mantel-nvim.config.default.highlights")
 local tabs = require("mantel-nvim.config.default.tabs")
 
 local get_default_highlights = require("mantel-nvim.config.default.highlight_overwrites")
@@ -16,8 +17,13 @@ return {
 		ignore_first_buffer_prefix = false,
 	},
 
-	bufs = bufs,
-	tabs = tabs,
+	tabline = {
+		bufs = bufs,
+		tabs = tabs,
+		hl = default_hl,
+
+		section_separator = " ",
+	},
 
 	breadcrumbs = breadcrumbs,
 

@@ -12,31 +12,29 @@ local function get_left_spacing(diff, hl)
 	return (hl and utils.hl(hl) or "") .. string.rep(" ", math.max(0, vim.o.columns - diff))
 end
 
---- @param line string
---- @param component fun(): (string, integer)
---- @param prev_len integer
---- @return string line, integer len
-local function add_component(line, component, prev_len)
-	local part, part_len = component()
-
-	return line .. part, prev_len + part_len
-end
-
 function M.render()
-	local line = ""
-	local len = 0
+	local max_len = vim.o.columns
 
 	debug.clear_log()
 	debug.start_timer("render_tabline")
+	local tabs_part, tabs_len = tabs.get()
+	max_len = max_len - tabs_len
 
-	line, len = add_component(line, buffers.get, 0)
-	line = add_component(line, function()
-		-- Wrap the tabs component in a function to get the length of the tabs part, so we can calculate the padding correctly
-		local tabs_part, tabs_len = tabs.get()
-		local padding = get_left_spacing(len + tabs_len, config.opts.tabs.hl.fill)
+	local buffers_part, buffers_len = buffers.get(max_len)
+	local padding = ""
 
-		return padding .. tabs_part, tabs_len
-	end, len)
+	if tabs_len > 0 or buffers_len < max_len then
+		padding = get_left_spacing(buffers_len + tabs_len, config.opts.tabline.hl.fill)
+	end
+
+	local line = buffers_part .. padding .. tabs_part
+	vim.schedule(function()
+		vim.notify_once(
+			vim.inspect({ tabs_len, max_len, vim.o.columns, buffers_len }),
+			vim.log.levels.INFO,
+			{ title = "Mantel Debug" }
+		)
+	end)
 
 	debug.log_timer("render_tabline")
 

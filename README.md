@@ -65,10 +65,15 @@ With the Breadcrumbs enable:
 - [x] Configurable highlights
 - [x] Document new sleek look!
 - [x] Breadcrumbs support!
-- [ ] Improve overflow handling <- Currently in progress
-  - [ ] Add ellipsis on overflow
-  - [ ] Always center on the current buffer
-  - [ ] Ensure spacing is done correctly
+- [ ] Improve overflow handling
+  - [x] Add ellipsis on breadcrumbs overflow
+  - [x] Always center on the current buffer
+  - [x] Ensure spacing is done correctly
+  - [ ] Reshape tabline options into a tabline options <- Currently in progress
+  - [ ] Add section separator between buffers and tabs, with configurable separator text
+  - [ ] Add max tab count to be visible before overflow handling is triggered (default: 3)
+  - [ ] Add alt tab rendering style ("Tab 1/N")
+  - [ ] Add option to enable the preset for tabs as well
 
 ## Installation
 

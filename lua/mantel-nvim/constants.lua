@@ -11,18 +11,22 @@ return {
 		slanted = {
 			prefix = "",
 			suffix = "",
+			breadcrumbs_separator = "  ",
 		},
 		slanted_inverted = {
 			prefix = "",
 			suffix = "",
+			breadcrumbs_separator = "  ",
 		},
 		sloped = {
 			prefix = "",
 			suffix = "",
+			breadcrumbs_separator = "  ",
 		},
 		sloped_inverted = {
 			prefix = "",
 			suffix = "",
+			breadcrumbs_separator = "  ",
 		},
 	},
 
@@ -45,6 +49,10 @@ return {
 		diagnostics_warn_inactive = prefix .. "DiagnosticsWarnInactive",
 		diagnostics_info_inactive = prefix .. "DiagnosticsInfoInactive",
 		diagnostics_hint_inactive = prefix .. "DiagnosticsHintInactive",
+
+		tab_inactive = prefix .. "TabInactive",
+		tab_active = prefix .. "TabActive",
+		section_separator = prefix .. "SectionSeparator",
 
 		breadcrumb_fill = prefix .. "BreadcrumbFill",
 		breadcrumb_item = prefix .. "BreadcrumbItem",
