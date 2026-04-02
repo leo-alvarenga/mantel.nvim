@@ -1,62 +1,38 @@
-local prefix = "Mantel"
-
 return {
-	prefix = prefix,
+	default_config = {
+		tabpages = "auto",
 
-	augrops = {
-		winbar = prefix .. "Breadcrumbs",
+		min_buffer_len = 24,
+		buffer_padding = 4,
+
+		preset = "arrow",
+		separator = "",
+		enable_icons = true,
+
+		icons = {
+			modified = "  ●",
+		},
+
+		ellipsis = "…",
+
+		ignore_first_and_last_edges = true,
+
+		hl = {
+			fill = "MantelFill",
+			active = "MantelActive",
+			inactive = "MantelInactive",
+			edge = "MantelEdge",
+			edge_inactive = "MantelEdgeInactive",
+
+			tab_active = "MantelTabActive",
+			tab_inactive = "MantelTabInactive",
+		},
 	},
 
-	styles = {
-		slanted = {
-			prefix = "",
-			suffix = "",
-			breadcrumbs_separator = "  ",
-		},
-		slanted_inverted = {
-			prefix = "",
-			suffix = "",
-			breadcrumbs_separator = "  ",
-		},
-		sloped = {
-			prefix = "",
-			suffix = "",
-			breadcrumbs_separator = "  ",
-		},
-		sloped_inverted = {
-			prefix = "",
-			suffix = "",
-			breadcrumbs_separator = "  ",
-		},
-	},
-
-	hl_groups = {
-		fill = prefix .. "Fill",
-		inactive = prefix .. "Inactive",
-		active = prefix .. "Active",
-		modified = prefix .. "Modified",
-		duplicate = prefix .. "Duplicate",
-		separator = prefix .. "Separator",
-		prefix = prefix .. "Prefix",
-		suffix = prefix .. "Suffix",
-		prefix_inactive = prefix .. "PrefixInactive",
-		suffix_inactive = prefix .. "SuffixInactive",
-		diagnostics_error = prefix .. "DiagnosticsError",
-		diagnostics_warn = prefix .. "DiagnosticsWarn",
-		diagnostics_info = prefix .. "DiagnosticsInfo",
-		diagnostics_hint = prefix .. "DiagnosticsHint",
-		diagnostics_error_inactive = prefix .. "DiagnosticsErrorInactive",
-		diagnostics_warn_inactive = prefix .. "DiagnosticsWarnInactive",
-		diagnostics_info_inactive = prefix .. "DiagnosticsInfoInactive",
-		diagnostics_hint_inactive = prefix .. "DiagnosticsHintInactive",
-
-		tab_inactive = prefix .. "TabInactive",
-		tab_active = prefix .. "TabActive",
-		section_separator = prefix .. "SectionSeparator",
-
-		breadcrumb_fill = prefix .. "BreadcrumbFill",
-		breadcrumb_item = prefix .. "BreadcrumbItem",
-		breadcrumb_item_focus = prefix .. "BreadcrumbItemFocus",
-		breadcrumb_separator = prefix .. "BreadcrumbSeparator",
+	edges_by_preset = {
+		none = { left = "", right = "" },
+		sloped = { left = "", right = "" },
+		arrow = { left = "", right = "" },
+		slanted = { left = "", right = "" },
 	},
 }

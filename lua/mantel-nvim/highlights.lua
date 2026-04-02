@@ -1,55 +1,110 @@
 local M = {}
 
-function M.blend(fg, bg, alpha)
-	return vim.api.nvim_get_color_by_name(string.format("#%06x", math.floor((1 - alpha) * fg + alpha * bg)))
+--- @param name string
+--- @return table
+function M.get_hl(name)
+	local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = name, link = false })
+
+	if not ok then
+		return {}
+	end
+
+	return hl
 end
 
---- @param opts mantel-nvim.Opts
-function M.setup_autocmd(opts)
+function M.get_default_highlights()
+	local normal = M.get_hl("Normal")
+	local comment = M.get_hl("Comment")
+	local statusline = M.get_hl("StatusLine")
+	local tabsel = M.get_hl("TabLineSel")
+	local tabline = M.get_hl("TabLine")
+
+	local diag_info = M.get_hl("DiagnosticInfo")
+
+	return {
+		-- Tabline
+		["MantelFill"] = {
+			fg = tabline.fg,
+			bg = statusline.bg,
+		},
+		["MantelInactive"] = {
+			fg = comment.fg or tabsel.bg,
+			bg = statusline.bg,
+		},
+		["MantelActive"] = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
+			italic = true,
+		},
+		["MantelSeparator"] = {
+			fg = diag_info.fg or statusline.fg,
+			bg = statusline.bg,
+		},
+		["MantelEdge"] = {
+			bg = normal.bg,
+			fg = statusline.bg,
+		},
+		["MantelEdgeInactive"] = {
+			fg = statusline.bg,
+			bg = statusline.bg,
+		},
+
+		["MantelTabInactive"] = {
+			fg = comment.fg or tabsel.bg,
+			bg = normal.bg,
+		},
+		["MantelTabActive"] = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
+		},
+
+		-- Winbar
+		["MantelBreadcrumbsFill"] = {
+			fg = tabline.fg,
+			bg = normal.bg,
+		},
+		["MantelBreadcrumbsItem"] = {
+			fg = comment.fg or statusline.fg,
+			bg = normal.bg,
+		},
+		["MantelBreadcrumbsItemFocus"] = {
+			fg = diag_info.fg or statusline.fg,
+			bg = normal.bg,
+			bold = true,
+			italic = true,
+		},
+		["MantelBreadcrumbsItemSeparator"] = {
+			fg = comment.fg or statusline.fg,
+			bg = normal.bg,
+		},
+	}
+end
+
+function M.load_colors()
+	local highlights = M.get_default_highlights()
+
+	for name, hl in pairs(highlights) do
+		vim.api.nvim_set_hl(0, name, hl)
+	end
+
+	M.setup_autocmd()
+	M.setup_cmd()
+end
+
+function M.setup_autocmd()
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		callback = function()
-			M.reload_colors(opts)
+			M.load_colors()
 		end,
 	})
 end
 
-function M.setup_cmd(opts)
-	local const = require("mantel-nvim.constants")
-
-	vim.api.nvim_create_user_command(const.prefix .. "ReloadColors", function()
-		M.reload_colors(opts)
+function M.setup_cmd()
+	vim.api.nvim_create_user_command("MantelReloadColors", function()
+		M.load_colors()
 	end, {})
-end
-
---- @param opts mantel-nvim.Opts
-function M.reload_colors(opts)
-	local get_default_highlights = require("mantel-nvim.config.default.highlight_overwrites")
-	local const = require("mantel-nvim.constants")
-	local utils = require("mantel-nvim.utils")
-
-	if not opts or not opts.highlight_overwrites then
-		return
-	end
-
-	local hl_overwrites = vim.tbl_deep_extend(
-		"force",
-		{},
-		get_default_highlights(),
-		utils.evaluate_table_option(opts.highlight_overwrites)
-	)
-
-	for key, hl in pairs(hl_overwrites) do
-		local value = utils.evaluate_table_option(hl)
-
-		--- @type string|nil
-		local hl_group = const.hl_groups[key]
-
-		if value and type(value) == "table" and hl_group then
-			vim.api.nvim_set_hl(0, hl_group, value)
-		end
-	end
-
-	M.setup_autocmd(opts)
 end
 
 return M
