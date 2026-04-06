@@ -31,7 +31,7 @@ return {
 
 	edges_by_preset = {
 		none = { left = "", right = "" },
-		sloped = { left = "", right = "" },
+		sloped = { left = "", right = "" },
 		arrow = { left = "", right = "" },
 		slanted = { left = "", right = "" },
 	},
