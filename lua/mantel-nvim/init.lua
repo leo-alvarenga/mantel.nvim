@@ -12,7 +12,9 @@ H.config = consts.default_config
 
 H.cache = {
 	labels = {},
+	preset = consts.presets["none"],
 }
+
 H.state = {
 	buf_positions = {},
 	next_position = 1,
@@ -41,6 +43,7 @@ end
 
 --- @param label string
 --- @param bufnr integer
+--- @return string
 function H.wrap_with_click(label, bufnr)
 	if not bufnr or type(bufnr) ~= "number" then
 		return label
@@ -49,12 +52,20 @@ function H.wrap_with_click(label, bufnr)
 	return "%" .. bufnr .. "@v:lua.Mantel_on_click@" .. label .. "%T"
 end
 
+function H.cache_preset()
+	H.cache.preset =
+		vim.tbl_deep_extend("keep", {}, consts.presets[H.config.preset] or consts.presets["none"], H.config.override)
+end
+
 function H.set_config(opts)
 	opts = opts or {}
 	H.config = vim.tbl_deep_extend("force", {}, consts.default_config, opts)
+
+	H.cache_preset()
 end
 
 --- @param bypass_sorting boolean?
+--- @return vim.fn.getbufinfo.ret.item[] bufs
 function H.get_bufs(bypass_sorting)
 	local bufs = vim.fn.getbufinfo({ buflisted = 1 })
 
@@ -80,10 +91,14 @@ function H.call_update()
 	vim.cmd("redrawtabline")
 end
 
+--- @param bufnr integer
+--- @return boolean
 function H.is_buffer_valid(bufnr)
 	return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted
 end
 
+--- @param str string
+--- @return integer
 function H.strlen(str)
 	if type(str) ~= "string" then
 		return 0
@@ -96,10 +111,12 @@ end
 --- TabPage Rendering
 ---------------------------------------------
 
+--- @return table tabpages
 function H.get_tabpages()
 	return vim.fn.gettabinfo()
 end
 
+--- @return string tabpages, string raw_tabpages
 function H.render_tabpages()
 	local tabpages = H.get_tabpages()
 
@@ -108,17 +125,16 @@ function H.render_tabpages()
 	end
 
 	local curr = vim.api.nvim_tabpage_get_number(vim.api.nvim_get_current_tabpage())
-	local edges = H.get_edges()
 
-	local res = H.fmt_hl(H.config.hl.edge) .. edges.left
+	local res = H.fmt_hl(H.config.hl.edge) .. H.cache.preset.left
 	res = res .. H.fmt_hl(H.config.hl.tab_active) .. " " .. curr
 	res = res .. H.fmt_hl(H.config.hl.tab_inactive) .. "/" .. #tabpages .. " "
 
-	local raw = edges.left .. curr .. "/" .. #tabpages
+	local raw = H.cache.preset.left .. curr .. "/" .. #tabpages
 
-	if not H.config.ignore_first_and_last_edges then
-		res = res .. H.fmt_hl(H.config.hl.edge) .. edges.right
-		raw = raw .. edges.right
+	if not H.cache.preset.ignore_first_and_last_edges then
+		res = res .. H.fmt_hl(H.config.hl.edge) .. H.cache.preset.right
+		raw = raw .. H.cache.preset.right
 	end
 
 	return res .. H.fmt_hl(H.config.hl.fill), raw
@@ -233,6 +249,7 @@ function H.move_current_buf(delta, call_update)
 	end
 end
 
+--- @param bufnr integer
 function _G.Mantel_on_click(bufnr)
 	if type(bufnr) ~= "number" then
 		return
@@ -250,9 +267,11 @@ end
 ---------------------------------------------
 
 function H.get_edges()
-	return consts.edges_by_preset[H.config.preset] or consts.edges_by_preset["none"]
+	return H.cache.preset
 end
 
+--- @param bufnr integer
+--- @return string
 function H.get_buffer_name(bufnr)
 	local name = vim.api.nvim_buf_get_name(bufnr) or ""
 
@@ -265,12 +284,13 @@ function H.get_buffer_name(bufnr)
 	return name
 end
 
+--- @param label string
+--- @return string pl, string pr
 function H.get_buffer_padding(label)
 	local pl = H.config.buffer_padding
 	local pr = pl
 
-	local edges = H.get_edges()
-	local edges_len = H.strlen(edges.left) + H.strlen(edges.right)
+	local edges_len = H.strlen(H.cache.preset.left) + H.strlen(H.cache.preset.right)
 
 	local raw_len = H.strlen(label) + edges_len
 	local total_len = raw_len + pl + pr
@@ -285,7 +305,7 @@ end
 
 --- @param bufnr integer
 function H.get_icon_for_buffer(bufnr)
-	if not H.config.enable_icons then
+	if not H.config.icons.enabled then
 		return ""
 	end
 
@@ -346,19 +366,18 @@ function H.make_item_parts(item, i)
 
 	local hl = H.config.hl.inactive
 
-	local edges = H.get_edges()
 	local edges_hl = H.config.hl.edge_inactive
 	if item.bufnr == vim.api.nvim_get_current_buf() then
 		hl = H.config.hl.active
 		edges_hl = H.config.hl.edge
 	end
 
-	if i > 1 or not H.config.ignore_first_and_last_edges then
-		table.insert(parts, { content = edges.left, hl = edges_hl })
+	if i > 1 or not H.cache.preset.ignore_first_and_last_edges then
+		table.insert(parts, { content = H.cache.preset.left, hl = edges_hl })
 	end
 
 	table.insert(parts, { content = item.label, hl = hl })
-	table.insert(parts, { content = edges.right, hl = edges_hl })
+	table.insert(parts, { content = H.cache.preset.right, hl = edges_hl })
 
 	return parts
 end
