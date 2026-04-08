@@ -23,21 +23,44 @@ return {
 	},
 
 	opts = {
-		disableWarning = false,
-		ellipsis = " ... ", -- any plain string
+		tabpages = "auto",
+		breadcrumbs_mode = "auto",
+		breadcrumbs_refresh_on = { "WinNew", "BufWinEnter", "WinEnter" },
 
-		mode = "classic", -- 'classic' | 'enhanced'
+		min_buffer_len = 16,
+		buffer_padding = 2,
 
-		style = {
-			preset = "default", -- 'default' | 'slanted' | 'slanted_inverted' | 'sloped' | 'sloped_inverted'
-			ignore_first_buffer_prefix = false,
+		preset = "none",
+
+		icons = {
+			enabled = true,
+			modified = "  ●",
 		},
 
-		bufs = { ... }, --- see References
-		tabs = { ... }, --- see References
+        -- use this in case you want customize a preset!
+		override = {
+			left = nil, -- left edge on each bufferline item
+			right = nil, -- right edge on each bufferline item
+			ellipsis = nil,
+			separator = nil, -- separator between each item
+			ignore_first_and_last_edges = nil, -- whether or not to forego rendering the left edge in the 1st item and the right one on the last
+		},
 
-		breadcrumbs = { ... }, --- see References
-		highlight_overwrites = { ... }, --- see References
+		hl = {
+			fill = "MantelFill", -- The background of the bufferline
+			active = "MantelActive", -- The active buffer
+			inactive = "MantelInactive", -- The inactive buffers
+			edge = "MantelEdge", -- The edges of each item in the bufferline
+			edge_inactive = "MantelEdgeInactive", -- The edges of inactive items in the bufferline
+
+			tab_active = "MantelTabActive", -- The active tab (tabpage) in the bufferline
+			tab_inactive = "MantelTabInactive", -- The inactive tabs (tabpages) in the bufferline
+
+			breadcrumbs_fill = "MantelBreadcrumbsFill", -- The background of the breadcrumbs (winbar)
+			breadcrumbs_item = "MantelBreadcrumbsItem", -- The breadcrumbs item (winbar)
+			breadcrumbs_item_focus = "MantelBreadcrumbsItemFocus", -- The focused breadcrumbs item (winbar)
+			breadcrumbs_separator = "MantelBreadcrumbsSeparator",
+		},
 	},
 }
 ```
@@ -45,6 +68,5 @@ return {
 > **Tip**: To inspect your resolved config, you can use `require("mantel-nvim").get_opts()` at any time
 
 For a complete list of options and their types, see the [References](./References.md) guide.
-For examples on different ways use these options, see the [Recipes](./Recipes.md) guide.
 
 [Back to README](../README.md)

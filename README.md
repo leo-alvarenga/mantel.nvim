@@ -1,8 +1,8 @@
 # mantel.nvim
 
-A lightweight, hackable tabline and winbar for Neovim
+Lightweight, clean tabline and winbars for Neovim
 
-`mantel.nvim` provides a simple, predictable, and hackable tabline layer that works with Neovim's native buffer and tab model; no hidden state, no magic, just a clean rendering pipeline you can bend to your will.
+`mantel.nvim` provides a simple, predictable and ready-to-use tabline layer that works with Neovim's native buffer and tab model; no magic, just clean rendering with straightforward configuration options.
 
 ## Table of Contents
 
@@ -10,13 +10,11 @@ A lightweight, hackable tabline and winbar for Neovim
 - [Installation](#installation)
 - [Usage](#usage)
 - [Concepts](#concepts)
-- [Performance](#performance)
 - [License](#license)
 - More
   - [References](./docs/References.md)
   - [Configuration](./docs/Configuration.md)
   - [Commands](./docs/Commands.md)
-  - [Recipes](./docs/Recipes.md)
 
 ## Preview
 
@@ -48,27 +46,11 @@ With the Breadcrumbs enable:
 - **No dependencies**
 - Zero runtime dependencies
 - **State-less**, **pull-based** rendering architecture
-- Flexible decorator system
 - Configurable highlight groups
 - Colorscheme-friendly defaults
 - Simple, predictable configuration
 - Icon support (optional)
 - Diagnostic indicators (optional)
-
-### Roadmap
-
-- [x] Basic bufferline rendering
-- [x] Tabline support
-- [x] Decorator system
-- [x] Icon support
-- [x] Diagnostic indicators
-- [x] Configurable highlights
-- [x] Document new sleek look!
-- [x] Breadcrumbs support!
-- [ ] Improve overflow handling <- Currently in progress
-  - [ ] Add ellipsis on overflow
-  - [ ] Always center on the current buffer
-  - [ ] Ensure spacing is done correctly
 
 ## Installation
 
@@ -107,32 +89,9 @@ For more details, read the Concepts section below and check out the [Configurati
 
 `mantel.nvim` offers two main components for displaying information: the **bufferline** (or tabline) and the **breadcrumbs** (or winbar). These components can be enabled independently, allowing you to choose which information you want to see and how you want to see it.
 
-Both components are designed to be flexible and customizable (each in their own way), while still providing sensible defaults that work well out of the box.
+Both components are designed to be simple and ready-to-use, while providing sensible defaults that work well out of the box.
 
-> `mantel.nvim` provides a powerful buffer reordering system that allows you to easily move buffers around in the bufferline, either with commands or keybindings; To enable it, change `opts.mode` to `enhanced`
-
-A few important concepts to understand when configuring `mantel.nvim`:
-
-- highlights
-  - named highlight groups that define the colors and styles to be used when rendering the bufferline and breadcrumbs. You can create your own custom highlight groups or use existing ones from your colorscheme, and then reference them in your `mantel.nvim` configuration
-  - run `:h highlight-groups` in Neovim to see all available highlight groups (natively) and their names
-- highlight overwrites
-  - a feature that allows you to specify colors to be used in `mantel-nvim`'s own highlights
-- **decorators**
-  - small pieces of text (e.g., icons, text) that can be added to buffer or tab entries in the bufferline to provide additional information (e.g. diagnostics indicator) at a glance OR to add visual flair (e.g. a custom icon for certain file types)
-  - these can be static (a plain string) or dynamic (a function that returns a string based on the buffer to be rendered)
-- **parts**
-  - sections of the breadcrumbs that can be configured to show different types of information (e.g., file path, LSP symbols, etc). Each part can be customized in terms of what it shows and how it looks
-  - each part is an object (table) that contains the text to be rendered, its character count (len) and whether it should have a special highlight or not (focused)
-  - these can be static (a list with all parts to show) or dynamic (a function that returns a list of parts based on the buffer to be rendered)
-    - each part can also be dynamic in the sense that it can decide what to show based on the buffer
-
-So, in summary, to drastically customize your `mantel.nvim` experience, you:
-
-1. Configure new highlight groups, declaring custom colors for the text and background to be used when rendering (optional, since there are good defaults)
-   a. AND/OR you pass highlight names to the decorators and parts you use in the bufferline and breadcrumbs configuration, so that they can be applied when rendering instead of the default ones
-2. Configure custom decorators for the bufferline, which can be used to add icons, diagnostic indicators, or any other custom text you want to show for each buffer or tab
-3. Configure parts for the breadcrumbs, which can be used to show different sections of information (e.g., file path, LSP symbols, etc)
+> `mantel.nvim` provides a powerful buffer reordering system that allows you to easily move buffers around in the bufferline, either with commands or keybindings
 
 ### Bufferline (Tabline)
 
@@ -148,7 +107,7 @@ Buffers represent open files.
 
 Each buffer entry supports:
 
-- decorators
+- icons (optional)
 - custom names
 - highlight groups
 - minimum width
@@ -161,9 +120,9 @@ They can be enabled or disabled independently from buffers.
 
 There are three modes for tabs, configured via the `opts.tabs.enabled` option:
 
-- `auto`: (Default) tabs are shown when there are more than 1 tabpages open, otherwise they are hidden
-- `always` or `true`: tabs are always shown, even if there is only 1 tabpage open
-- `never` or `false`: tabs are never shown, even if there are multiple tabpages open
+- `"auto"`: (Default) tabs are shown when there are more than 1 tabpages open, otherwise they are hidden
+- `true`: tabs are always shown, even if there is only 1 tabpage open
+- `false`: tabs are never shown, even if there are multiple tabpages open
 
 ### Breadcrumbs (Winbar)
 
@@ -173,40 +132,14 @@ There are three modes for tabs, configured via the `opts.tabs.enabled` option:
 
 ![Breadcrumbs preview](./docs/images/breadcrumbs.png)
 
-Different from the bufferline, breadcrumbs are designed to show contextual information about the current file and its location within the project. Here, there are no decorators, instead **parts** can be used to define different sections of the breadcrumbs (e.g., file path, LSP symbols, etc).
+Different from the bufferline, breadcrumbs are designed to show the location of the current file within the project.
 
-When configuring breadcrumbs, you tell `mantel.nvim` what parts you want to show and in which order, and it will handle the rendering for you.
-
-Each part can be dynamic, meaning it can decide what to show based on the current buffer, and so do the parts list _itself_ (i.e., you can have a function that returns different lists of parts based on the buffer, each part can also be dynamic and decide what to show based on the buffer).
-
-Also, breadcrumbs can be **toggled**, meaning you can show or hide them on demand (e.g., with a keybinding). This is useful if you want to quickly check the file path and then hide it again to save space.
+Breadcrumbs can be **toggled**, meaning you can show or hide them on demand (e.g., with a keybinding). This is useful if you want to quickly check the file path and then hide it again to save space.
 
 There are two breadcrumbs behavior modes, configured via the `opts.breadcrumbs.mode` option:
 
-- `auto-inclusive`: (Default) breadcrumbs are shown in all windows, automatically. You can toggle individual windows on or off, but by default they are all on
-- `manual-only`: breadcrumbs are hidden by default, and you have to toggle them on for each window you want to see them
-
-## Performance
-
-`mantel.nvim` uses a stateless, pull-based rendering model; no background timers, no polling, no cached state to maintain. The renderer is only called when Neovim decides the tabline needs redrawing.
-The numbers below were measured using `vim.uv.hrtime()` directly around the render call, averaged over 10 runs.
-
-> Both scenarios were measured under active LSP clients and formatting tools running concurrently, representing realistic everyday use
-> **Test environment**: Intel Core i7-1165G7 (4C, 2.8–4.7GHz, 12MB cache), 16GB DDR4 3200MHz.
-
-### Bufferline
-
-| Scenario                                           | Average  | Worst     | Best     |
-| -------------------------------------------------- | -------- | --------- | -------- |
-| 2 buffers, 1 window (lua_ls + Copilot + Stylua)    | 0.8523ms | 0.9584ms  | 0.3815ms |
-| 30 buffers, 20 windows (lua_ls + Copilot + Stylua) | 8.5712ms | 14.8602ms | 6.2086ms |
-
-### Breadcrumbs
-
-| Scenario                                           | Average  | Worst    | Best   |
-| -------------------------------------------------- | -------- | -------- | ------ |
-| 2 buffers, 1 window (lua_ls + Copilot + Stylua)    | 0.2157ms | 0.9584ms | 0.04ms |
-| 30 buffers, 20 windows (lua_ls + Copilot + Stylua) | 0.9315ms | 1.0581ms | 0.2ms  |
+- `"auto"` or `true`: (Default) breadcrumbs are shown in all windows, automatically. You can toggle individual windows on or off, but by default they are all on
+- `"manual"` or `false`: breadcrumbs are hidden by default, and you have to toggle them on for each window you want to see them
 
 ## License
 
