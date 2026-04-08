@@ -14,8 +14,6 @@ There are a few user commands exposed for interacting with the `mantel.nvim` at 
 
 Focuses the previous buffer in the tabline.
 
-> Requires `mode = "enhanced"` to be enabled.
-
 Example mapping:
 
 ```lua
@@ -25,8 +23,6 @@ vim.keymap.set("n", "<leader>h", "<cmd>MantelBufPrev<CR>")
 ### `:MantelBufNext`
 
 Focuses the next buffer in the tabline.
-
-> Requires `mode = "enhanced"` to be enabled.
 
 Example mapping:
 
@@ -38,8 +34,6 @@ vim.keymap.set("n", "<leader>l", "<cmd>MantelBufNext<CR>")
 
 Moves the current buffer **one position to the left** in the tabline.
 
-> Requires `mode = "enhanced"` to be enabled.
-
 Example mapping:
 
 ```lua
@@ -49,8 +43,6 @@ vim.keymap.set("n", "<leader>bh", "<cmd>MantelMoveBufLeft<CR>")
 ### `:MantelMoveBufRight`
 
 Moves the current buffer **one position to the right** in the tabline.
-
-> Requires `mode = "enhanced"` to be enabled.
 
 Example mapping:
 
@@ -72,7 +64,7 @@ This can be useful when:
 
 Toggles the breadcrumbs (winbar) component.
 
-> The behavior of this command depends on the value of `opts.breadcrumbs.mode`
+> The behavior of this command depends on the value of `opts.breadcrumbs_mode`
 > See README for a full explanation of breadcrumb behavior modes
 
 [Back to README](../README.md)

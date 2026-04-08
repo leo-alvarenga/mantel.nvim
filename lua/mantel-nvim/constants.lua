@@ -19,6 +19,7 @@ return {
 			left = nil,
 			right = nil,
 			ellipsis = nil,
+			breadcrumbs_separator = nil,
 			separator = nil,
 			ignore_first_and_last_edges = nil,
 		},

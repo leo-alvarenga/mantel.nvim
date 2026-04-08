@@ -122,7 +122,7 @@ end
 function H.render_tabpages()
 	local tabpages = H.get_tabpages()
 
-	if #tabpages < 2 and H.config.tabpages ~= true then
+	if not H.config.tabpages or (#tabpages < 2 and H.config.tabpages ~= true) then
 		return "", ""
 	end
 
@@ -727,6 +727,10 @@ end
 
 function Mantel.render()
 	return H.render_tabline()
+end
+
+function Mantel.get_opts()
+	return H.config
 end
 
 --- @param opts table

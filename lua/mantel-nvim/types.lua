@@ -18,6 +18,7 @@
 --- @field left string?
 --- @field right string?
 --- @field separator string?
+--- @field breadcrumbs_separator string?
 --- @field ellipsis string?
 --- @field ignore_first_and_last_edges boolean?
 
@@ -39,6 +40,10 @@
 --- @field breadcrumbs_item string
 --- @field breadcrumbs_item_focus string
 --- @field breadcrumbs_separator string
+
+--- @alias mantel-nvim.TabpagesMode
+--- | "auto"
+--- | boolean
 
 --- @alias mantel-nvim.BreadcrumbsMode
 --- | "auto"
