@@ -10,6 +10,7 @@
 --- @field left string
 --- @field right string
 --- @field separator string
+--- @field breadcrumbs_separator string
 --- @field ellipsis string
 --- @field ignore_first_and_last_edges boolean
 
@@ -34,8 +35,19 @@
 --- @field edge_inactive string
 --- @field tab_active string
 --- @field tab_inactive string
+--- @field breadcrumbs_fill string
+--- @field breadcrumbs_item string
+--- @field breadcrumbs_item_focus string
+--- @field breadcrumbs_separator string
+
+--- @alias mantel-nvim.BreadcrumbsMode
+--- | "auto"
+--- | "manual"
+--- | boolean
 
 --- @class mantel-nvim.Opts
+--- @field breadcrumbs_mode mantel-nvim.BreadcrumbsMode
+--- @field breadcrumbs_refresh_on string[]
 --- @field tabpages string
 --- @field min_buffer_len integer
 --- @field buffer_padding integer

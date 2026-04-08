@@ -2,6 +2,8 @@ return {
 	--- @type mantel-nvim.Opts
 	default_config = {
 		tabpages = "auto",
+		breadcrumbs_mode = "auto",
+		breadcrumbs_refresh_on = { "WinNew", "BufWinEnter", "WinEnter" },
 
 		min_buffer_len = 16,
 		buffer_padding = 2,
@@ -30,6 +32,11 @@ return {
 
 			tab_active = "MantelTabActive",
 			tab_inactive = "MantelTabInactive",
+
+			breadcrumbs_fill = "MantelBreadcrumbsFill",
+			breadcrumbs_item = "MantelBreadcrumbsItem",
+			breadcrumbs_item_focus = "MantelBreadcrumbsItemFocus",
+			breadcrumbs_separator = "MantelBreadcrumbsSeparator",
 		},
 	},
 
@@ -40,6 +47,7 @@ return {
 			left = "",
 			right = "",
 			separator = "",
+			breadcrumbs_separator = " > ",
 			ignore_first_and_last_edges = false,
 		},
 
@@ -48,6 +56,7 @@ return {
 			left = "",
 			right = "",
 			separator = "",
+			breadcrumbs_separator = " > ",
 			ignore_first_and_last_edges = false,
 		},
 
@@ -56,6 +65,7 @@ return {
 			left = "",
 			right = "",
 			separator = "",
+			breadcrumbs_separator = " > ",
 			ignore_first_and_last_edges = true,
 		},
 
@@ -64,6 +74,7 @@ return {
 			left = "",
 			right = "",
 			separator = "",
+			breadcrumbs_separator = " > ",
 			ignore_first_and_last_edges = true,
 		},
 	},

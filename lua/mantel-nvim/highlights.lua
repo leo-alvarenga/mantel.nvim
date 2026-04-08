@@ -75,7 +75,7 @@ function M.get_default_highlights()
 			bold = true,
 			italic = true,
 		},
-		["MantelBreadcrumbsItemSeparator"] = {
+		["MantelBreadcrumbsSeparator"] = {
 			fg = comment.fg or statusline.fg,
 			bg = normal.bg,
 		},

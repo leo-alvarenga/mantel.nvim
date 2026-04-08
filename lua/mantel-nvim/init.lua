@@ -18,6 +18,8 @@ H.cache = {
 H.state = {
 	buf_positions = {},
 	next_position = 1,
+
+	winids = {},
 }
 
 ---------------------------------------------
@@ -490,8 +492,8 @@ end
 
 ---------------------------------------------
 --- Tabline
-
 ---------------------------------------------
+
 function H.render_tabline()
 	local tabline_width = vim.o.columns
 
@@ -501,6 +503,161 @@ function H.render_tabline()
 	local buffer_line_str = H.render_buffer_line(available_width)
 
 	return buffer_line_str .. "%=" .. tabpages_str
+end
+
+---------------------------------------------
+--- Winbar
+---------------------------------------------
+
+function H.has_breadcrumbs()
+	return H.config.breadcrumbs_mode ~= false
+end
+
+--- @param winid integer
+function H.does_win_have_breadcrumbs(winid)
+	local auto_inclusive = H.config.breadcrumbs_mode == "auto" or H.config.breadcrumbs_mode == true
+
+	local has_been_added = vim.iter(H.state.winids):any(function(win)
+		return win == winid
+	end)
+
+	return (auto_inclusive and not has_been_added) or (not auto_inclusive and has_been_added)
+end
+
+--- @param winid integer?
+function H.is_win_valid(winid)
+	if not winid or not vim.api.nvim_win_is_valid(winid) then
+		return false
+	end
+
+	local win_cfg = vim.api.nvim_win_get_config(winid)
+	local is_win_floating = win_cfg.relative ~= ""
+
+	local curr_buf = vim.api.nvim_win_get_buf(winid)
+	local bufinfo = vim.bo[curr_buf]
+
+	local is_buf_valid = vim.api.nvim_buf_is_valid(curr_buf)
+		and bufinfo
+		and bufinfo.buflisted
+		and bufinfo.filetype ~= ""
+		and bufinfo.buftype == ""
+
+	local has_breadcrumbs = H.does_win_have_breadcrumbs(winid)
+
+	return not is_win_floating and is_buf_valid and has_breadcrumbs
+end
+
+--- @param buf vim.fn.getbufinfo.ret.item
+--- @return table parts
+function H.get_breadcrumbs_parts(buf)
+	local full_name = vim.fn.fnamemodify(buf.name, ":~:.")
+
+	local str_parts = vim.split(full_name, "/", { plain = true })
+
+	local parts = {}
+
+	if #str_parts > 0 and str_parts[1] ~= "~" and str_parts[1] ~= "/" then
+		table.insert(parts, {
+			text = ".",
+			len = 1,
+			focused = false,
+		})
+	end
+
+	for i, str in ipairs(str_parts) do
+		local str_len = H.strlen(str)
+
+		if str_len > 0 then
+			table.insert(parts, {
+				text = str,
+				len = str_len,
+				focused = i == #str_parts,
+			})
+		end
+	end
+
+	return parts
+end
+
+function H.render_breadcrumbs(winid)
+	local contents = ""
+
+	if not winid or not H.is_win_valid(winid) then
+		vim.wo[winid].winbar = contents
+		return contents
+	end
+
+	local bufid = vim.api.nvim_win_get_buf(winid)
+	local buf = vim.fn.getbufinfo(bufid)[1]
+
+	local win_width = vim.api.nvim_win_get_width(winid)
+
+	local ellipsis = H.cache.preset.ellipsis
+	local parts = H.get_breadcrumbs_parts(buf)
+
+	local item_hl = H.config.hl.breadcrumbs_item
+	local sep_hl = H.config.hl.breadcrumbs_separator
+	local focused_item_hl = H.config.hl.breadcrumbs_item_focus
+
+	local len = 1
+	local expected_total_len = 0
+	for i = #parts, 1, -1 do
+		::continue::
+		local part = parts[i]
+
+		if part.len <= 0 then
+			goto continue
+		end
+
+		expected_total_len = len + H.strlen(ellipsis) + part.len
+
+		if expected_total_len >= win_width then
+			contents = ellipsis .. contents
+			break
+		end
+
+		len = len + part.len
+		contents = part.text .. contents
+
+		if part.focused then
+			contents = H.fmt_hl(focused_item_hl) .. contents
+		else
+			contents = H.fmt_hl(item_hl) .. contents
+		end
+
+		if i > 1 then
+			len = len + H.strlen(H.cache.preset.right)
+			contents = H.fmt_hl(sep_hl) .. H.cache.preset.breadcrumbs_separator .. contents
+		end
+	end
+
+	contents = contents .. H.fmt_hl(H.config.hl.breadcrumbs_fill)
+
+	vim.wo[winid].winbar = " " .. contents
+	return contents
+end
+
+function H.toggle_breadcrumbs()
+	local win = vim.api.nvim_get_current_win()
+
+	if not win or not vim.api.nvim_win_is_valid(win) then
+		return
+	end
+
+	local iter = vim.iter(H.state.winids)
+	iter = iter:filter(function(w)
+		return w ~= win
+	end)
+
+	local result = iter:totable()
+
+	if #result < #H.state.winids then
+		H.state.winids = result
+	else
+		table.insert(H.state.winids, win)
+	end
+
+	H.render_breadcrumbs(win)
 end
 
 ---------------------------------------------
@@ -527,6 +684,8 @@ function H.setup_cmds()
 	vim.api.nvim_create_user_command("MantelRedraw", function()
 		H.call_update()
 	end, {})
+
+	vim.api.nvim_create_user_command("MantelBreadcrumbs", H.toggle_breadcrumbs, {})
 end
 
 function H.setup_autocmds()
@@ -541,6 +700,14 @@ function H.setup_autocmds()
 			H.remove_buf(args.buf)
 		end,
 	})
+
+	if H.has_breadcrumbs() then
+		vim.api.nvim_create_autocmd(H.config.breadcrumbs_refresh_on, {
+			callback = function()
+				H.render_breadcrumbs(vim.api.nvim_get_current_win())
+			end,
+		})
+	end
 end
 
 ---------------------------------------------
