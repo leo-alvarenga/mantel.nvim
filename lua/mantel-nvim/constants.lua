@@ -1,54 +1,89 @@
-local prefix = "Mantel"
-
 return {
-	prefix = prefix,
+	--- @type mantel-nvim.Opts
+	default_config = {
+		tabpages = "auto",
+		breadcrumbs_mode = "auto",
+		breadcrumbs_refresh_on = { "WinNew", "BufWinEnter", "WinEnter" },
 
-	augrops = {
-		winbar = prefix .. "Breadcrumbs",
+		min_buffer_len = 16,
+		buffer_padding = 2,
+
+		preset = "none",
+
+		icons = {
+			enabled = true,
+			modified = "  ●",
+		},
+
+		override = {
+			left = nil,
+			right = nil,
+			ellipsis = nil,
+			breadcrumbs_separator = nil,
+			separator = nil,
+			ignore_first_and_last_edges = nil,
+		},
+
+		hl = {
+			fill = "MantelFill",
+			active = "MantelActive",
+			inactive = "MantelInactive",
+			edge = "MantelEdge",
+			edge_inactive = "MantelEdgeInactive",
+
+			tab_active = "MantelTabActive",
+			tab_inactive = "MantelTabInactive",
+
+			breadcrumbs_fill = "MantelBreadcrumbsFill",
+			breadcrumbs_item = "MantelBreadcrumbsItem",
+			breadcrumbs_item_focus = "MantelBreadcrumbsItemFocus",
+			breadcrumbs_separator = "MantelBreadcrumbsSeparator",
+		},
 	},
 
-	styles = {
-		slanted = {
-			prefix = "",
-			suffix = "",
+	--- @type mantel-nvim.PresetTable
+	presets = {
+		none = {
+			ellipsis = "…",
+			left = "",
+			right = "",
+			separator = "",
+			breadcrumbs_separator = " > ",
+			ignore_first_and_last_edges = false,
 		},
-		slanted_inverted = {
-			prefix = "",
-			suffix = "",
-		},
+
 		sloped = {
-			prefix = "",
-			suffix = "",
+			ellipsis = "…",
+			left = "",
+			right = "",
+			separator = "",
+			breadcrumbs_separator = " > ",
+			ignore_first_and_last_edges = false,
 		},
-		sloped_inverted = {
-			prefix = "",
-			suffix = "",
+
+		arrow = {
+			ellipsis = "…",
+			left = "",
+			right = "",
+			separator = "",
+			breadcrumbs_separator = " > ",
+			ignore_first_and_last_edges = true,
+		},
+
+		slanted = {
+			ellipsis = "…",
+			left = "",
+			right = "",
+			separator = "",
+			breadcrumbs_separator = " > ",
+			ignore_first_and_last_edges = true,
 		},
 	},
 
-	hl_groups = {
-		fill = prefix .. "Fill",
-		inactive = prefix .. "Inactive",
-		active = prefix .. "Active",
-		modified = prefix .. "Modified",
-		duplicate = prefix .. "Duplicate",
-		separator = prefix .. "Separator",
-		prefix = prefix .. "Prefix",
-		suffix = prefix .. "Suffix",
-		prefix_inactive = prefix .. "PrefixInactive",
-		suffix_inactive = prefix .. "SuffixInactive",
-		diagnostics_error = prefix .. "DiagnosticsError",
-		diagnostics_warn = prefix .. "DiagnosticsWarn",
-		diagnostics_info = prefix .. "DiagnosticsInfo",
-		diagnostics_hint = prefix .. "DiagnosticsHint",
-		diagnostics_error_inactive = prefix .. "DiagnosticsErrorInactive",
-		diagnostics_warn_inactive = prefix .. "DiagnosticsWarnInactive",
-		diagnostics_info_inactive = prefix .. "DiagnosticsInfoInactive",
-		diagnostics_hint_inactive = prefix .. "DiagnosticsHintInactive",
-
-		breadcrumb_fill = prefix .. "BreadcrumbFill",
-		breadcrumb_item = prefix .. "BreadcrumbItem",
-		breadcrumb_item_focus = prefix .. "BreadcrumbItemFocus",
-		breadcrumb_separator = prefix .. "BreadcrumbSeparator",
+	edges_by_preset = {
+		none = { left = "|", right = "" },
+		sloped = { left = "", right = "" },
+		arrow = { left = "", right = "" },
+		slanted = { left = "", right = "" },
 	},
 }
